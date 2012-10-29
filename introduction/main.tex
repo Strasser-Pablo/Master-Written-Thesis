@@ -58,6 +58,8 @@ We note the vector version of the laplacian $\vect{\Delta}$
 \end{definition}
 \subsection{Divergence Free and Rotational Free Space}
 
+\subsubsection{Definition}
+
 \begin{definition}
  The Divergence of a vector consist of:
  \begin{equation}
@@ -79,6 +81,8 @@ We note the vector version of the laplacian $\vect{\Delta}$
  \end{equation}
 \end{definition}
 
+\subsubsection{Property}
+
 \begin{property}
  The divergence of a vector is Rotational Free.
  \begin{equation}
@@ -91,6 +95,27 @@ We note the vector version of the laplacian $\vect{\Delta}$
  \begin{equation}
   \vect{\nabla}\cdot \vect{\nabla} \vect{v}=0
  \end{equation}
-
 \end{property}
+\subsubsection{Projection}
+
+\begin{property}
+ Every vector can be projected to a divergence free space without changing it's rotational with the following change:
+\begin{align}
+ \vect{v_{new}}&=v-\vect{\nabla}p \label{introduction:ProjectionA}\\
+ \Delta p=\vect{\nabla} \cdot \vect{v} \label{introduction:ProjectionB}
+\end{align}
+\end{property}
+\begin{proof}
+  Taking the divergence of equation \ref{introduction:ProjectionA} and using \ref{introduction:ProjectionB}
+  \begin{equation}
+   \vect{v_{new}}=\vect{\nabla}\cdot\vect{v}-\Delta p=\vect{\nabla}\cdot\vect{v}-\vect{\nabla}\cdot\vect{v}=0
+  \end{equation}
+  \begin{rem}
+ This work as long as:
+ \begin{equation}
+  \Delta=\vect{\nabla}\cdot \vect{\nabla}\label{introduction:ProjectionDelta}
+ \end{equation}
+ So this can be used in discretized case and will be exact as long as \ref{introduction:ProjectionDelta} is respected.
+ \end{rem}
+\end{proof}
 
