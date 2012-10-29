@@ -48,6 +48,17 @@
 %New command Bold for vector in math mode
 \newcommand{\vect}[1]{ {\boldsymbol #1}}
 
+%Theorem and Definition counter
+\newtheorem{prop}{Proposition}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\theoremstyle{remark}
+\newtheorem*{rem}{Remark}
+\newtheorem*{example}{Example}
+\newtheorem{cor}[thm]{Corollaire}
+
 \begin{document}
 %make the title page
 \maketitle
