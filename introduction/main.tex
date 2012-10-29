@@ -2,4 +2,95 @@
 
 \section{Introduction}
 
-\section{Notation}
+\section{Notation and Somes Basic Math Property}
+
+\subsection{Vector}
+
+Vector with the dimension of physical space (2d or 3d) are written $\vect{v}$.
+
+We only use cartesian coordinate system.
+
+We indicate a given component of a vector with indice. $\vect{v}_1$ is the first component.
+
+\subsection{Differential operator}
+
+\subsubsection{Component by component}
+
+Derivatif is written $\partial_i$ where $i$ is the spatial component with witch we derivate.
+\begin{equation}
+ \partial_i v(\vect{x})=\frac{\partial v(\vect{x})}{\partial \vect{x}_{i}}
+\end{equation}
+
+\subsubsection{Nabla}
+
+\begin{definition}
+ In Cartesian coordinate, the $\vect{\nabla}$ is a vector that cannot commute.
+ It's expression is given by:
+ \begin{equation}
+ \vect{\nabla}_{i}=\partial_{i}
+ \end{equation}
+\end{definition}
+
+With the $\vect{\nabla}$ we can form the following expression.
+With $n$ the dimension of the vector:
+\begin{equation}
+ \vect{\nabla}p=\begin{pmatrix}\partial_1 p\\ \vdots \\ \partial_n p\end{pmatrix}
+\end{equation}
+\begin{equation}
+ \vect{\nabla}\cdot \vect{v}=\sum_{i=1}^{n}\partial_i \vect{v}_i
+\end{equation}
+\begin{equation}
+ \left((\vect{v}\cdot\vect{\nabla})\vect{v}\right)_{i}=\sum_{j=1}^{n}v_{j}\partial_{j} v_{i}
+\end{equation}
+
+\subsubsection{Laplacian}
+
+\begin{definition}
+The lapplacian $\Delta$ consist of a scalar operator witch can be seen as:
+\begin{equation}
+\Delta=\vect{\nabla}\cdot \vect{\nabla}=\sum_{i=1}^{n} \partial_{i}\partial_{i}
+\end{equation}
+\end{definition}
+
+\begin{definition}
+A vector version of the laplacian consist to apply the laplacian to all component of the vector.
+We note the vector version of the laplacian $\vect{\Delta}$
+\end{definition}
+\subsection{Divergence Free and Rotational Free Space}
+
+\begin{definition}
+ The Divergence of a vector consist of:
+ \begin{equation}
+  \vect{\nabla} \cdot \vect{v}
+  \end{equation}
+\end{definition}
+
+\begin{definition}
+ The Rotational of a vector consist of:
+ \begin{equation}
+  \vect{\nabla} \times \vect{v}
+ \end{equation}
+\end{definition}
+
+\begin{definition}
+ The Gradiant of a scalar consist of:
+ \begin{equation}
+  \vect{\nabla} p
+ \end{equation}
+\end{definition}
+
+\begin{property}
+ The divergence of a vector is Rotational Free.
+ \begin{equation}
+  \vect{\nabla}\times \vect{\nabla} p=\vect{0}
+ \end{equation}
+\end{property}
+
+\begin{property}
+ The gradiant of a vector is Divergence Free.
+ \begin{equation}
+  \vect{\nabla}\cdot \vect{\nabla} \vect{v}=0
+ \end{equation}
+
+\end{property}
+
