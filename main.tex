@@ -1,0 +1,52 @@
+\documentclass[a4paper]{amsbook}
+
+%Package inclusion
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{tikz}
+\usepackage{verbatim}
+
+%Tikz library inclusion
+\usepgflibrary{shapes.geometric}
+
+%New command for identifier style
+\newcommand{\identifiera}[0]{\ttfamily }
+\newcommand{\identifier}[1]{ {\identifiera #1}}
+
+%listings option set
+% Warning use newcommand for identifier style
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=5, numbersep=5pt}
+\lstset{escapeinside={(*@}{@*)}}
+\lstset{basicstyle=\small, language=c++}
+\lstset{breaklines=true,
+    breakindent=0pt,
+    tabsize=2,
+    identifierstyle=\identifiera}
+\lstset{morekeywords={iterator,stack,pair}}
+\lstset{emphstyle=\underbar}
+\lstset{escapeinside={@}{@}}
+
+%New filename command for typseting file
+\DeclareUrlCommand\filename{\urlstyle{tt}}
+
+%Information as title and author
+\title{Master Thesis}
+\author{Pablo Strasser}
+\date{\today}
+
+%Pdf information
+\hypersetup{pdfinfo={%
+  Title={Master Thesis},
+  Author={Pablo Strasser},
+  Creator={Pablo Strasser},
+  Producer={Pablo Strasser},
+  Subject={Navier-Stockes},
+  Keywords={Navier-Stockes}}
+}
+
+\begin{document}
+%make the title page
+\maketitle
+
+\end{document}
