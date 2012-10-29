@@ -1,3 +1,4 @@
+/introduction/main.tex.backup
 *.aux
 *.bbl
 *.blg
@@ -27,3 +28,4 @@
 *.mtc0
 *.pdf
 *~
+*backup
