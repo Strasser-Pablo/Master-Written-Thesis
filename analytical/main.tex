@@ -1,0 +1,174 @@
+\chapter{Analytical}
+\section{Introduction}
+In this chapter, i will discuss the analytical problem that we want to solve.
+The other numerical chapter will consist of a numerical sheme to solve the problem given in this chapter.
+
+\section{Variable and Parameter}
+
+The problem will consist to find a function of space and time respecting somes condition and equation.
+
+\subsection{Space and Time}
+
+The space consist of a vector in fixed cartesian coordinate with dimension typically 2 or 3 (Navier-Stokes on 1d is trivial).
+Space is noted $x$.
+The time consist of a indice indicating the evolution of the function in time.
+Time is noted $t$.
+
+\subsection{Domain}
+
+A domain is the spatial region where a field is defined. This consist physically in the spatial region where watter lay.
+Boundary condition need to be provided.
+
+The Domain can vary with respect of time and can vary with respect of the solution at previous time.
+
+The Domain don't need to be connex. But can be decomposed in union of connex Subdomain.
+
+\begin{example}
+ If we take a drop of watter falling in a glass of watter. The domain consist of the region where the watter lie.
+ At the begining this will consist of domain consisting of two connex subdomain (the drop and the glass)
+ that after a given time will merge in one domain.
+\end{example}
+
+The Domain is generaly noted $\Omega$ or $\Omega(t)$ to emphasy that it can be variable with respect of time.
+
+\subsection{Field}
+
+A Field consist of a function with respect space and time of space in the domain and time in the temporal domain.
+\begin{equation}
+ F(x,t)\qquad \text{With $x\in\Omega(t)$ and $t_0\leq t \leq t_f$}
+\end{equation}
+
+\subsubsection{Vector Field}
+A vector field is a field that is a vector.
+
+We only have one Vector Field named speed and noted $\vect{v}$.
+
+The speed physically represent the speed of water at a given position.
+\subsubsection{Scalar Field}
+A scalar field is a field that is a scalar.
+
+We only have on Scalar Field named pressure and noted $p$.
+
+The pressure physically represent an internal force per unit area between water particle.
+
+\subsection{Parameter}
+
+The following parameter are used in this work.
+
+\subsubsection{Viscosity}
+The viscosity represent how much water particle stick together.
+
+Higher is the viscosity less abrupt speed change is possible.
+
+The viscosity is noted $\mu$. We use alot $\nu$ that is the viscosity divided by the density.
+\begin{equation}
+ \nu=\frac{\mu}{\rho}
+\end{equation}
+
+\subsubsection{Density}
+
+The density is a mass per unit volumn.
+
+Density play the same role as mass in Newton's mechanic.
+
+In the incompressible Navier-Stokes equation density is more a constant depending
+of the domain because incompressibility tell us that density doesn't change.
+
+The density is noted $\rho$.
+
+\subsubsection{Force}
+
+The force is a user defined vector field that represent the external force applyed to the water.
+It can possibly depend on the solution for previous time.
+
+The force is noted $\vect{f}$
+
+We often assume that the force is divergence free.
+\section{Navier Stokes}
+
+The incompressible Navier-Stokes equation are given by:
+
+\begin{align}
+\label{analytical:navierStokesA}
+\vect{\nabla} \cdot \vect{v}(\vect{x} ,t)&=0\\
+\label{analytical:navierStokesB}
+\partial_t \vect{v}(\vect{x} ,t)+(\vect{v}(\vect{x},t)\cdot\vect{\nabla} ) \vect{v}(\vect{x} ,t)&=-\frac{\vect{\nabla} p(\vect{x},t)}{\rho(\vect{x},t)}+\frac{\vect{F}(\vect{x},t)}{\rho(\vect{x},t)}+\nu \Delta \vect{u}(\vect{x},t)
+\end{align}
+
+Equation \ref{analytical:navierStokesA}, tell us that the speed is a divergence free field.
+Equation \ref{analytical:navierStokesB} is a equation of evolution. The pressence of $p$ allow to maintain the speed always divergence free.
+Taking the rotational of \ref{analytical:navierStokesB} make disappear the pressure term (because the rotational of a gradiant is 0).
+
+The pressure term can be seen as a correction of the divergence without changing the rotational.
+
+We can obtain an expression for the pressure by taking the divergence of \ref{analytical:navierStokesB} for $F$ a divergence free force.
+\begin{equation}
+\label{true_pressure}
+\Delta p=-\rho \vect{\nabla} \cdot (\vect{v}\vect{\nabla} \cdot \vect{v})
+\end{equation}
+
+\subsection{Convectif term}
+We will in this section rewrite \ref{analytical:navierStokesB} in nother form.
+
+We begin to define a new position system $\vect{\xi}_{\lambda}(t)$.
+\begin{align}
+ \partial_t \vect{\xi}_{\lambda}(t)&=v(\xi_{\lambda}(t),t)\\
+ \xi_{\lambda}(t_0)&=\xi^{0}_{\lambda}
+\end{align}
+
+$\lambda$ is a system of representent that is initialised by initial condition.
+For a given $\lambda$ $\xi_{\lambda}(t)$ follow the speed at the given point.
+
+This position system is called particle coordinate or laggragean.
+$\xi_\lambda(t)$ is called the characteristic.
+
+We then can define the laggragean speed.
+\begin{equation}
+ u_{\lambda}(t)=v(\xi_{\lambda}(t),t)
+\end{equation}
+
+The laggrangean speed is the speed following a characteristic.
+
+Taking the total derivative(the derivative of everything that depend on time) of the laggrangean speed with respect of time, we have:
+\begin{equation}
+\frac{d u_{\lambda}(t)}{d t}=\frac{d v(\xi_{\lambda},t)}{d t}=\partial_t \vect{v}+\left(\frac{\partial \vect{\xi_{\lambda}}(t)}{\partial t}\cdot\vect{\nabla}\right)\vect{v}
+\end{equation}
+
+This can be rewritten:
+\begin{equation}
+\frac{d u_{\lambda}(t)}{d t}=\partial_t \vect{v}+\left(\vect{v} cdot\vect{\nabla}\right)\vect{v}
+\end{equation}
+
+This is exactly the lhs of equation \ref{analytical:navierStokesB}.
+
+We then can rewrite Navier-Stokes equation as:
+\begin{align}
+\label{analytical:navierStokesLagA}
+\vect{\nabla} \cdot \vect{u}_{\lambda}(t)&=0\\
+\label{analytical:navierStokesLagB}
+\frac{d u_{\lambda}(t)}{d t}&=-\frac{\vect{\nabla} p(\xi_{\lambda}(t),t)}{\rho(\xi_{\lambda},t)}+\frac{\vect{F}(\xi_{\lambda}(t),t)}{\rho(\vect{x},t)}+\nu \Delta \vect{v}_{\lambda}(t)
+\end{align}
+
+\begin{rem}
+We remark that with this notation some expression like spatial derivative of $u$ is not defined.
+In an analytical procedure, we can transform $u$ to $v$ with the help of the expression of $\xi$, then the derivative is well defined.
+But in a numerical procedure, the point where the value is know are particle in the case of $u$. This demand to define derivative on unstructured grid.
+Or to interpolate at grid point.
+\end{rem}
+
+\subsection{Projection}
+
+We have seen in section \ref{introduction:projection} that every speed can be projected in a divergence free space with:
+\begin{align}
+ \vect{v_{new}}&=v-\vect{\nabla}p\\
+ \Delta p&=\vect{\nabla} \cdot \vect{v}
+\end{align}
+
+$p$ defined this way is to a factor $\rho$ the same kind of correction that we find in \ref{analytical:navierStokesB}.
+And correct the speed to a divergence free space.
+
+This fact will be used in numerical method.
+
+If $v$ is already divergence free, this will change nothing (with good and consistant boundary condition and discretisation in case of discrete case).
+Because the solution of $\Delta p=0$ is a constant pressure.
+
