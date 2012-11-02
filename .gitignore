@@ -24,7 +24,7 @@
 *.toc
 *.vrb
 *.maf
-*.mtc
+*.mtc*
 *.mtc0
 *.pdf
 *~
