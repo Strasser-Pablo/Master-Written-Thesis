@@ -1,0 +1,370 @@
+\chapter{Fixed}
+\section{Introduction}
+
+We will in this chapter be interested in the case of fixed domain Navier-Stokes with grid discretisation.
+This case is simplier than the variable domain case and serve as basis to more complicated case.
+
+\section{Overview}
+
+To solve the Navier-Stokes equation, we will cut the equation in two step.
+\begin{enumerate}
+ \item Evolve speed without consideration of pressure and divergence free.
+  \begin{equation}
+   \partial_t \vect{v}(\vect{x} ,t)+(\vect{v}(\vect{x},t)\cdot\vect{\nabla} ) \vect{v}(\vect{x} ,t)=\frac{\vect{F}(\vect{x},t)}{\rho(\vect{x},t)}+\nu \Delta \vect{u}(\vect{x},t)
+  \end{equation}
+ \item We project the none divergence free speed found before to a divergence free speed.
+  \begin{align}
+   \vect{v}_{new}&=v-\vect{\nabla}\phi\\
+   \Delta \phi&=\vect{\nabla} \cdot \vect{v}
+  \end{align}
+\end{enumerate}
+
+After this step the discrete evaluation of divergence will be divergence free exactly (to numerical precision) as long as the shame used respect:
+\begin{equation}
+ \Delta=\vect{\nabla}\cdot \vect{\nabla}
+\end{equation}
+
+\begin{rem}
+ This method to have a divergence free speed is different that what we will find if we use the analytical expression for $p$ found in equation \ref{analytical:pressure}:
+ \begin{equation}
+  \Delta p=-\rho \vect{\nabla} \cdot (\vect{v}\cdot \vect{\nabla}) \vect{v}
+ \end{equation}
+ 
+ But using this equation, will not ensure in the numerical case that the speed is divergence free.
+ The latter equation will not be used because we consider that being divergence free at every time step is more important than
+ to have the goode equation for pressure but where time discretisation error will create more divergence.
+\end{rem}
+
+\section{Evolve in time}
+
+We need to solve:
+  \begin{equation}
+   \partial_t \vect{v}(\vect{x} ,t)=\frac{\vect{F}(\vect{x},t)}{\rho(\vect{x},t)}+\nu \Delta \vect{u}(\vect{x},t)-(\vect{v}(\vect{x},t)\cdot\vect{\nabla} ) \vect{v}(\vect{x} ,t)
+  \end{equation}
+  
+  \subsection{Analytical solution to Burger's equation}
+  This equation is know as the Burger equation and can be solved analyticaly for $\nu=0$.
+  The solution is given by the method of characteristics. Using the same method that we us in section \ref{analytical:convectif}.
+  \begin{equation}
+   \frac{d u_{\lambda}(t)}{dt}=\frac{\vect{F}(\vect{x},t)}{\rho(\vect{x},t)}
+  \end{equation}
+  
+  The change of speed is given by the force.
+  
+  This equation can after a finite time have more that one solution and don't have continuous and derivable solution everywhere.
+  
+  We see this in taking for example a sinus as input speed for the case whithout force.
+  The high speed region of the sinus will go faster than the slow point of the sinus.
+  After a given time we will find a multi-valued solution. This is the sign, that we need to consider discontinuous solution after this time.
+  But solution are no more unique, other condition need to be added.
+  
+  For the 3d case of Navier-Stokes equation we do not know if we have unicity after a given time.
+  We know that we have a solution but not how many.
+  
+  In discretised version, we only need to solve for one time step.
+  The projection step will change the speed everywhere.
+
+  \subsection{Method of Line}
+  
+  A typical method of resolution is to discretize in time and space separately.
+  We consider that the Burger equation is given by:
+  \begin{align}
+   \label{fixed:lineA}
+   \partial_t \vect{v}(\vect{x} ,t)&=f(\vect{v}(\vect{x}),\vect{x})\\
+   \label{fixed:lineB}
+   f(t,\vect{v}(\vect{x}),\vect{x})&=\frac{\vect{F}(\vect{x},t)}{\rho(\vect{x},t)}+\nu \Delta \vect{u}(\vect{x},t)
+  \end{align}
+  
+Equation \ref{fixed:lineA} is now an ordinary differential equation for a field $\vect{v}$.
+Equation \ref{fixed:lineB} is the evaluation of an expression with derivative at a given time and position.
+
+\subsubsection{Runge-Kutta}
+
+A Runge-Kutta method is a method to solve the ODE (I drop the $\vect{x}$ dependance, but it's understood that this equation is for a vector formed in concataning every speed):
+\begin{equation}
+ \partial_t \vect{v}(t)=f(\vect{v})
+\end{equation}
+
+The solution at time $n+1$ is given from the solution at time $n$ with $\Delta t$ the time step and $a$, $b$ parameter of the method.
+\begin{align*}
+	\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}k_{i}\\
+	k_{j}&=\Delta t f(\vect{v}_{n}+\sum_{i=1}^{j-1}a_{j,i}k_{i})
+\end{align*}
+
+\subsubsection{Spatial Evaluation}
+To apply the Method of Line, we need to evaluate derivative.
+
+\section{Projection}
+\label{fixed:projection}
+The projection step consist to apply:
+ \begin{align}
+  \vect{v}_{new}&=v-\vect{\nabla}\phi\\
+  \Delta \phi&=\vect{\nabla} \cdot \vect{v}\label{fixed:project}
+ \end{align}
+
+ Equation \ref{fixed:project} typicaly consist to solve a linear system.
+ 
+ \section{Runge-Kutta and Projection}
+ 
+ A possible idea, is to project after every evaluation of speed int the Runge-Kutta method.
+ We first define the projection for a vector $\vect{v}$, $P(\vect{v})$.
+ Using \ref{fixed:projection} $P(\vect{v})$ can be written:
+ \begin{equation}
+  P(\vect{v})=-\vect{\nabla}\left(\vect{\nabla}\cdot \vect{\nabla}\right)^{-1}\vect{\nabla}\cdot\vect{v}
+ \end{equation}
+
+ $P$ is a linear operator because derivative are linear operator.
+ 
+ From the Navier-Stokes equation:
+ \begin{equation}
+   \partial_t \vect{v}(\vect{x} ,t)=-(\vect{v}(\vect{x},t)\cdot\vect{\nabla} ) \vect{v}(\vect{x} ,t)+\frac{\vect{F}(\vect{x},t)}{\rho(\vect{x},t)}+\nu \Delta \vect{u}(\vect{x},t)-\nabla \phi
+ \end{equation}
+
+ Can be rewritten:
+ \begin{align}
+ \label{fixed:rung-projA}
+  \partial_t \vect{v}(\vect{x} ,t)&=f(\vect{v})-\nabla \phi \\
+  \intertext{With:}
+  f(\vect{v})&=-(\vect{v}(\vect{x},t)\cdot\vect{\nabla} ) \vect{v}(\vect{x} ,t)+\frac{\vect{F}(\vect{x},t)}{\rho(\vect{x},t)}+\nu \Delta \vect{u}(\vect{x},t)
+ \end{align}
+ 
+ Taking the divergence of \ref{fixed:rung-projA} we can determine $\phi$.
+ \begin{equation}
+  \Delta \phi=\nabla \cdot f(\vect{v})
+ \end{equation}
+
+ The gradiant of $\phi$ is then:
+ 
+ \begin{equation}
+  -\vect{\nabla}\phi=P(f(\vect{v}))
+ \end{equation}
+
+ The Navier-Stokes equation can then be rewritten as:
+ \begin{equation}\label{fixed:simpl_navier}
+ \partial_t \vect{v}(\vect{x} ,t)=f(\vect{v})+P(f(\vect{v})) 
+\end{equation}
+
+This equation is analyticaly exact.
+
+We would expect that solving this equation with a Runge-Kutta algorithm will lead to a numerical error in Divergence.
+
+To show that this is not the case, we show that another method to force divergence free of every speed is in fact equivalent to this one.
+
+We define the following sheme.
+\begin{align}
+\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i}+P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i}\right)\\
+\tilde{k}_{i}&=\Delta t f\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\tilde{k}_{j}+P\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\tilde{k}_{j}\right)\right)
+\end{align}
+
+We project at every estimation of speed. Making by construction every speed divergence free.
+
+We now write the Runge-Kutta expression for \ref{fixed:simpl_navier}.
+
+\begin{align}
+	\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}k_{i}\\
+	k_{i}&=\Delta t f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}k_{j}\right)+\Delta t P\left(f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}k_{j}\right)\right)
+\end{align}
+
+\begin{thm}
+If $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ is divergence free then $\vect{v}_{n+1}=\vect{\tilde{v}}_{n+1}$ 
+\end{thm}
+ \begin{proof}
+ We begin by prove the following lema.
+ \begin{lem}
+ \begin{equation}
+  k_{i}=\tilde{k}_{i}+P(\tilde{k}_{i})
+ \end{equation}
+ \end{lem}
+ \begin{proof}
+ By recurrence on $i$.
+ We begin with $i=1$:
+ \begin{equation}
+  k_{1}=\Delta tf\left(\vect{v}_n\right)+\Delta tP\left(f\left(\vect{v}_n\right)\right)
+ \end{equation}
+\begin{equation}
+ \tilde{k}_{1}=\Delta tf\left(\vect{v}_n\right)
+\end{equation}
+ \begin{equation}
+  k_{1}=\Delta t f\left(\vect{v}_n\right)+\Delta tP\left(f\left(\vect{v}_n\right)\right)=\tilde{k}_1+P\left(\tilde{k}_1\right)
+ \end{equation}
+ 
+ Assuming true for smaller $i$:
+ \begin{align*}
+  k_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{n}a_{ij}k_{j}\right)+\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}k_{ij}\right)\right)\\
+  &=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\tilde{k}_{j}+P\left(\tilde{k}_{j}\right)\right)\right)+\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\tilde{k}_{j}+P\left(\tilde{k}_{j}\right)\right)\right)\right)\\
+  \tilde{k}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\tilde{k}_{j}+P\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\tilde{k}_{j}\right)\right)\\
+  &=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\tilde{k}_{j}+P\left(\tilde{k}_{j}\right)\right)\right)\\
+  k_{i}&=\tilde{k}_{i}+P\left(\tilde{k}_{i}\right)
+ \end{align*}
+ \end{proof}
+ 
+ We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ using the lemma.
+ 
+ \begin{align*}
+ \vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}k_{i}\\
+ &=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\tilde{k}_{i}+P\left(\tilde{k}_{i}\right)\right)\\
+ \vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i}+P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i}\right)\\
+ &=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\tilde{k}_{i}+P\left(\tilde{k}_{i}\right)\right)\\
+ \intertext{Using that $\vect{v}_{n}=\tilde{\vect{v}_{n}}$}
+ \vect{v}_{n+1}&=\vect{\tilde{v}}_{n+1}
+ \end{align*}
+
+ \end{proof}
+ 
+ \begin{thm}
+ For the implicit Runge-Kutta case, where the sum to $i-i$ go now to $s$.
+If $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ is divergence free then $\vect{v}_{n+1}=\vect{\tilde{v}}_{n+1}$ 
+\end{thm}
+ \begin{proof}
+ We begin by prove the following lema.
+ \begin{lem}
+ \begin{equation}
+  k_{i}=\tilde{k}_{i}+P(\tilde{k}_{i})
+ \end{equation}
+ \end{lem}
+ \begin{proof}
+Because the sum goes to $s$ and not $i-1$ we cannot use recurrence.
+We now will use vector notation for $k$.
+
+We construct $k$ and $\tilde{k}$ vector with the vector $k_{i}$ and $\tilde{k}_{i}$
+\begin{align}
+ k&=\begin{pmatrix}
+    k_{1}\\
+    \vdots\\
+    k_{s}\\
+   \end{pmatrix}\\
+ \tilde{k}&=\begin{pmatrix}
+    \tilde{k}_{1}\\
+    \vdots\\
+    \tilde{k}_{s}\\
+   \end{pmatrix}
+\end{align}
+
+We form $\hat{P}$ and $\hat{f}$ from a kronecker product:
+\begin{align}
+ \hat{P}&=\eye_{s}\kron P=\begin{pmatrix}P	&\ldots	&0\\
+			\vdots &\ddots 	&\vdots\\
+			0	&0	&P\\
+         \end{pmatrix}\\
+ \hat{f}&=\eye_{s}\kron f\begin{pmatrix}f	&\ldots	&0\\
+			\vdots &\ddots 	&\vdots\\
+			0	&0	&f\\
+         \end{pmatrix}
+\end{align}
+
+We now define $\hat{v}_n$:
+\begin{equation}
+ \hat{v}_{n}=\begin{pmatrix}
+               v_{n}\\
+               \vdots\\
+               v_{n}
+              \end{pmatrix}
+\end{equation}
+
+We now define $A$ with the following kronecker product:
+\begin{equation}
+ A=\begin{pmatrix}
+    a_{11}	&\ldots	&a_{1s}\\
+    \vdots	&\ddots	&\vdots\\
+    a_{s1}	&\ldots	&a_{ss}\\
+   \end{pmatrix} \kron \eye
+\end{equation}
+
+$A$ and $\hat{P}$ are comutative, because of the mixed-product property.
+\begin{align}
+A\hat{P}&=\left(\begin{pmatrix}
+    a_{11}	&\ldots	&a_{1s}\\
+    \vdots	&\ddots	&\vdots\\
+    a_{s1}	&\ldots	&a_{ss}\\
+   \end{pmatrix} \kron \eye \right)
+   \left(\eye_{s}\kron P\right)=
+         \begin{pmatrix}
+    a_{11}	&\ldots	&a_{1s}\\
+    \vdots	&\ddots	&\vdots\\
+    a_{s1}	&\ldots	&a_{ss}\\
+    \end{pmatrix}\kron P\\
+    %
+    \hat{P}A&=
+   \left(\eye_{s}\kron P\right)
+         \left(\begin{pmatrix}
+    a_{11}	&\ldots	&a_{1s}\\
+    \vdots	&\ddots	&\vdots\\
+    a_{s1}	&\ldots	&a_{ss}\\
+   \end{pmatrix} \kron \eye \right)=
+         \begin{pmatrix}
+    a_{11}	&\ldots	&a_{1s}\\
+    \vdots	&\ddots	&\vdots\\
+    a_{s1}	&\ldots	&a_{ss}\\
+    \end{pmatrix}\kron P
+\end{align}
+
+\begin{align}
+ k&=(1+\hat{P})\Delta t\hat{f}(\hat{v}_{n}+Ak)\\
+ \tilde{k}&=\Delta t \hat{f}((1+\hat{P})(\hat{v}_{n}+Ak))
+\end{align}
+
+We begin to define 2 functions:
+\begin{align}
+ k&=g(k)\\
+ \tilde{k}&=\tilde{g}(\tilde{k})\\
+ g(x)&=(1+\hat{P})\Delta t \hat{f}(\hat{v}_{n}+Ax)\\
+ \tilde{g}(x)&=\Delta t \hat{f}((1+\hat{P})(\hat{v}_{n}+Ax))
+\end{align}
+
+$k$ and $\tilde{k}$ are fixed point of function $g$ and $\tilde{g}$.
+
+We now calculate:
+\begin{align}
+ (1+\hat{P})\tilde{g}(x)&=(1+\hat{P})\Delta t \hat{f}((1+\hat{P})(\hat{v}_{n}+Ax))=(1+\hat{P})\Delta t \hat{f}(\hat{v}_{n}+A (1+\hat{P})x)\\
+ &=g((1+\hat{P})x)
+\end{align}
+
+We now substitute $g$ in $\tilde{g}$
+\begin{equation}
+(1+\hat{P})\tilde{k}=g((1+\hat{P})\tilde{k})
+\end{equation}
+
+$(1+\hat{P})\tilde{k}$ is a fixed point of $g$.
+But fixed point of $g$ is $k$.
+
+\begin{equation}
+ k=(1+\hat{P})\tilde{k}
+\end{equation}
+This is exactly the vector version of what we wanted to prove.
+ \end{proof}
+ 
+ The reste is exactly the same than in the first case:
+ 
+ We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ using the lemma.
+ 
+ \begin{align*}
+ \vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}k_{i}\\
+ &=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\tilde{k}_{i}+P\left(\tilde{k}_{i}\right)\right)\\
+ \vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i}+P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i}\right)\\
+ &=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\tilde{k}_{i}+P\left(\tilde{k}_{i}\right)\right)\\
+ \intertext{Using that $\vect{v}_{n}=\tilde{\vect{v}_{n}}$}
+ \vect{v}_{n+1}&=\vect{\tilde{v}}_{n+1}
+ \end{align*}
+
+ \end{proof}
+ 
+ \begin{cor}
+Solving Navier-Stokes equation with the analytical good choice of pressure.
+Is exactly divergence free at every approximation of speed.
+ \end{cor}
+ \begin{proof}
+  The expression of $v$ is the solution of the Navier-Stokes equation with the good choice of pressure.
+  $\tilde{v}$ is the solution of Runge-Kutta equation without pressure witch is projected at every speed estimation.
+  This is divergence free.
+  $v$ and $\tilde{v}$ are the same. With end the proof.
+ \end{proof}
+ 
+ \begin{cor}
+  Using the expression for $v$ or $\tilde{v}$ we are $k$ order precise in time. Where $k$ is the order of the Runge-Kutta method.
+ \end{cor}
+ \begin{proof}
+  $v$ and $\tilde{v}$ are the same.
+  $v$ consist only of a Runge-Kutta method with a good choosen function.
+  So the order in time of $v$ and $\tilde{v}$ is the same that the methode order.
+ \end{proof}
+
