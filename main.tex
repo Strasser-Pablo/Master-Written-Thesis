@@ -1,7 +1,7 @@
 \documentclass[a4paper]{amsbook}
 
 %Package inclusion
-\usepackage[utf8]{inputenc}
+\usepackage{fontspec}
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{tikz}
@@ -12,7 +12,7 @@
 \usepgflibrary{shapes.geometric}
 
 %New command for identifier style
-\newcommand{\identifiera}[0]{\ttfamily }
+\newcommand{\identifiera}[0]{\setmonofont }
 \newcommand{\identifier}[1]{ {\identifiera #1}}
 
 %listings option set
