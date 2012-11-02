@@ -6,6 +6,7 @@
 \usepackage{listings}
 \usepackage{tikz}
 \usepackage{verbatim}
+\usepackage{minitoc}
 
 %Tikz library inclusion
 \usepgflibrary{shapes.geometric}
@@ -66,8 +67,10 @@
 \newtheorem{cor}[thm]{Corollaire}
 
 \begin{document}
+\dominitoc
 %make the title page
 \maketitle
+\tableofcontents
 \include{introduction/main}
 \include{analytical/main}
 \include{fixed/main}
