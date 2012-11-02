@@ -46,7 +46,12 @@
 }
 
 %New command Bold for vector in math mode
-\newcommand{\vect}[1]{ {\boldsymbol #1}}
+\newcommand{\vect}[1]{ {\boldsymbol {#1}}}
+
+%New command for kronecker product.
+\newcommand{\kron}{\bigotimes}
+%New command for identity matrice.
+\newcommand{\eye}{1}
 
 %Theorem and Definition counter
 \newtheorem{property}{Property}
