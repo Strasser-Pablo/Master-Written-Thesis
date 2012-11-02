@@ -1,8 +1,10 @@
-\documentclass[a4paper]{amsbook}
+\documentclass[a4paper]{book}
 
 %Package inclusion
 \usepackage{fontspec}
 \usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amsthm}
 \usepackage{listings}
 \usepackage{tikz}
 \usepackage{verbatim}
@@ -67,9 +69,9 @@
 \newtheorem{cor}[thm]{Corollaire}
 
 \begin{document}
-\dominitoc
 %make the title page
 \maketitle
+\dominitoc
 \tableofcontents
 \include{introduction/main}
 \include{analytical/main}
