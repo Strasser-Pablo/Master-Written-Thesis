@@ -3,7 +3,7 @@
 \section{Introduction}
 
 We will in this chapter be interested in the case of fixed domain Navier-Stokes with grid discretisation.
-This case is simplier than the variable domain case and serve as basis to more complicated case.
+This case is easier than the variable domain case and serve as basis to more complicated case.
 
 \section{Overview}
 
@@ -33,7 +33,7 @@ After this step the discrete evaluation of divergence will be divergence free ex
  
  But using this equation, will not ensure in the numerical case that the speed is divergence free.
  The latter equation will not be used because we consider that being divergence free at every time step is more important than
- to have the goode equation for pressure but where time discretisation error will create more divergence.
+ to have the good equation for pressure but where time discretisation error will create more divergence.
 \end{rem}
 
 \section{Evolve in time}
@@ -44,7 +44,7 @@ We need to solve:
   \end{equation}
   
   \subsection{Analytical solution to Burger's equation}
-  This equation is know as the Burger equation and can be solved analyticaly for $\nu=0$.
+  This equation is know as the Burger equation and can be solved analytically for $\nu=0$.
   The solution is given by the method of characteristics. Using the same method that we us in section \ref{analytical:convectif}.
   \begin{equation}
    \frac{d u_{\lambda}(t)}{dt}=\frac{\vect{F}(\vect{x},t)}{\rho(\vect{x},t)}
@@ -54,7 +54,7 @@ We need to solve:
   
   This equation can after a finite time have more that one solution and don't have continuous and derivable solution everywhere.
   
-  We see this in taking for example a sinus as input speed for the case whithout force.
+  We see this in taking for example a sinus as input speed for the case without force.
   The high speed region of the sinus will go faster than the slow point of the sinus.
   After a given time we will find a multi-valued solution. This is the sign, that we need to consider discontinuous solution after this time.
   But solution are no more unique, other condition need to be added.
@@ -62,7 +62,7 @@ We need to solve:
   For the 3d case of Navier-Stokes equation we do not know if we have unicity after a given time.
   We know that we have a solution but not how many.
   
-  In discretised version, we only need to solve for one time step.
+  In discretized version, we only need to solve for one time step.
   The projection step will change the speed everywhere.
 
   \subsection{Method of Line}
@@ -81,7 +81,7 @@ Equation \ref{fixed:lineB} is the evaluation of an expression with derivative at
 
 \subsubsection{Runge-Kutta}
 
-A Runge-Kutta method is a method to solve the ODE (I drop the $\vect{x}$ dependance, but it's understood that this equation is for a vector formed in concataning every speed):
+A Runge-Kutta method is a method to solve the ODE (I drop the $\vect{x}$ dependence, but it's understood that this equation is for a vector formed in concatenating every speed):
 \begin{equation}
  \partial_t \vect{v}(t)=f(\vect{v})
 \end{equation}
@@ -103,7 +103,7 @@ The projection step consist to apply:
   \Delta \phi&=\vect{\nabla} \cdot \vect{v}\label{fixed:project}
  \end{align}
 
- Equation \ref{fixed:project} typicaly consist to solve a linear system.
+ Equation \ref{fixed:project} typically consist to solve a linear system.
  
  \section{Runge-Kutta and Projection}
  
@@ -134,7 +134,7 @@ The projection step consist to apply:
   \Delta \phi=\nabla \cdot f(\vect{v})
  \end{equation}
 
- The gradiant of $\phi$ is then:
+ The gradient of $\phi$ is then:
  
  \begin{equation}
   -\vect{\nabla}\phi=P(f(\vect{v}))
@@ -145,13 +145,13 @@ The projection step consist to apply:
  \partial_t \vect{v}(\vect{x} ,t)=f(\vect{v})+P(f(\vect{v})) 
 \end{equation}
 
-This equation is analyticaly exact.
+This equation is analytically exact.
 
 We would expect that solving this equation with a Runge-Kutta algorithm will lead to a numerical error in Divergence.
 
 To show that this is not the case, we show that another method to force divergence free of every speed is in fact equivalent to this one.
 
-We define the following sheme.
+We define the following scheme.
 \begin{align}
 \vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i}+P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i}\right)\\
 \tilde{k}_{i}&=\Delta t f\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\tilde{k}_{j}+P\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\tilde{k}_{j}\right)\right)
@@ -170,7 +170,7 @@ We now write the Runge-Kutta expression for \ref{fixed:simpl_navier}.
 If $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ is divergence free then $\vect{v}_{n+1}=\vect{\tilde{v}}_{n+1}$ 
 \end{thm}
  \begin{proof}
- We begin by prove the following lema.
+ We begin by prove the following lemma.
  \begin{lem}
  \begin{equation}
   k_{i}=\tilde{k}_{i}+P(\tilde{k}_{i})
@@ -217,7 +217,7 @@ If $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ is divergence free then 
 If $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ is divergence free then $\vect{v}_{n+1}=\vect{\tilde{v}}_{n+1}$ 
 \end{thm}
  \begin{proof}
- We begin by prove the following lema.
+ We begin by prove the following lemma.
  \begin{lem}
  \begin{equation}
   k_{i}=\tilde{k}_{i}+P(\tilde{k}_{i})
@@ -241,7 +241,7 @@ We construct $k$ and $\tilde{k}$ vector with the vector $k_{i}$ and $\tilde{k}_{
    \end{pmatrix}
 \end{align}
 
-We form $\hat{P}$ and $\hat{f}$ from a kronecker product:
+We form $\hat{P}$ and $\hat{f}$ from a Kronecker product:
 \begin{align}
  \hat{P}&=\eye_{s}\kron P=\begin{pmatrix}P	&\ldots	&0\\
 			\vdots &\ddots 	&\vdots\\
@@ -262,7 +262,7 @@ We now define $\hat{v}_n$:
               \end{pmatrix}
 \end{equation}
 
-We now define $A$ with the following kronecker product:
+We now define $A$ with the following Kronecker product:
 \begin{equation}
  A=\begin{pmatrix}
     a_{11}	&\ldots	&a_{1s}\\
@@ -271,7 +271,7 @@ We now define $A$ with the following kronecker product:
    \end{pmatrix} \kron \eye
 \end{equation}
 
-$A$ and $\hat{P}$ are comutative, because of the mixed-product property.
+$A$ and $\hat{P}$ are commutative, because of the mixed-product property.
 \begin{align}
 A\hat{P}&=\left(\begin{pmatrix}
     a_{11}	&\ldots	&a_{1s}\\
@@ -334,7 +334,7 @@ But fixed point of $g$ is $k$.
 This is exactly the vector version of what we wanted to prove.
  \end{proof}
  
- The reste is exactly the same than in the first case:
+ The rest is exactly the same than in the first case:
  
  We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ using the lemma.
  
@@ -365,7 +365,7 @@ Is exactly divergence free at every approximation of speed.
  \end{cor}
  \begin{proof}
   $v$ and $\tilde{v}$ are the same.
-  $v$ consist only of a Runge-Kutta method with a good choosen function.
-  So the order in time of $v$ and $\tilde{v}$ is the same that the methode order.
+  $v$ consist only of a Runge-Kutta method with a good chosen function.
+  So the order in time of $v$ and $\tilde{v}$ is the same that the method order.
  \end{proof}
 

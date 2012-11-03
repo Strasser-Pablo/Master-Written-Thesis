@@ -6,31 +6,31 @@ The other numerical chapter will consist of a numerical sheme to solve the probl
 
 \section{Variable and Parameter}
 
-The problem will consist to find a function of space and time respecting somes condition and equation.
+The problem will consist to find a function of space and time respecting some condition and equation.
 
 \subsection{Space and Time}
 
 The space consist of a vector in fixed cartesian coordinate with dimension typically 2 or 3 (Navier-Stokes on 1d is trivial).
 Space is noted $x$.
-The time consist of a indice indicating the evolution of the function in time.
+The time consist of a indices indicating the evolution of the function in time.
 Time is noted $t$.
 
 \subsection{Domain}
 
-A domain is the spatial region where a field is defined. This consist physically in the spatial region where watter lay.
+A domain is the spatial region where a field is defined. This consist physically in the spatial region where water lay.
 Boundary condition need to be provided.
 
 The Domain can vary with respect of time and can vary with respect of the solution at previous time.
 
-The Domain don't need to be connex. But can be decomposed in union of connex Subdomain.
+The Domain don't need to be connected. But can be decomposed in union of connected Subdomain.
 
 \begin{example}
- If we take a drop of watter falling in a glass of watter. The domain consist of the region where the watter lie.
- At the begining this will consist of domain consisting of two connex subdomain (the drop and the glass)
+ If we take a drop of water falling in a glass of water. The domain consist of the region where the water lie.
+ At the beginning this will consist of domain consisting of two connected subdomain (the drop and the glass)
  that after a given time will merge in one domain.
 \end{example}
 
-The Domain is generaly noted $\Omega$ or $\Omega(t)$ to emphasy that it can be variable with respect of time.
+The Domain is generally noted $\Omega$ or $\Omega(t)$ to emphasis that it can be variable with respect of time.
 
 \subsection{Field}
 
@@ -61,14 +61,14 @@ The viscosity represent how much water particle stick together.
 
 Higher is the viscosity less abrupt speed change is possible.
 
-The viscosity is noted $\mu$. We use alot $\nu$ that is the viscosity divided by the density.
+The viscosity is noted $\mu$. We use allot $\nu$ that is the viscosity divided by the density.
 \begin{equation}
  \nu=\frac{\mu}{\rho}
 \end{equation}
 
 \subsubsection{Density}
 
-The density is a mass per unit volumn.
+The density is a mass per unit volume.
 
 Density play the same role as mass in Newton's mechanic.
 
@@ -79,7 +79,7 @@ The density is noted $\rho$.
 
 \subsubsection{Force}
 
-The force is a user defined vector field that represent the external force applyed to the water.
+The force is a user defined vector field that represent the external force applied to the water.
 It can possibly depend on the solution for previous time.
 
 The force is noted $\vect{f}$
@@ -97,8 +97,8 @@ The incompressible Navier-Stokes equation are given by:
 \end{align}
 
 Equation \ref{analytical:navierStokesA}, tell us that the speed is a divergence free field.
-Equation \ref{analytical:navierStokesB} is a equation of evolution. The pressence of $p$ allow to maintain the speed always divergence free.
-Taking the rotational of \ref{analytical:navierStokesB} make disappear the pressure term (because the rotational of a gradiant is 0).
+Equation \ref{analytical:navierStokesB} is a equation of evolution. The presence of $p$ allow to maintain the speed always divergence free.
+Taking the rotational of \ref{analytical:navierStokesB} make disappear the pressure term (because the rotational of a gradient is 0).
 
 The pressure term can be seen as a correction of the divergence without changing the rotational.
 
@@ -108,9 +108,9 @@ We can obtain an expression for the pressure by taking the divergence of \ref{an
 \Delta p=-\rho \vect{\nabla} \cdot (\vect{v}\vect{\nabla} \cdot \vect{v})
 \end{equation}
 
-\subsection{Convectif term}
+\subsection{Convective term}
 \label{analytical:convectif}
-We will in this section rewrite \ref{analytical:navierStokesB} in nother form.
+We will in this section rewrite \ref{analytical:navierStokesB} in another form.
 
 We begin to define a new position system $\vect{\xi}_{\lambda}(t)$.
 \begin{align}
@@ -118,20 +118,20 @@ We begin to define a new position system $\vect{\xi}_{\lambda}(t)$.
  \xi_{\lambda}(t_0)&=\xi^{0}_{\lambda}
 \end{align}
 
-$\lambda$ is a system of representent that is initialised by initial condition.
+$\lambda$ is a system of representative that is initialized by initial condition.
 For a given $\lambda$ $\xi_{\lambda}(t)$ follow the speed at the given point.
 
-This position system is called particle coordinate or laggragean.
+This position system is called particle coordinate or Lagrangian.
 $\xi_\lambda(t)$ is called the characteristic.
 
-We then can define the laggragean speed.
+We then can define the Lagrangian speed.
 \begin{equation}
  u_{\lambda}(t)=v(\xi_{\lambda}(t),t)
 \end{equation}
 
-The laggrangean speed is the speed following a characteristic.
+The Lagrangian speed is the speed following a characteristic.
 
-Taking the total derivative(the derivative of everything that depend on time) of the laggrangean speed with respect of time, we have:
+Taking the total derivative(the derivative of everything that depend on time) of the Lagrangian speed with respect of time, we have:
 \begin{equation}
 \frac{d u_{\lambda}(t)}{d t}=\frac{d v(\xi_{\lambda},t)}{d t}=\partial_t \vect{v}+\left(\frac{\partial \vect{\xi_{\lambda}}(t)}{\partial t}\cdot\vect{\nabla}\right)\vect{v}
 \end{equation}
@@ -171,6 +171,6 @@ And correct the speed to a divergence free space.
 
 This fact will be used in numerical method.
 
-If $v$ is already divergence free, this will change nothing (with good and consistant boundary condition and discretisation in case of discrete case).
+If $v$ is already divergence free, this will change nothing (with good and consistent boundary condition and discretisation in case of discrete case).
 Because the solution of $\Delta p=0$ is a constant pressure.
 
