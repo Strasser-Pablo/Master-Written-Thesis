@@ -10,7 +10,7 @@ Vector with the dimension of physical space (2d or 3d) are written $\vect{v}$.
 
 We only use Cartesian coordinate system.
 
-We indicate a given component of a vector with indices. $\vect{v}_1$ indices first component.
+We indicate a given component of a vector with indices. $\vect{v}_1$ indice first component.
 
 \subsection{Differential operator}
 
@@ -119,4 +119,16 @@ The gradient of a vector is Divergence Free.
  So this can be used in discretized case and will be exact as long as \ref{introduction:ProjectionDelta} is respected.
  \end{rem}
 \end{proof}
+
+\begin{definition}
+We define the projection operator $P(\vect{v})$
+  \begin{equation}
+    P(\vect{v})=\vect{\nabla}\Delta^{-1}\vect{\nabla}\cdot \vect{v}
+  \end{equation}
+  The projection of section \ref{introduction:projection} is then written:
+  \begin{equation}
+    \vect{v}_{new}=\vect{v}+P(\vect{v})
+  \end{equation}
+
+\end{definition}
 
