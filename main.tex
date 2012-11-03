@@ -68,6 +68,11 @@
 \newtheorem*{example}{Example}
 \newtheorem{cor}[thm]{Corollaire}
 
+\newwrite\luadebug
+\immediate\openout\luadebug luadebug.lua
+\AtEndDocument{\immediate\closeout\luadebug}
+\newcommand\directluadebug{\immediate\write\luadebug}
+
 \begin{document}
 %make the title page
 \maketitle
