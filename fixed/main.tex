@@ -28,10 +28,12 @@ But a priori the numerical solution is not necessary divergence free.
 \label{fixed:proj}
 
 We can project every speed in a divergence free space:
+\begin{subequations}
 \begin{align}
   \partial_t \vect{\tilde{v}}(\vect{x} ,t)&=f(\vect{v}(\vect{x},t))\\
   \vect{v}(\vect{x},t)&=(\eye+P)\vect{\tilde{v}}
 \end{align}
+\end{subequations}
 
 We have the certitude to be always divergence free by construction.
 
@@ -43,28 +45,34 @@ A Runge-Kutta method is a method to solve the ODE (I drop the $\vect{x}$ depende
 \end{equation}
 
 The solution at time $n+1$ is given from the solution at time $n$ with $\Delta t$ the time step and $a$, $b$ parameter of the method.
-\begin{align*}
+\begin{subequations}
+\begin{align}
 	\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}k_{i}\\
 	k_{j}&=\Delta t f(\vect{v}_{n}+\sum_{i=1}^{j-1}a_{j,i}k_{i})
-\end{align*}
+\end{align}
+\end{subequations}
 
 \section{Runge-Kutta based scheme}
 
 We now integrate method \label{fixed:analytical} and \label{fixed:proj} with a Runge-Kutta method.
 
 Scheme for projection at every evaluation of speed:
+\begin{subequations}
 \begin{align}
 \vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i}+P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i}\right)\\
 \tilde{k}_{i}&=\Delta t f\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\tilde{k}_{j}+P\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\tilde{k}_{j}\right)\right)
 \end{align}
+\end{subequations}
 
 We project at every estimation of speed. Making by construction every speed divergence free.
 
-Scheme for analytical expression for pressure.
+Scheme for analytical expression for pressure:
+\begin{subequations}
 \begin{align}
 	\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}k_{i}\\
 	k_{i}&=\Delta t f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}k_{j}\right)+\Delta t P\left(f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}k_{j}\right)\right)
 \end{align}
+\end{subequations}
 
 The following theorem show that the two scheme are the same.
 
