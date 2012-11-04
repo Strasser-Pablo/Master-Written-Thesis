@@ -280,5 +280,99 @@ Is exactly divergence free at every approximation of speed.
 
 \subsection{Unstaggered grid}
 
+On an unstaggered grid we put the variable like figure \ref{fixed:unstaggered}.
 
+\begin{figure}
+\directlua{dofile('fixed/unstaggered.lua')}
+\caption{Position of variable for unstaggered grid}
+\label{fixed:unstaggered}
+\end{figure}
 
+The problem with unstaggered grid, is that obvious center difference discretization lead to wrong divergence free vector.
+
+We define the derivative of a scalar by:
+\begin{equation}
+  \partial_x a_i=\frac{a_{i+1}-a{i-1}}{\Delta x}
+\end{equation}
+
+The divergence discretisation is then given by (notation for 2d, but for 3d it's the same):
+\begin{equation}
+  \vect{\nabla} \cdot \vect{v}_{i,j}=\frac{{v_{x}}_{i+1,j}-{v_{x}}_{i-1,j}}{\Delta x}+\frac{{v_{y}}_{i+1,j}-{v_{y}}_{i-1,j}}{\Delta y}
+\end{equation}
+
+The problem can be see in figure \ref{fixed:unstaggered_div} is that the divergence at red point only use value at blue point and not the point at center (red point).
+This allow to have none physical solution that are divergence free.
+
+\begin{figure}
+\directlua{dofile('fixed/unstaggered_div.lua')}
+\caption{Value used to calculate the divergence at red point are in blue}
+\label{fixed:unstaggered_div}
+\end{figure}
+
+In figure \ref{fixed:unstaggered_div2} we have solution that is numerically divergence free. But this solution is not continuous and we expect that is not divergence free.
+
+\begin{figure}
+\directlua{dofile('fixed/unstaggered_div2.lua')}
+\caption{Speed that are numerically divergence free but should'nt}
+\label{fixed:unstaggered_div2}
+\end{figure}
+
+The problem with this kind of solution, is that it's very stable.
+The projection operator $P$ will be 0, and don't correct this kind of speed. We cannot correct it in general for every choice of $f$.
+
+We can recall one of the formulation of the so call Murphy's law, ``If anything can go wrong, it will.''
+
+We can correct this problem with using a forward or backward expression. But this kind of expression is only first order accurate.
+
+Another solution is to use another grid.
+
+\subsection{Staggered grid}
+
+On a staggered grid we put the variable in the position shown if figure \ref{fixed:staggere}.
+
+\begin{figure}
+\directlua{dofile('fixed/staggered.lua')}
+\caption{Position of variable on a staggered grid}
+\label{fixed:staggered}
+\end{figure}
+
+This can seem to be strange to have different component of speed at different place. But it make discretization more easy.
+
+To label variable, we label by cell and then took the lower,left component (cf. figure \ref{fixed:staggered_label}).
+
+\begin{figure}
+\directlua{dofile('fixed/staggered_label.lua')}
+\caption{Labeling on staggered grid}
+\label{fixed:staggered_label}
+\end{figure}
+
+We now define the divergence and the gradient:
+\begin{align}
+  \vect{\nabla}p_{ij}&=\begin{pmatrix}
+    \frac{p_{i,j}-p_{i-1,j}}{\Delta x}\\
+    \frac{p_{i,j}-p_{i,j-1}}{\Delta y}\\
+                      \end{pmatrix}\\
+  \vect{\nabla}\cdot \vect{v}_{i,j}&=\frac{{v_{x}}_{i+1,j}-{v_{x}}_{i,j}}{\Delta x}+\frac{{v_{y}}_{i,j+1}-{v_{y}}_{i,j}}{\Delta y}
+\end{align}
+
+This two expression are geometrically very clear.
+
+In figure \ref{fixed:staggered_gradient}, the gradient at red speed component use component at blue point.
+Contrary at case with center difference we cannot create a none constant vector with 0 gradient.
+
+\begin{figure}
+\directlua{dofile('fixed/staggered_gradient.lua')}
+\caption{Point used to calculate the red gradient component are in blue}
+\label{fixed:staggered_gradient}
+\end{figure}
+
+The divergence is given by the sum of inflow around a cell.
+In figure \ref{fixed:staggered_divergence}, the divergence at red point use component at blue point.
+
+\begin{figure}
+\directlua{dofile('fixed/staggered_divergence.lua')}
+\caption{Point used to calculate red divergence are in blue}
+\label{fixed:staggred_divergence}
+\end{figure}
+
+We cannot have the same situation than without staggered grid, where a unphysical vector is divergence free.
