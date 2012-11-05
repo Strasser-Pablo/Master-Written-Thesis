@@ -54,7 +54,7 @@ The solution at time $n+1$ is given from the solution at time $n$ with $\Delta t
 
 \section{Runge-Kutta based scheme}
 
-We now integrate method \label{fixed:analytical} and \label{fixed:proj} with a Runge-Kutta method.
+We now integrate method \ref{fixed:analytical} and \ref{fixed:proj} with a Runge-Kutta method.
 
 Scheme for projection at every evaluation of speed:
 \begin{subequations}
@@ -320,7 +320,7 @@ Another solution is to use another grid.
 
 \subsection{Staggered grid}
 
-On a staggered grid we put the variable in the position shown if figure \ref{fixed:staggere}.
+On a staggered grid we put the variable in the position shown if figure \ref{fixed:staggered}.
 
 \begin{figure}
 \directlua{dofile('fixed/staggered.lua')}
@@ -364,7 +364,134 @@ In figure \ref{fixed:staggered_divergence}, the divergence at red point use comp
 \begin{figure}
 \directlua{dofile('fixed/staggered_divergence.lua')}
 \caption{Point used to calculate red divergence are in blue}
-\label{fixed:staggred_divergence}
+\label{fixed:staggered_divergence}
 \end{figure}
 
-We cannot have the same situation than without staggered grid, where a unphysical vector is divergence free.
+We cannot have the same situation than without staggered grid, where an unphysical vector is divergence free.
+
+\subsubsection{Discretization}
+
+We now look at different possible scheme for staggered grid discretization.
+
+\paragraph{Gradient}
+The gradient is discretized with center difference.
+
+\begin{equation}
+  \vect{\nabla}p_{i,j}=\begin{pmatrix}
+                       	\frac{p_{i-1,j}-p_{i,j}}{\Delta x}\\
+                       	\frac{p_{i,j-1}-p_{i,j}}{\Delta y}\\
+                       \end{pmatrix}
+\end{equation}
+
+Center difference is second order accurate to the contrary to forward or backward difference.
+
+\paragraph{Divergence}
+The divergence is discretized with center difference.
+
+\begin{equation}
+	\vect{\nabla}\cdot \vect{v}_{i,j}=\frac{{v_{x}}_{i,j}-{v_{x}}_{i-1,j}}{\Delta x}+\frac{{v_{y}}_{i,j}-{v_{y}}_{i,j-1}}{\Delta y}
+\end{equation}
+
+Because of center difference, it's second order accurate.
+
+\paragraph{Laplacian}
+\label{fixed:Laplacian}
+The discretization of the laplacian is the combination of the application of the gradient and divergence.
+
+\begin{equation}
+  \Delta p_{i,j}=\frac{p_{i+1,j}-2p_{i,j}+p_{i-1,j}}{(\Delta x)^2}+\frac{p_{i,j+1}-2p_{i,j}+p_{i,j-1}}{(\Delta y)^2}
+\end{equation}
+
+This formula is of order 2.
+
+We prove it for the one dimensional case:
+\begin{align*}
+  f(x+\Delta x)-2f(x)+f(x-\Delta x)&=\\
+  \intertext{We make a taylor expansion around $x$}
+  &=f(x)+\Delta x f'(x) +(\Delta x)^2 \frac{f''(x)}{2}+(\Delta x)^3 \frac{f'''(x)}{6}+O((\Delta x)^4)-2f(x)\\
+  &\qquad+f(x)-\Delta x f'(x) +(\Delta x)^2 \frac{f''(x)}{2}-(\Delta x)^3 \frac{f'''(x)}{6}\\
+  &=(\Delta x)^2f''(x) +O((\Delta x)^4)\\
+  f''(x)&=\frac{f(x+\Delta x)-2f(x)+f(x-\Delta x)}{(\Delta x)^2}+O((\Delta x)^2)
+\end{align*}
+
+\paragraph{Vector Laplacian}
+For vector Laplacian we use the same scheme as in section \ref{fixed:Laplacian} but for every component of speed.
+
+Staggered grid don't pose problem because we don't have mixed term with derivative and none derivative.
+
+\paragraph{Convection}
+
+Convection term is the more difficult term to treat, because it's none linear and use mixed term.
+
+We need to consider two type of term. Let $i\neq j$. And $\vect{k}$ be a integer vector of the position on the grid.
+And $\vect{e}_i$ the i\th unit vector.
+
+We first consider as ith component:
+\begin{equation}
+\left(v_{i}\partial_{i}v_{i}\right)^{i}_{\vect{k}}
+\end{equation}
+
+We can discretize this in two manner:
+
+\subparagraph{Central difference}
+\begin{equation}
+{v_{i}}_{\vect{k}}\frac{{v_{i}}_{\vect{k}+\vect{e}_i}-{v_{i}}_{\vect{k}-\vect{e}_i}}{2\Delta x_{i}}
+\end{equation}
+
+\subparagraph{Upwind difference}
+
+We use the same method, but instead to use center difference, we use upwind:
+
+\begin{align}
+\intertext{if ${v_{i}}_{\vect{k}}<0$}
+\left(v_{i}\partial_{i}v_{i}\right)_{\vect{k}}&={v_{i}}_{\vect{k}}\frac{{v_{i}}_{\vect{k}+\vect{e}_i}-{v_{i}}_{\vect{k}}}{\Delta x_{i}}\\
+\intertext{if ${v_{i}}_{\vect{k}}>0$}
+\left(v_{i}\partial_{i}v_{i}\right)_{\vect{k}}&={v_{i}}_{\vect{k}}\frac{{v_{i}}_{\vect{k}}-{v_{i}}_{\vect{k}-\vect{e}_i}}{\Delta x_{i}}\\
+\intertext{if ${v_{i}}_{\vect{k}}=0$}
+\left(v_{i}\partial_{i}v_{i}\right)_{\vect{k}}&=0
+\end{align}
+
+Upwind is considered more stable (can be proof easly in one dimension for burger's equation) but more diffusif.
+
+We now consider:
+\begin{equation}
+\left(v_{j}\partial_{j}v_{i}\right)^{i}_{\vect{k}}
+\end{equation}
+
+\begin{rem}
+  Contrary to the other case, we need to have the speed at a position not know for $v_{j}$. This come because of the staggered grid sheme.
+  For this, we can interpolated the know speed of neighbour cell taking for example the average of the 4 neighbour (cf. figure \ref{fixed:staggered_convection_upwind}).
+  We will use as notation $v_{j}^{i}$ for the speed component $j$ at position for the component $i$.
+  
+  \begin{figure}
+    \directlua{dofile('fixed/staggered_convection_upwind.lua')}
+    \caption{We need the value of the red arrow. For this we can interpolated from the blue arrow.}
+    \label{fixed:staggered_convection_upwind}
+    \end{figure}
+\end{rem}
+
+We can discretize this in two manner:
+
+\subparagraph{Central difference}
+\begin{equation}
+\left(v_{j}\partial_{j}v_{i}\right)^{i}_{\vect{k}}={v_{j}^{i}}_{\vect{k}}\frac{{v_{i}}_{\vect{k}+\vect{e}_j}-{v_{i}}_{\vect{k}-\vect{e}_j}}{2\Delta x_{j}}
+\end{equation}
+
+\subparagraph{Upwind difference}
+
+We use the same method, but instead to use center difference, we use upwind:
+
+\begin{align}
+\intertext{if ${v_{j}^{i}}_{\vect{k}}<0$}
+\left(v_{j}\partial_{j}v_{i}\right)^{i}_{\vect{k}}&={v_{j}^{i}}_{\vect{k}}\frac{{v_{i}}_{\vect{k}+\vect{e}_j}-{v_{i}}_{\vect{k}}}{\Delta x_{j}}\\
+\intertext{if ${v_{j}^{i}}_{\vect{k}}>0$}
+\left(v_{j}\partial_{j}v_{i}\right)^{i}_{\vect{k}}&={v_{j}^{i}}_{\vect{k}}\frac{{v_{i}}_{\vect{k}}-{v_{i}}_{\vect{k}-\vect{e}_j}}{\Delta x_{j}}\\
+\intertext{if ${v_{j}^{i}}_{\vect{k}}=0$}
+\left(v_{j}\partial_{j}v_{i}\right)^{i}_{\vect{k}}&=0
+\end{align}
+
+Upwind is considered more stable (can be proven easly in one dimension for burger's equation) but more diffusive.
+
+
+
+
