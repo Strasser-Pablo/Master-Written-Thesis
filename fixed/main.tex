@@ -176,61 +176,45 @@ We now define $\hat{v}_n$:
 	      \end{pmatrix}
 \end{equation}
 
-We now define $A$ with the following Kronecker product:
+We now define $\hat{A}$ with the following Kronecker product:
 \begin{equation}
-A=\begin{pmatrix}
+\hat{A}=\begin{pmatrix}
     a_{11}	&\ldots	&a_{1s}\\
     \vdots	&\ddots	&\vdots\\
     a_{s1}	&\ldots	&a_{ss}\\
-  \end{pmatrix} \kron \eye
+  \end{pmatrix} \kron \eye=A \kron \eye
 \end{equation}
 
-$A$ and $\hat{P}$ are commutative, because of the mixed-product property.
+$\hat{A}$ and $\hat{P}$ are commutative, because of the mixed-product property.
 \begin{align}
-A\hat{P}&=\left(\begin{pmatrix}
-    a_{11}	&\ldots	&a_{1s}\\
-    \vdots	&\ddots	&\vdots\\
-    a_{s1}	&\ldots	&a_{ss}\\
-  \end{pmatrix} \kron \eye \right)
+\hat{A}\hat{P}&=\left(A\kron \eye \right)
   \left(\eye_{s}\kron P\right)=
-	\begin{pmatrix}
-    a_{11}	&\ldots	&a_{1s}\\
-    \vdots	&\ddots	&\vdots\\
-    a_{s1}	&\ldots	&a_{ss}\\
-    \end{pmatrix}\kron P\\
+	A\kron P\\
     %
-    \hat{P}A&=
+    \hat{P}\hat{A}&=
   \left(\eye_{s}\kron P\right)
-	\left(\begin{pmatrix}
-    a_{11}	&\ldots	&a_{1s}\\
-    \vdots	&\ddots	&\vdots\\
-    a_{s1}	&\ldots	&a_{ss}\\
-  \end{pmatrix} \kron \eye \right)=
-	\begin{pmatrix}
-    a_{11}	&\ldots	&a_{1s}\\
-    \vdots	&\ddots	&\vdots\\
-    a_{s1}	&\ldots	&a_{ss}\\
-    \end{pmatrix}\kron P
+	\left(A \kron \eye \right)=
+	A\kron P
 \end{align}
 
 \begin{align}
-k&=(1+\hat{P})\Delta t\hat{f}(\hat{v}_{n}+Ak)\\
-\tilde{k}&=\Delta t \hat{f}((1+\hat{P})(\hat{v}_{n}+Ak))
+k&=(1+\hat{P})\Delta t\hat{f}(\hat{v}_{n}+\hat{A}k)\\
+\tilde{k}&=\Delta t \hat{f}((1+\hat{P})(\hat{v}_{n}+\hat{A}k))
 \end{align}
 
 We begin to define 2 functions:
 \begin{align}
 k&=g(k)\\
 \tilde{k}&=\tilde{g}(\tilde{k})\\
-g(x)&=(1+\hat{P})\Delta t \hat{f}(\hat{v}_{n}+Ax)\\
-\tilde{g}(x)&=\Delta t \hat{f}((1+\hat{P})(\hat{v}_{n}+Ax))
+g(x)&=(1+\hat{P})\Delta t \hat{f}(\hat{v}_{n}+\hat{A}x)\\
+\tilde{g}(x)&=\Delta t \hat{f}((1+\hat{P})(\hat{v}_{n}+\hat{A}x))
 \end{align}
 
 $k$ and $\tilde{k}$ are fixed point of function $g$ and $\tilde{g}$.
 
 We now calculate:
 \begin{align}
-(1+\hat{P})\tilde{g}(x)&=(1+\hat{P})\Delta t \hat{f}((1+\hat{P})(\hat{v}_{n}+Ax))=(1+\hat{P})\Delta t \hat{f}(\hat{v}_{n}+A (1+\hat{P})x)\\
+(1+\hat{P})\tilde{g}(x)&=(1+\hat{P})\Delta t \hat{f}((1+\hat{P})(\hat{v}_{n}+\hat{A}x))=(1+\hat{P})\Delta t \hat{f}(\hat{v}_{n}+\hat{A} (1+\hat{P})x)\\
 &=g((1+\hat{P})x)
 \end{align}
 
