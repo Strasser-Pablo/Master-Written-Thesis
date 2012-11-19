@@ -492,6 +492,53 @@ We use the same method, but instead to use center difference, we use upwind:
 
 Upwind is considered more stable (can be proven easly in one dimension for burger's equation) but more diffusive.
 
+\section{Numerical experiment}
+
+We will now do some numerical experiment in fixed boundary condition to show how it work.
+
+\subsection{Forced wave problem}
+
+In a rectangular pool with Von-Neumann boundary condition (except to one point to fix the constant) in pressure.
+We begin with a zero speed initial condition with a forced speed at one of the boundary.
+The choose of Von-Neumann boundary condition ensure that pressure will not change the velocity at the boundary of the pool if possible.
+
+\subsubsection{Constant speed case}
+
+We begin with the case where the input speed is constant and normal to the boundary.
+
+\subsection{Heat Equation}
+\pgfplotstableread{fixed/solheat/sol_1.txt}\HeatSola
+%\pgfplotstabletypeset[columns={x,u}]\HeatSola
+
+\pgfplotstableread{fixed/solheat/sol_10.txt}\HeatSolb
+%\pgfplotstabletypeset[columns={x,u}]\HeatSolb
+
+\pgfplotstableread{fixed/solheat/sol_100.txt}\HeatSolc
+%\pgfplotstabletypeset[columns={x,u}]\HeatSolc
+
+\pgfplotstableread{fixed/solheat/sol_200.txt}\HeatSold
+%\pgfplotstabletypeset[columns={x,u}]\HeatSold
+
+\pgfplotstableread{fixed/solheat/sol_300.txt}\HeatSole
+%\pgfplotstabletypeset[columns={x,u}]\HeatSole
+
+\pgfplotstableread{fixed/solheat/sol_400.txt}\HeatSolf
+%\pgfplotstabletypeset[columns={x,u}]\HeatSolf
+
+\pgfplotstableread{fixed/solheat/sol_500.txt}\HeatSolg
+%\pgfplotstabletypeset[columns={x,u}]\HeatSolg
+
+\begin{tikzpicture}
+	\begin{axis}
+		\addplot table[x=x,y=u]{\HeatSola};
+		\addplot table[x=x,y=u]{\HeatSolb};
+		\addplot table[x=x,y=u]{\HeatSolc};
+		\addplot table[x=x,y=u]{\HeatSold};
+		\addplot table[x=x,y=u]{\HeatSole};
+		\addplot table[x=x,y=u]{\HeatSolf};
+		\addplot table[x=x,y=u]{\HeatSolg};
+	\end{axis}
+\end{tikzpicture}
 
 
 
