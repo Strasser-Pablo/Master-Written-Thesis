@@ -76,16 +76,16 @@ Scheme for analytical expression for pressure:
 
 The following theorem show that the two scheme are the same.
 
-\begin{thm}
+\begin{theorem}
 If $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ is divergence free then $\vect{v}_{n+1}=\vect{\tilde{v}}_{n+1}$ 
-\end{thm}
+\end{theorem}
 \begin{proof}
 We begin by prove the following lemma.
-\begin{lem}
+\begin{lemma}
 \begin{equation}
   k_{i}=\tilde{k}_{i}+P(\tilde{k}_{i})
 \end{equation}
-\end{lem}
+\end{lemma}
 \begin{proof}
 By recurrence on $i$.
 We begin with $i=1$:
@@ -122,13 +122,13 @@ We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ us
 
 \end{proof}
 
-\begin{thm}
+\begin{theorem}
 For the implicit Runge-Kutta case, where the sum to $i-i$ go now to $s$.
 If $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ is divergence free then $\vect{v}_{n+1}=\vect{\tilde{v}}_{n+1}$ 
-\end{thm}
+\end{theorem}
 \begin{proof}
 We begin by prove the following lemma.
-\begin{lem}
+\begin{lemma}
 After relabeling noting $k_{i}^{j}$ the $j$ solution of $k_{i}$.
 We have for every $j$.
 \begin{equation}
@@ -136,7 +136,7 @@ We have for every $j$.
 \end{equation}
 This doesn't say that we have existence and unicity of the solution only that if we have a set of solution for $k$ we have a bijection
 to solution of $\tilde{k}$
-\end{lem}
+\end{lemma}
 \begin{proof}
 Because the sum goes to $s$ and not $i-1$ we cannot use recurrence.
 We now will use vector notation for $k$.
@@ -248,10 +248,10 @@ We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ us
 
 \end{proof}
 
-\begin{cor}
+\begin{corollary}
 Solving Navier-Stokes equation with the analytical good choice of pressure.
 Is exactly divergence free at every approximation of speed.
-\end{cor}
+\end{corollary}
 \begin{proof}
   The expression of $v$ is the solution of the Navier-Stokes equation with the good choice of pressure.
   $\tilde{v}$ is the solution of Runge-Kutta equation without pressure witch is projected at every speed estimation.
@@ -259,9 +259,9 @@ Is exactly divergence free at every approximation of speed.
   $v$ and $\tilde{v}$ are the same. With end the proof.
 \end{proof}
 
-\begin{cor}
+\begin{corollary}
   Using the expression for $v$ or $\tilde{v}$ we are $k$ order precise in time. Where $k$ is the order of the Runge-Kutta method.
-\end{cor}
+\end{corollary}
 \begin{proof}
   $v$ and $\tilde{v}$ are the same.
   $v$ consist only of a Runge-Kutta method with a good chosen function.
@@ -458,7 +458,7 @@ We now consider:
 \left(v_{j}\partial_{j}v_{i}\right)^{i}_{\vect{k}}
 \end{equation}
 
-\begin{rem}
+\begin{remark}
   Contrary to the other case, we need to have the speed at a position not know for $v_{j}$. This come because of the staggered grid sheme.
   For this, we can interpolated the know speed of neighbour cell taking for example the average of the 4 neighbour (cf. figure \ref{fixed:staggered_convection_upwind}).
   We will use as notation $v_{j}^{i}$ for the speed component $j$ at position for the component $i$.
@@ -468,7 +468,7 @@ We now consider:
     \caption{We need the value of the red arrow. For this we can interpolated from the blue arrow.}
     \label{fixed:staggered_convection_upwind}
     \end{figure}
-\end{rem}
+\end{remark}
 
 We can discretize this in two manner:
 

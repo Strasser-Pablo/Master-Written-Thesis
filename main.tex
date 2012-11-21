@@ -1,44 +1,11 @@
-\documentclass[a4paper]{book}
+\documentclass[a4paper]{master}
 
-%Package inclusion
-\usepackage{fontspec}
-\usepackage{hyperref}
-\usepackage{amsmath}
-\usepackage{amsthm}
-\usepackage{listings}
-\usepackage{tikz}
-\usepackage{verbatim}
-\usepackage{minitoc}
-\usepackage{pgfplots}
-\usepackage{pgfplotstable}
 
-%Tikz library inclusion
-\usepgflibrary{shapes.geometric}
-\usetikzlibrary{fit}
-\usetikzlibrary{backgrounds}
-%New command for identifier style
-\newcommand{\identifiera}[0]{\setmonofont }
-\newcommand{\identifier}[1]{ {\identifiera #1}}
-
-%listings option set
-% Warning use newcommand for identifier style
-\lstset{numbers=left, numberstyle=\tiny, stepnumber=5, numbersep=5pt}
-\lstset{escapeinside={(*@}{@*)}}
-\lstset{basicstyle=\small, language=c++}
-\lstset{breaklines=true,
-    breakindent=0pt,
-    tabsize=2,
-    identifierstyle=\identifiera}
-\lstset{morekeywords={iterator,stack,pair}}
-\lstset{emphstyle=\underbar}
-\lstset{escapeinside={@}{@}}
-
-%New filename command for typseting file
-\DeclareUrlCommand\filename{\urlstyle{tt}}
 
 %Information as title and author
 \title{Master Thesis}
 \author{Pablo Strasser}
+\Supervisor{Prof. Martin Gander and Dr. Felix Kwok}
 \date{\today}
 
 %Pdf information
@@ -51,30 +18,7 @@
   Keywords={Navier-Stockes}}
 }
 
-%New command Bold for vector in math mode
-\newcommand{\vect}[1]{ {\boldsymbol {#1}}}
 
-%New command for kronecker product.
-\newcommand{\kron}{\bigotimes}
-%New command for identity matrice.
-\newcommand{\eye}{1}
-
-%Theorem and Definition counter
-\newtheorem{property}{Property}
-\newtheorem{prop}{Proposition}
-\newtheorem{thm}{Theorem}[section]
-\newtheorem{lem}[thm]{Lemma}
-\theoremstyle{definition}
-\newtheorem{definition}{Definition}
-\theoremstyle{remark}
-\newtheorem*{rem}{Remark}
-\newtheorem*{example}{Example}
-\newtheorem{cor}[thm]{Corollaire}
-
-\newwrite\luadebug
-\immediate\openout\luadebug luadebug.lua
-\AtEndDocument{\immediate\closeout\luadebug}
-\newcommand\directluadebug{\immediate\write\luadebug}
 
 \begin{document}
 %make the title page
