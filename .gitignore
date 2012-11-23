@@ -1,3 +1,7 @@
+/figures
+/main.auxlock
+/main.figlist
+/main.makefile
 /luadebug.lua
 /introduction/main.tex.backup
 *.aux

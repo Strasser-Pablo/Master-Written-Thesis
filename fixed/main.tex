@@ -507,6 +507,9 @@ The choose of Von-Neumann boundary condition ensure that pressure will not chang
 We begin with the case where the input speed is constant and normal to the boundary.
 
 \subsection{Heat Equation}
+\pgfplotstableread{fixed/solheat/sol_0.txt}\HeatSolaa
+%\pgfplotstabletypeset[columns={x,u}]\HeatSolaa
+
 \pgfplotstableread{fixed/solheat/sol_1.txt}\HeatSola
 %\pgfplotstabletypeset[columns={x,u}]\HeatSola
 
@@ -528,17 +531,161 @@ We begin with the case where the input speed is constant and normal to the bound
 \pgfplotstableread{fixed/solheat/sol_500.txt}\HeatSolg
 %\pgfplotstabletypeset[columns={x,u}]\HeatSolg
 
+\begin{figure}
 \begin{tikzpicture}
-	\begin{axis}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=m,y unit=\frac{m}{s},xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[x=x,y=u]{\HeatSolaa};
+		\label{fix:heatSol0}
+		\addlegendentry{$t=0s$}
 		\addplot table[x=x,y=u]{\HeatSola};
+		\label{fix:heatSol1}
+		\addlegendentry{$t=1s$}
 		\addplot table[x=x,y=u]{\HeatSolb};
+		\label{fix:heatSol10}
+		\addlegendentry{$t=10s$}
 		\addplot table[x=x,y=u]{\HeatSolc};
+		\label{fix:heatSol100}
+		\addlegendentry{$t=100s$}
 		\addplot table[x=x,y=u]{\HeatSold};
+		\label{fix:heatSol200}
+		\addlegendentry{$t=200s$}
 		\addplot table[x=x,y=u]{\HeatSole};
+		\label{fix:heatSol300}
+		\addlegendentry{$t=300s$}
 		\addplot table[x=x,y=u]{\HeatSolf};
+		\label{fix:heatSol400}
+		\addlegendentry{$t=400s$}
 		\addplot table[x=x,y=u]{\HeatSolg};
+		\label{fix:heatSol500}
+		\addlegendentry{$t=500s$}
 	\end{axis}
 \end{tikzpicture}
+\caption[.]{
+\begin{align*}
+\ref{fix:heatSol0} t&=0& \ref{fix:heatSol100} t&=100&\ref{fix:heatSol400} t&=400&\\
+\ref{fix:heatSol1} t&=16&\ref{fix:heatSol200} t&=200&\ref{fix:heatSol500} t&=500&\\
+\ref{fix:heatSol10} t&=10&\ref{fix:heatSol300} t&=300&\\
+\end{align*}
+}
+\end{figure}
 
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=m,y unit=\frac{m}{s},xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data0_1.csv};
+		\label{fix:heatdata0_1}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data2_1.csv};
+		\label{fix:heatdata2_1}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data4_1.csv};
+		\label{fix:heatdata4_1}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data5_1.csv};
+		\label{fix:heatdata5_1}
+		\addplot table[x=x,y=u]{\HeatSola};
+		\label{fix:heatsol_1}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+\begin{align*}
+&\text{Euler}&&\text{Runge-Kutta}&\\
+\ref{fix:heatdata2_1} dt&=0.1& \ref{fix:heatdata5_1} dt&=0.1&\\
+\ref{fix:heatdata0_1} dt&=1&\ref{fix:heatdata4_1} dt&=1&
+\end{align*}
+\begin{center}
+\ref{fix:heatsol_1} Analytical
+\end{center}
+}
+\end{figure}
 
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=m,y unit=\frac{m}{s},xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data2_100.csv};
+		\label{fix:heatdata2_100}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data0_100.csv};
+		\label{fix:heatdata0_100}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data5_100.csv};
+		\label{fix:heatdata5_100}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data4_100.csv};
+		\label{fix:heatdata4_100}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data6_100.csv};
+		\label{fix:heatdata6_100}
+		\addplot table[x=x,y=u]{\HeatSolc};
+		\label{fix:heatsol_100}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+\begin{align*}
+&\text{Euler}&&\text{Runge-Kutta}&\\
+\ref{fix:heatdata2_100} dt&=0.1& \ref{fix:heatdata5_100} dt&=0.1&\\
+\ref{fix:heatdata0_100} dt&=1&\ref{fix:heatdata4_100} dt&=1&\\
+\end{align*}
+\begin{center}
+\ref{fix:heatsol_100} Analytical
+\end{center}
+}
+\end{figure}
 
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=m,y unit=\frac{m}{s},xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data2_300.csv};
+		\label{fix:heatdata2_300}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data0_300.csv};
+		\label{fix:heatdata0_300}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data5_300.csv};
+		\label{fix:heatdata5_300}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data4_300.csv};
+		\label{fix:heatdata4_300}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data6_300.csv};
+		\label{fix:heatdata6_300}
+		\addplot table[x=x,y=u]{\HeatSole};
+		\label{fix:heatsol_300}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+\begin{align*}
+&\text{Euler}&&\text{Runge-Kutta}&\\
+\ref{fix:heatdata2_300} dt&=0.1& \ref{fix:heatdata5_300} dt&=0.1&\\
+\ref{fix:heatdata0_300} dt&=1&\ref{fix:heatdata4_300} dt&=1&\\
+&&\ref{fix:heatdata6_300} dt&=2&
+\end{align*}
+\begin{center}
+\ref{fix:heatsol_300} Analytical
+\end{center}
+}
+\end{figure}
+
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=m,y unit=\frac{m}{s},xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data2_500.csv};
+		\label{fix:heatdata2_500}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data0_500.csv};
+		\label{fix:heatdata0_500}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data5_500.csv};
+		\label{fix:heatdata5_500}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data4_500.csv};
+		\label{fix:heatdata4_500}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data6_500.csv};
+		\label{fix:heatdata6_500}
+		\addplot table[x=x,y=u]{\HeatSolg};
+		\label{fix:heatsol_500}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+\begin{align*}
+&\text{Euler}&&\text{Runge-Kutta}&\\
+\ref{fix:heatdata2_500} dt&=0.1& \ref{fix:heatdata5_500} dt&=0.1&\\
+\ref{fix:heatdata0_500} dt&=1&\ref{fix:heatdata4_500} dt&=1&\\
+&&\ref{fix:heatdata6_500} dt&=2&
+\end{align*}
+\begin{center}
+\ref{fix:heatsol_500} Analytical
+\end{center}
+}
+\end{figure}

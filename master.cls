@@ -39,11 +39,31 @@
 \usepackage{minitoc}
 \usepackage{pgfplots}
 \usepackage{pgfplotstable}
+\usepackage{caption}
+\usepackage{float}
+
+%Float Style
+\floatstyle{ruled}
+\restylefloat*{table}
+\restylefloat*{figure}
 
 %Tikz library inclusion
 \usepgflibrary{shapes.geometric}
 \usetikzlibrary{fit}
 \usetikzlibrary{backgrounds}
+\usetikzlibrary{pgfplots.external}
+\usetikzlibrary{pgfplots.units} 
+\usepgfplotslibrary{external}
+\tikzexternalize
+
+%External command
+\tikzset{external/system call={lualatex \tikzexternalcheckshellescape -halt-on-error
+-interaction=batchmode -jobname "\image" "\texsource"}}
+
+\tikzset{external/mode=list and make}
+
+\tikzsetexternalprefix{figures/}
+
 %New command for identifier style
 \newcommand{\identifiera}[0]{\setmonofont }
 \newcommand{\identifier}[1]{ {\identifiera #1}}

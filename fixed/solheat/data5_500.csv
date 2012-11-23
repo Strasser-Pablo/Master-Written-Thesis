@@ -1,4 +1,4 @@
-speedy,Points:0,Points:1,Points:2,vtkOriginalIndices,__vtkIsSelected__,vtkCompositeIndexArray
+u,x,Points:1,Points:2,vtkOriginalIndices,__vtkIsSelected__,vtkCompositeIndexArray
 -0.967355,0.096,0.103,0,0,0,4
 -1,0.098,0.103,0,1,0,4
 -1,0.104,0.095,0,2,0,4
