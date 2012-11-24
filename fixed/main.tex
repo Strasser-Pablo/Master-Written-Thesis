@@ -706,6 +706,9 @@ The solution for different time $t$ are shown in figure \ref{fix:solheat:fig:num
 For $dt=2\second$ for the Euler method and $dt=\unit{3}{\second}$ for the Runge-Kutta method we have divergence (result completely wrong).
 Note that the time step used is bigger than the CFL condition that is $dt_{max}=hu_{max}=\unit{0.002}{\second}$. This can be done because the viscosity is small and the none linear term cancel.
 
+The solution with low resolution for different time $t$ are shown in figure \ref{fix:solheat:fig:num1b}, \ref{fix:solheat:fig:num100b}, \ref{fix:solheat:fig:num300b} ,\ref{fix:solheat:fig:num500b}.
+We are in excellent agreement with this low resolution. The reason can be because the equation is linear. 
+
 \begin{figure}
 \begin{tikzpicture}
 	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
@@ -836,4 +839,110 @@ For the following method:
 \end{center}
 }
 \label{fix:solheat:fig:num500}
+\end{figure}
+
+
+
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.01,y=u]{fixed/solheat/data8_1.csv};
+		\label{fix:heatdata8_1}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.01,y=u]{fixed/solheat/data9_1.csv};
+		\label{fix:heatdata9_1}
+		\addplot table[x=x,y=u]{\HeatSola};
+		\label{fix:heatsolb_1}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+Numerical solution for $t=\unit{1}{s}$.
+For the following method:
+\begin{align*}
+&\text{Euler}&&\text{Runge-Kutta}&\\
+\ref{fix:heatdata8_1} dt&=\unit{1}{\second}& \ref{fix:heatdata9_1} dt&=\unit{1}{\second}&
+\end{align*}
+\begin{center}
+\ref{fix:heatsolb_1} Analytical
+\end{center}
+}
+\label{fix:solheat:fig:num1b}
+\end{figure}
+
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.01,y=u]{fixed/solheat/data8_100.csv};
+		\label{fix:heatdata8_100}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.01,y=u]{fixed/solheat/data9_100.csv};
+		\label{fix:heatdata9_100}
+		\addplot table[x=x,y=u]{\HeatSolc};
+		\label{fix:heatsolb_100}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+Numerical solution for $t=\unit{100}{\second}$.
+For the following method:
+\begin{align*}
+&\text{Euler}&&\text{Runge-Kutta}&\\
+\ref{fix:heatdata8_100} dt&=\unit{1}{\second}& \ref{fix:heatdata9_100} dt&=\unit{1}{\second}&\\
+\end{align*}
+\begin{center}
+\ref{fix:heatsolb_100} Analytical
+\end{center}
+}
+\label{fix:solheat:fig:num100b}
+\end{figure}
+
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.01,y=u]{fixed/solheat/data8_300.csv};
+		\label{fix:heatdata8_300}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.01,y=u]{fixed/solheat/data9_300.csv};
+		\label{fix:heatdata9_300}
+		\addplot table[x=x,y=u]{\HeatSole};
+		\label{fix:heatsolb_300}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+Numerical solution for $t=\unit{300}{\second}$.
+For the following method:
+\begin{align*}
+&\text{Euler}&&\text{Runge-Kutta}&\\
+\ref{fix:heatdata8_300} dt&=\unit{1}{\second}& \ref{fix:heatdata9_300} dt&=\unit{1}{\second}&
+\end{align*}
+\begin{center}
+\ref{fix:heatsolb_300} Analytical
+\end{center}
+}
+\label{fix:solheat:fig:num300b}
+\end{figure}
+
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.01,y=u]{fixed/solheat/data8_500.csv};
+		\label{fix:heatdata8_500}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.01,y=u]{fixed/solheat/data9_500.csv};
+		\label{fix:heatdata9_500}
+		\addplot table[x=x,y=u]{\HeatSolg};
+		\label{fix:heatsolb_500}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+Numerical solution for $t=\unit{500}{\second}$.
+For the following method:
+\begin{align*}
+&\text{Euler}&&\text{Runge-Kutta}&\\
+\ref{fix:heatdata8_500} dt&=\unit{0.1}{\second}& \ref{fix:heatdata9_500} dt&=\unit{0.1}{\second}&
+\end{align*}
+\begin{center}
+\ref{fix:heatsolb_500} Analytical
+\end{center}
+}
+\label{fix:solheat:fig:num500b}
 \end{figure}
