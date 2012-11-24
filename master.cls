@@ -41,6 +41,7 @@
 \usepackage{pgfplotstable}
 \usepackage{caption}
 \usepackage{float}
+\usepackage[amssymb,thickspace,thickqspace]{SIunits}
 
 %Float Style
 \floatstyle{ruled}

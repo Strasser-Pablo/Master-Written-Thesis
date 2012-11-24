@@ -621,7 +621,7 @@ The general solution is then:
   C_{n}&=\frac{1}{L}\int_{0}^{2L}f(x,0)\sin\left(\frac{n\pi}{2L}x\right) dx
 \end{align}
 
-This is plotted for $2L=0.1 m$ and $\nu=1.307e-6$ witch is the viscosity of Water for 10°c and for $n_{max}=1'000'000$ in figure \ref{fixed:solheat:fig:sol}.
+This is plotted for $2L=\unit{0.1}{\metre}$ and $\nu=\unit{1.307\cdot 10^{-6}}{\pascal\second}$ witch is the viscosity of Water for $\unit{10}{\degreecelsius}$ and for $n_{max}=1'000'000$ in figure \ref{fixed:solheat:fig:sol}.
 
 Note that the fact that we have truncated the sum can be considered as a slightly change of initial condition, and an analytical solution of this solution.
 Numerically the difference is of the level of the numerical precision.
@@ -652,7 +652,7 @@ Numerically the difference is of the level of the numerical precision.
 
 \begin{figure}
 \begin{tikzpicture}
-	\begin{axis}[width=\textwidth,only marks,use units,x unit=m,y unit=\frac{m}{s},xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
 	,xtick scale label code/.code={$\cdot 10^{-2}$}]
 		\addplot table[x=x,y=u]{\HeatSolaa};
 		\label{fix:heatSol0}
@@ -681,19 +681,19 @@ Numerically the difference is of the level of the numerical precision.
 	\end{axis}
 \end{tikzpicture}
 \caption[.]{
-Plot for the analytical solution truncated to $n_{max}=1'000'000$ with $2L=0.1 m$ and $\nu=1.307e-6$.
+Plot for the analytical solution truncated to $n_{max}=1'000'000$ with $2L=\unit{0.1}{\meter}$ and $\nu=\unit{1.307\cdot 10^{-6}}{\pascal\second}$.
 With the following time.
 \begin{align*}
-\ref{fix:heatSol0} t&=0& \ref{fix:heatSol100} t&=100&\ref{fix:heatSol400} t&=400&\\
-\ref{fix:heatSol1} t&=16&\ref{fix:heatSol200} t&=200&\ref{fix:heatSol500} t&=500&\\
-\ref{fix:heatSol10} t&=10&\ref{fix:heatSol300} t&=300&\\
+\ref{fix:heatSol0} t&=\unit{0}{\second}& \ref{fix:heatSol100} t&=\unit{100}{\second}&\ref{fix:heatSol400} t&=\unit{400}{\second}&\\
+\ref{fix:heatSol1} t&=\unit{1}{\second}&\ref{fix:heatSol200} t&=\unit{200}{\second}&\ref{fix:heatSol500} t&=\unit{500}{\second}&\\
+\ref{fix:heatSol10} t&=\unit{10}{\second}&\ref{fix:heatSol300} t&=\unit{300}{\second}&\\
 \end{align*}
 }
 \label{fixed:solheat:fig:sol}
 \end{figure}
 
-The analytical solution show that the effect of viscosity is to smooth the speed distribution. The time needed to do that is of $500 s$
-witch is a very long time with respect of the distance traveled in this time ($500 m$).
+The analytical solution show that the effect of viscosity is to smooth the speed distribution. The time needed to do that is of $\unit{500}{\second}$
+witch is a very long time with respect of the distance traveled in this time ($\unit{500}{\meter}$).
 
 But this doesn't say that viscosity is not important, because it's effect is inversely proportional squared of $L$.
 
@@ -703,12 +703,12 @@ We now use our numerical program to solve the same problem. The effective proble
 The other part of the program as convection and projection are done but should have a negligible effect.
 
 The solution for different time $t$ are shown in figure \ref{fix:solheat:fig:num1}, \ref{fix:solheat:fig:num100}, \ref{fix:solheat:fig:num300} ,\ref{fix:solheat:fig:num500}. We have an excellent agreement with the analytical result.
-For $dt=2$ for the Euler method and $dt=3$ for the Runge-Kutta method we have divergence (result completely wrong).
-Note that the time step used is bigger than the CFL condition that is $dt_{max}=hu_{max}=0.002$. This can be done because the viscosity is small and the none linear term cancel.
+For $dt=2\second$ for the Euler method and $dt=\unit{3}{\second}$ for the Runge-Kutta method we have divergence (result completely wrong).
+Note that the time step used is bigger than the CFL condition that is $dt_{max}=hu_{max}=\unit{0.002}{\second}$. This can be done because the viscosity is small and the none linear term cancel.
 
 \begin{figure}
 \begin{tikzpicture}
-	\begin{axis}[width=\textwidth,only marks,use units,x unit=m,y unit=\frac{m}{s},xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
 	,xtick scale label code/.code={$\cdot 10^{-2}$}]
 		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data0_1.csv};
 		\label{fix:heatdata0_1}
@@ -723,12 +723,12 @@ Note that the time step used is bigger than the CFL condition that is $dt_{max}=
 	\end{axis}
 \end{tikzpicture}
 \caption[.]{
-Numerical solution for $t=1s$.
+Numerical solution for $t=\unit{1}{s}$.
 For the following method:
 \begin{align*}
 &\text{Euler}&&\text{Runge-Kutta}&\\
-\ref{fix:heatdata2_1} dt&=0.1& \ref{fix:heatdata5_1} dt&=0.1&\\
-\ref{fix:heatdata0_1} dt&=1&\ref{fix:heatdata4_1} dt&=1&
+\ref{fix:heatdata2_1} dt&=\unit{0.1}{\second}& \ref{fix:heatdata5_1} dt&=\unit{0.1}{\second}&\\
+\ref{fix:heatdata0_1} dt&=\unit{1}{\second}&\ref{fix:heatdata4_1} dt&=\unit{1}{\second}&
 \end{align*}
 \begin{center}
 \ref{fix:heatsol_1} Analytical
@@ -739,7 +739,7 @@ For the following method:
 
 \begin{figure}
 \begin{tikzpicture}
-	\begin{axis}[width=\textwidth,only marks,use units,x unit=m,y unit=\frac{m}{s},xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
 	,xtick scale label code/.code={$\cdot 10^{-2}$}]
 		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data2_100.csv};
 		\label{fix:heatdata2_100}
@@ -756,12 +756,12 @@ For the following method:
 	\end{axis}
 \end{tikzpicture}
 \caption[.]{
-Numerical solution for $t=100s$.
+Numerical solution for $t=\unit{100}{\second}$.
 For the following method:
 \begin{align*}
 &\text{Euler}&&\text{Runge-Kutta}&\\
-\ref{fix:heatdata2_100} dt&=0.1& \ref{fix:heatdata5_100} dt&=0.1&\\
-\ref{fix:heatdata0_100} dt&=1&\ref{fix:heatdata4_100} dt&=1&\\
+\ref{fix:heatdata2_100} dt&=\unit{0.1}{\second}& \ref{fix:heatdata5_100} dt&=\unit{0.1}{\second}&\\
+\ref{fix:heatdata0_100} dt&=\unit{1}{\second}&\ref{fix:heatdata4_100} dt&=\unit{1}{\second}&\\
 \end{align*}
 \begin{center}
 \ref{fix:heatsol_100} Analytical
@@ -772,7 +772,7 @@ For the following method:
 
 \begin{figure}
 \begin{tikzpicture}
-	\begin{axis}[width=\textwidth,only marks,use units,x unit=m,y unit=\frac{m}{s},xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
 	,xtick scale label code/.code={$\cdot 10^{-2}$}]
 		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data2_300.csv};
 		\label{fix:heatdata2_300}
@@ -789,13 +789,13 @@ For the following method:
 	\end{axis}
 \end{tikzpicture}
 \caption[.]{
-Numerical solution for $t=100s$.
+Numerical solution for $t=\unit{300}{\second}$.
 For the following method:
 \begin{align*}
 &\text{Euler}&&\text{Runge-Kutta}&\\
-\ref{fix:heatdata2_300} dt&=0.1& \ref{fix:heatdata5_300} dt&=0.1&\\
-\ref{fix:heatdata0_300} dt&=1&\ref{fix:heatdata4_300} dt&=1&\\
-&&\ref{fix:heatdata6_300} dt&=2&
+\ref{fix:heatdata2_300} dt&=\unit{0.1}{\second}& \ref{fix:heatdata5_300} dt&=\unit{0.1}{\second}&\\
+\ref{fix:heatdata0_300} dt&=\unit{1}{\second}&\ref{fix:heatdata4_300} dt&=\unit{1}{\second}&\\
+&&\ref{fix:heatdata6_300} dt&=2\second&
 \end{align*}
 \begin{center}
 \ref{fix:heatsol_300} Analytical
@@ -806,7 +806,7 @@ For the following method:
 
 \begin{figure}
 \begin{tikzpicture}
-	\begin{axis}[width=\textwidth,only marks,use units,x unit=m,y unit=\frac{m}{s},xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
 	,xtick scale label code/.code={$\cdot 10^{-2}$}]
 		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data2_500.csv};
 		\label{fix:heatdata2_500}
@@ -823,13 +823,13 @@ For the following method:
 	\end{axis}
 \end{tikzpicture}
 \caption[.]{
-Numerical solution for $t=100s$.
+Numerical solution for $t=\unit{500}{\second}$.
 For the following method:
 \begin{align*}
 &\text{Euler}&&\text{Runge-Kutta}&\\
-\ref{fix:heatdata2_500} dt&=0.1& \ref{fix:heatdata5_500} dt&=0.1&\\
-\ref{fix:heatdata0_500} dt&=1&\ref{fix:heatdata4_500} dt&=1&\\
-&&\ref{fix:heatdata6_500} dt&=2&
+\ref{fix:heatdata2_500} dt&=\unit{0.1}{\second}& \ref{fix:heatdata5_500} dt&=\unit{0.1}{\second}&\\
+\ref{fix:heatdata0_500} dt&=\unit{1}{\second}&\ref{fix:heatdata4_500} dt&=\unit{1}{\second}&\\
+&&\ref{fix:heatdata6_500} dt&=\unit{2}{\second}&
 \end{align*}
 \begin{center}
 \ref{fix:heatsol_500} Analytical
