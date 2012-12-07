@@ -131,5 +131,18 @@ We define the projection operator $P(\vect{v})$
     \vect{v}_{new}=\vect{v}+P(\vect{v})
   \end{equation}
 
+  In case where we use boundary condition that are not 0 Dirichlet or Von Neumann boundary condition.
+  The projection operator is no more linear, but affine.
+
+  \begin{definition}
+  We denote this by $P(v,T)=Av+T$.
+  Where $A$ is a matrix.
+  \end{definition}
+  
+  The important change is that the projection of a divergence free vector field is no more 0.
+  \begin{equation}
+  P(v,T)=Av+T=0+T=T
+  \end{equation}
+
 \end{definition}
 

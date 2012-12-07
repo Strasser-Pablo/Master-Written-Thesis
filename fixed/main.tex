@@ -53,7 +53,7 @@ The solution at time $n+1$ is given from the solution at time $n$ with $\Delta t
 \end{subequations}
 
 \section{Runge-Kutta based scheme}
-
+\label{fixed:sect:runge-kutta}
 We now integrate method \ref{fixed:analytical} and \ref{fixed:proj} with a Runge-Kutta method.
 
 Scheme for projection at every evaluation of speed:
@@ -266,6 +266,257 @@ Is exactly divergence free at every approximation of speed.
   $v$ and $\tilde{v}$ are the same.
   $v$ consist only of a Runge-Kutta method with a good chosen function.
   So the order in time of $v$ and $\tilde{v}$ is the same that the method order.
+\end{proof}
+
+
+\section{Runge-Kutta based scheme Affine Projection}
+We will repeat the work in section \ref{fixed:sect:runge-kutta} but where the projection is an affine operator.
+We use the notation of \ref{introduction:projectiondef}.
+
+Scheme for projection at every evaluation of speed:
+\begin{subequations}
+\begin{align}
+\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i}+P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i},\tilde{T}_0\right)\\
+\tilde{k}_{i}&=\Delta t f\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\tilde{k}_{j}+P\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\tilde{k}_{j},\tilde{T}_i\right)\right)
+\end{align}
+\end{subequations}
+
+We project at every estimation of speed. Making by construction every speed divergence free.
+
+Scheme for analytical expression for pressure:
+\begin{subequations}
+\begin{align}
+	\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}k_{i}\\
+	k_{i}&=\Delta t f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}k_{j}\right)+\Delta t P\left(f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}k_{j}\right),T_{i}\right)
+\end{align}
+\end{subequations}
+
+The following theorem show that the two scheme are the same. And given the relation between $T$ and $\tilde{T}$.
+
+\begin{theorem}
+If $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ is divergence free then $\vect{v}_{n+1}=\vect{\tilde{v}}_{n+1}$.
+With the relation for the translation:
+\begin{align}
+\intertext{For $i\geq s$}
+  \tilde{T}_i&=\sum_{j=1}^{i-1}a_{ij}\Delta t T_{j}\\
+  \tilde{T}_0&=\sum_{i=1}^{s}b_{i}\Delta t T_{i}
+\end{align}
+
+\end{theorem}
+\begin{proof}
+We begin by prove the following lemma.
+\begin{lemma}
+\begin{equation}
+  k_{i}=\tilde{k}_{i}+P(\tilde{k}_{i},\Delta t T_{i})
+\end{equation}
+\end{lemma}
+\begin{proof}
+By recurrence on $i$.
+We begin with $i=1$:
+\begin{equation}
+  k_{1}=\Delta tf\left(\vect{v}_n\right)+\Delta tP\left(f\left(\vect{v}_n\right),T_{1}\right)
+\end{equation}
+\begin{equation}
+\tilde{k}_{1}=\Delta tf\left(\vect{v}_n\right)
+\end{equation}
+\begin{equation}
+  k_{1}=\Delta t f\left(\vect{v}_n\right)+\Delta tP\left(f\left(\vect{v}_n\right),T_{1}\right)=\tilde{k}_1+P\left(\tilde{k}_1,\Delta t T_{1}\right)
+\end{equation}
+
+Assuming true for smaller $i$:
+\begin{align*}
+  k_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{n}a_{ij}k_{j}\right)+\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}k_{j}\right),T_{i}\right)\\
+  &=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\tilde{k}_{j}+P\left(\tilde{k}_{j},\Delta t T_{j}\right)\right)\right)+\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\tilde{k}_{j}+P\left(\tilde{k}_{j},\Delta t T_{j}\right)\right)\right),T_{i}\right)\\
+  \tilde{k}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\tilde{k}_{j}+P\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\tilde{k}_{j},\tilde{T}_{i}\right)\right)\\
+  &=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\tilde{k}_{j}+P\left(\tilde{k}_{j},\hat{T}_{j}^{i}\right)\right)\right)\\
+  \tilde{T_i}&=\sum_{j}^{i-1}a_{ij}\hat{T}_{j}^{i}\\
+  \hat{T}^{i}_{j}&=\Delta t T_{j}\\
+  k_{i}&=\tilde{k}_{i}+P\left(\tilde{k}_{i},\Delta tT_j\right)
+\end{align*}
+This prove the relation and give the relation between the two.
+\begin{equation}
+  \tilde{T_i}=\sum_{j}^{i-1}a_{ij}\Delta t T_{j}
+\end{equation}
+\end{proof}
+
+We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ using the lemma.
+
+\begin{align*}
+\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}k_{i}\\
+&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\tilde{k}_{i}+P\left(\tilde{k}_{i},\Delta tT_{i}\right)\right)\\
+\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i}+P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i},\tilde{T}_{0}\right)\\
+&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\tilde{k}_{i}+P\left(\tilde{k}_{i},\hat{T}_{i}^{0}\right)\right)\\
+\tilde{T}_{0}&=\sum_{i=1}^{s}b_{i}\hat{T}_{i}^{0}\\
+\tilde{T}_{0}&=\sum_{i=1}^{s}b_{i}\Delta t T_{i}\\
+\intertext{Using that $\vect{v}_{n}=\tilde{\vect{v}_{n}}$}
+\vect{v}_{n+1}&=\vect{\tilde{v}}_{n+1}
+\end{align*}
+
+This end the proof.
+
+\end{proof}
+
+\begin{theorem}
+For the implicit Runge-Kutta case, where the sum on $i-1$ go now to $s$.
+If $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ is divergence free then $\vect{v}_{n+1}=\vect{\tilde{v}}_{n+1}$.
+And the translation is given by:
+\begin{align}
+  \tilde{T_{i}}&=\Delta t\sum_{j}a_{ij}T_{j}\\
+  \tilde{T_{0}}&=\Delta t\sum_{j}b_{j}T_{j}
+\end{align}
+
+\end{theorem}
+\begin{proof}
+We begin by prove the following lemma.
+\begin{lemma}
+After relabeling noting $k_{i}^{j}$ the $j$ solution of $k_{i}$.
+We have for every $j$.
+\begin{equation}
+  k_{i}=\tilde{k}_{i}^{j}+P(\tilde{k}_{i}^{j},\Delta t T_{i})
+\end{equation}
+This doesn't say that we have existence and unicity of the solution only that if we have a set of solution for $k$ we have a bijection
+to solution of $\tilde{k}$
+\end{lemma}
+\begin{proof}
+Because the sum goes to $s$ and not $i-1$ we cannot use recurrence.
+We now will use vector notation for $k$.
+
+We construct $k$ and $\tilde{k}$ vector with the vector $k_{i}$ and $\tilde{k}_{i}$
+\begin{align}
+k&=\begin{pmatrix}
+    k_{1}\\
+    \vdots\\
+    k_{s}\\
+  \end{pmatrix}\\
+\tilde{k}&=\begin{pmatrix}
+    \tilde{k}_{1}\\
+    \vdots\\
+    \tilde{k}_{s}\\
+  \end{pmatrix}
+\end{align}
+
+We form $\hat{L}$ the linear part of the projection from $L$ the linear part from the projection $P$.
+\begin{align}
+\hat{L}&=\eye_{s}\kron L=\begin{pmatrix}L	&\ldots	&0\\
+			\vdots &\ddots 	&\vdots\\
+			0	&0	&L\\
+	\end{pmatrix}
+\end{align}
+
+
+$\tau_{i}$ the translation vector from $T_i$ the translation part of $P$.
+$\tau$ is the sum of all individual translation.
+\begin{align}
+	\tau_i&=\begin{pmatrix}
+			0\\
+			\vdots\\
+			T_{i}\\
+			\vdots\\
+			0\\
+	\end{pmatrix}
+	\\
+	\tau&=\sum_{i}\tau_{i}=\begin{pmatrix}
+			T_{1}\\
+			\vdots\\
+			T_{s}\\
+	\end{pmatrix}
+\end{align}
+
+Same for $\tilde{\tau}_{i}$ with $T_{i}$ changed with $\tilde{T}_i$
+
+We now form the function $\hat{f}$ from $f$ with:
+\begin{align}
+\hat{f}&=\eye_{s}\kron f=\begin{pmatrix}f	&\ldots	&0\\
+			\vdots &\ddots 	&\vdots\\
+			0	&0	&f\\
+	\end{pmatrix}
+\end{align}
+
+We now define $\hat{v}_n$:
+\begin{equation}
+\hat{v}_{n}=\begin{pmatrix}
+	      v_{n}\\
+	      \vdots\\
+	      v_{n}
+	      \end{pmatrix}
+\end{equation}
+
+We now define $\hat{A}$ with the following Kronecker product:
+\begin{equation}
+\hat{A}=\begin{pmatrix}
+    a_{11}	&\ldots	&a_{1s}\\
+    \vdots	&\ddots	&\vdots\\
+    a_{s1}	&\ldots	&a_{ss}\\
+  \end{pmatrix} \kron \eye=A \kron \eye
+\end{equation}
+
+$\hat{A}$ and $\hat{L}$ are commutative, because of the mixed-product property.
+\begin{align}
+\hat{A}\hat{L}&=\left(A\kron \eye \right)
+  \left(\eye_{s}\kron L\right)=
+	A\kron L\\
+    %
+    \hat{L}\hat{A}&=
+  \left(\eye_{s}\kron L\right)
+	\left(A \kron \eye \right)=
+	A\kron L
+\end{align}
+
+\begin{align}
+k&=(1+\hat{L})\Delta t\hat{f}(\hat{v}_{n}+\hat{A}k)+\Delta t\tau\\
+\tilde{k}&=\Delta t \hat{f}((1+\hat{L})(\hat{v}_{n}+\hat{A}k)+\tilde{\tau})
+\end{align}
+
+We begin to define 2 functions:
+\begin{align}
+k&=g(k)\\
+\tilde{k}&=\tilde{g}(\tilde{k})\\
+g(x)&=(1+\hat{L})\Delta t \hat{f}(\hat{v}_{n}+\hat{A}x)+\Delta t\tau\\
+\tilde{g}(x)&=\Delta t \hat{f}((1+\hat{L})(\hat{v}_{n}+\hat{A}x)+\tilde{\tau})
+\end{align}
+
+$k$ and $\tilde{k}$ are fixed point of function $g$ and $\tilde{g}$.
+
+We now calculate:
+\begin{align}
+(1+\hat{L})\tilde{g}(x)&=(1+\hat{L})\Delta t \hat{f}((1+\hat{L})(\hat{v}_{n}+\hat{A}x)+\tilde{\tau})=(1+\hat{L})\Delta t \hat{f}(\hat{v}_{n}+\hat{A} (1+\hat{L})x+\tilde{\tau})\\
+&=(1+\hat{L})\Delta t \hat{f}(\hat{v}_{n}+\hat{A} ((1+\hat{L})x+\hat{A}^{-1}\tilde{\tau}))=g((1+\hat{L})x+\tilde{A}^{-1}\tilde{\tau})-\Delta t \tau
+\end{align}
+
+We now substitute $g$ in $\tilde{g}$
+\begin{equation}
+(1+\hat{L})\tilde{k}+\Delta t \tau=g((1+\hat{L})\tilde{k}+\hat{A}^{-1}\tilde{\tau})
+\end{equation}
+
+If
+\begin{equation}
+  \tilde{\tau}=\Delta t \hat{A}\tau
+\end{equation}
+
+$(1+\hat{L})\tilde{k}+\Delta t \tau$ is a fixed point of $g$.
+But fixed point of $g$ is $k$.
+
+This directly give the result with $k^{j}$ the $j$ solution:
+\begin{equation}
+k^{j}=(1+\hat{L})\tilde{k}^{j}+\Delta t \tau
+\end{equation}
+This is exactly the vector version of what we wanted to prove.
+\end{proof}
+
+The rest is exactly the same than in the first case.
+
+To not overload the proof with notation, we drop the $j$ label to indicate witch solution we take.
+We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ using the lemma.
+\begin{align*}
+\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}k_{i}\\
+&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\left(\eye+L\right)\tilde{k}_i+\Delta t T_{i}\right)\\
+\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i}+L\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i}\right)+\tilde{T}_0\\
+&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\eye+L\right)\tilde{k}_{i}+\tilde{T}_0\\
+\tilde{T}_0&=\Delta t\sum_{i=1}^{s}b_{i}T_{i}\\
+\intertext{Using that $\vect{v}_{n}=\tilde{\vect{v}_{n}}$}
+\vect{v}_{n+1}&=\vect{\tilde{v}}_{n+1}
+\end{align*}
+
 \end{proof}
 
 \section{Spatial discretization}
