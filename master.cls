@@ -29,6 +29,7 @@
 %Package used by Pablo
 
 %Package inclusion
+\usepackage{morefloats}
 \usepackage{fontspec}
 \usepackage{hyperref}
 \usepackage{amsmath}

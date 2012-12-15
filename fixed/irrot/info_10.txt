@@ -1,0 +1,7 @@
+dtmin=0
+dtmax=0.1
+Euler
+Length=1.0
+NB=50
+div t 1.39177  i=21
+alpha=10

@@ -1,0 +1,7 @@
+dtmin=0
+dtmax=0.1
+Runge-Kutta
+Length=1.0
+NB=50
+div  i=9 t=0.770046
+alpha=10
