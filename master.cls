@@ -29,7 +29,7 @@
 %Package used by Pablo
 
 %Package inclusion
-\usepackage{morefloats}
+%\usepackage{morefloats}
 \usepackage{fontspec}
 \usepackage{hyperref}
 \usepackage{amsmath}
@@ -63,7 +63,6 @@
 -interaction=batchmode -jobname "\image" "\texsource"}}
 
 \tikzset{external/mode=list and make}
-
 \tikzsetexternalprefix{figures/}
 
 %New command for identifier style
