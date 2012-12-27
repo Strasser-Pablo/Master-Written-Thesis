@@ -1,0 +1,341 @@
+\chapter{Variable Topology}
+
+\section{Introduction}
+In the previous chapter all numerical scheme were done on the same domain.
+We will here see the change that we need to make if we want to have variable topology.
+
+
+We will need to take care of two additional thing:
+\begin{enumerate}
+\item Know the speed in cell that weren't in the domain but are in the new time step.
+\item Know the position of the different boundary.
+\end{enumerate}
+
+We are mainly interested in mobile boundary consisting in free surface boundary because it will be the only
+boundary that move depending on the solution.
+
+The motion of the domain and the boundary is given by:
+\begin{equation}
+\dot{\vect{x}}=\vect{v}
+\end{equation}
+
+Where $\vect{v}$ is the speed at the given position.
+
+To discretize this equation, we will use particle  placed in every cell. A cell where a particle lie is in the domain.
+A cell without particle is out of the domain.
+
+But particle move with the speed given at there position, witch is not on a grid point.
+
+Because of this, we need to interpolate the speed at the given point.
+
+When a particle move to a new cell, we need to know the initial speed at this position.
+We analytically have boundary condition for speed at boundary.
+We need to extrapolate this boundary condition one cell away.
+
+\section{Analytical equation}
+
+We can write a none discretized particle method equation as:
+
+\begin{align*}
+	\dot{v}&=\left(\eye + P(D(\vect{x}))\right)f(\vect{v},\vect{x})\\
+	\dot{x}&=v
+\end{align*}
+
+Where $x$ are a continuous representation of the space with particle.
+The notation $P(\vect{x})$ say that we consider the projection operator with boundary condition given by $\vect{x}$.
+
+We need to had to this boundary condition that are given by a linear differential operator $A$.
+\begin{equation}
+	A\vect{v}=0
+\end{equation}
+$A$ contain derivative with respect to space but not respect to time.
+
+When we discretize, we will need to interpolate because we need speed at position we don't know (for a staggered grid we have):
+\begin{align*}
+	\left.\dot{\vect{v}}\right|_{\in D_{v}(D(\vect{x}))}&=\left(\eye+P(D(\vect{x}))\right)\left.f(E(\vect{v},D_v(D(\vect{x}))),D_{v}(D(\vect{x})))\right|_{\in D_{v}(D(\vect{x}))}\\
+	\dot{x}&=I\left(\vect{x},E(\vect{v},D_v(D(\vect{x})))\right)\\
+	\left.\vect{v}\right|_{\notin D_{v}(D(\vect{x}))}&=\left.E(\vect{v},D_v(D(\vect{x})))\right|_{\notin D_{v}(D(\vect{x}))}
+\end{align*}
+
+For mathematical simplicity we will take that $\vect{v}$ consist of a speed defined everywhere, 
+but in the computation only speed that are accessed in the time step is needed (only speed in the domain and in it's neighbour).
+
+$D(\vect{x})$ indicate the domain in witch at least a particle is found. This consist at the same time to the topology for pressure (Pressure are cell centered).
+$D_{v}$ is a function depending of the topology given in general by $D(\vect{x})$ and indicate witch speed component are in the domain.
+$f$ is a function that take as argument the topology for pressure given by $D(\vect{x})$ and the topology for speed given by $D_v(D(\vect{x}))$ and the speed everywhere.
+$E$ is the extrapolation operator witch take as argument the speed everywhere and return a speed everywhere,
+but where the speed in the speed domain is not changed.
+$I$ is an interpolation operator witch from the speed everywhere find the speed at a given position.
+
+The use of two topology is needed because in a staggered grid the position of speed and pressure is not the same.
+
+$D_{v}$ need to be good chosen to avoid pathological case.
+For example for a cell with only one cell. We will normally consider all speed as boundary. But with only boundary we have no motion.
+For this reason in this case, we consider all boundary cell as in the domain.
+
+We will now rewrite this as a differential equation from time $t_0$ to $t_0+dt$:
+\begin{align*}
+	\left.\dot{\vect{v}}\right|_{\in D_{v}(D(\vect{x}))}&=\left(\eye+P(D(\vect{x}))\right)\left.f(E(\vect{v},D_v(D(\vect{x}))),D_{v}(D(\vect{x})))\right|_{\in D_{v}(D(\vect{x}))}\\
+	\left.\vect{v_{t_0}}\right|_{\notin D_{v_{t_0}}(D(\vect{x}))}&=\left.E(\vect{v_{t_0}},D_v(D(\vect{x})))\right|_{\notin D_{v}(D(\vect{x}))}\\
+	\dot{x}&=I\left(\vect{x},E(\vect{v},D_v(D(\vect{x})))\right)\\
+\end{align*}
+
+\subsection{Splitting}
+
+A simple but of only order $1$ (in general) mean to solve this equation, is to consider two different problem.
+The first advance speed for a given topology, then advance topology from the given speed.
+
+The first step is to solve:
+\begin{align}
+\left.\dot{\vect{v}}\right|_{\in D_{v}(D(\vect{x}))}&=\left(\eye+P(D(\vect{x}))\right)\left.f(E(\vect{v},D_v(D(\vect{x}))),D_{v}(D(\vect{x})))\right|_{\in D_{v}(D(\vect{x}))}\\
+	\left.\vect{v_{t_0}}\right|_{\notin D_{v_{t_0}}(D(\vect{x}))}&=\left.E(\vect{v_{t_0}},D_v(D(\vect{x})))\right|_{\notin D_{v}(D(\vect{x}))}
+\end{align}
+
+Witch can be done like in the fixed topology case with a Runge-Kutta method. The second equation indicate the boundary condition.
+Numerically we can calculate the speed at boundary at every evaluation of $f$.
+
+We then move the particle with the calculated speed.
+\begin{equation}
+	\dot{x}=I\left(\vect{x},E(\vect{v},D_v(D(\vect{x})))\right)\\
+\end{equation}
+
+This method is only of order 1. We can see it from the following example.
+Consider only one particle. With as initial condition 0 speed without viscosity.
+The extrapolation operator in this case will copy the speed vertically,
+the speed will be constant and the only none zero component is in the $y$ direction.
+The speed will be given by the integration of the gravity force, the convective term is 0 because speed is constant.
+The speed will be calculated with an accuracy of order $4$.
+But the position will be calculated from the advance of a constant speed.
+
+In final, our speed will be correct at order $4$ but position will be wrong.
+
+This error doesn't depend on the precision of integration for the speed or position problem.
+It come from the splitting.
+
+\subsection{One differential equation}
+
+We will now show how we can rewrite this differential equation in only one differential equation.
+For this, we need an expression for the derivative of the boundary condition.
+When we have it, we only have to use a Runge-Kutta method.
+
+
+We will now only be interested in the case where $E$ is a linear operator white the two following constraint:
+\begin{itemize}
+	\item It's effect for speed in the domain (for speed) is the identity.
+	\item It's effect for speed out of the domain (for speed) depend only on speed of the domain (for speed).
+\end{itemize}
+
+The domain for speed for $E$ is noted $E(D_v(D(\vect{x})))$.
+
+In matrix notation it tell that some block need to be $0$ or $\eye$.
+If we consider that indice from $1$ to $n_d$ are in the domain(for speed) and $n_d+1$ to $n$ are out of the domain (for speed), the constraint for a line of the matrix is,
+using as notation the : as in matlab in indicating by an indice it's position in the vector:
+\begin{align}
+	\intertext{For $i<n_d+1$}
+	E_{i :}&=\left( 0 \ldots 1_{i} \ldots 0\right)\\
+	\intertext{For $i>n_d$}
+	E_{i :}&=\left( e_{1}\ldots e_{n_d} 0\ldots 0\right)\\
+\end{align}
+
+Taking the derivative of $E(D_v(D(\vect{x})))\vect{v}$ has two term, the first give:
+\begin{equation}
+	E(D_v(D(\vect{x})))\dot{\vect{v}}
+\end{equation}
+
+Witch use $\dot{\vect{v}}$ but need it only for in the domain because outside the given column of the $E$ matrix is zero.
+
+The second therm is the derivative of the matrix $E$ with respect of change of time. Witch will lead to the derivative with respect of change of topology.
+This will give a delta of dirac.
+
+The reason of this is because of the discontinuity in time of the boundary speed, when we change topology.
+
+We will neglect this dirac delta. The equation is then:
+\begin{align}
+	\left.\dot{\vect{v}}\right|_{\in D_{v}(D(\vect{x}))}&=\left(\eye+P(D(\vect{x}))\right)\left.f(E(D_v(D(\vect{x})))\vect{v},D_{v}(D(\vect{x})))\right|_{\in D_{v}(D(\vect{x}))}\\
+	\left.\dot{\vect{v}}\right|_{\notin D_{v}(D(\vect{x}))}&=E(D_v(D(\vect{x})))\left(\eye+P(D(\vect{x}))\right)\left.f(E(D_v(D(\vect{x})))\vect{v},D_{v}(D(\vect{x})))\right|_{\in D_{v}(D(\vect{x}))}\\
+	\left.\vect{v_{t_0}}\right|_{\notin D_{v_{t_0}}(D(\vect{x}))}&=\left.\left(E(D_v(D(\vect{x})))\left.\vect{v_{t_0}}\right|_{\in D_{v}(D(\vect{x}))}\right)\right|_{\notin D_{v}(D(\vect{x}))}\\
+	\dot{x}&=I\left(\vect{x},E(D_v(D(\vect{x})))\vect{v}\right)\\
+\end{align}
+Where we have used the notation that vector can be extended with 0 when needed because the extension is not needed because the good column are zero.
+
+Witch can be rewritten as:
+
+\begin{align}
+	\left.\dot{\vect{v}}\right|&=\left(\eye_{\in D_{v}(D(\vect{x}))}+E(D_v(D(\vect{x})))\right)\left(\eye+P(D(\vect{x}))\right)\left.f(E(D_v(D(\vect{x})))\vect{v},D_{v}(D(\vect{x})))\right|_{\in D_{v}(D(\vect{x}))}\\
+	\left.\vect{v_{t_0}}\right|_{\notin D_{v_{t_0}}(D(\vect{x}))}&=\left.\left(E(D_v(D(\vect{x})))\left.\vect{v_{t_0}}\right|_{\in D_{v}(D(\vect{x}))}\right)\right|_{\notin D_{v}(D(\vect{x}))}\\
+	\dot{x}&=I\left(\vect{x},E(D_v(D(\vect{x})))\vect{v}\right)\\
+\end{align}
+
+This equation can be integrated with a Runge-Kutta method.
+For having a maximal precision, the boundary speed is taken from the extrapolation at every complete Runge-Kutta step.
+
+In the argument of $f$ we have used an extrapolation of speed witch don't depend of the input in boundary speed.
+The integrated boundary speed is only used in the case where a cell become in the domain in a time step.
+
+The neglected dirac delta will only have an effect on a boundary speed component in the case where in a Runge-Kutta step the following happen.
+A neighbor cell(cell witch $E$ matrix as component with) fill. This will change the value of boundary speed with a jump (this jump will be neglected).
+Then the speed need to be fill between the Runge-Kutta step so that the wrong value is conserved and not erased.
+
+This effect will change the precision when it happen from order $k$ to order 1.
+And this error will only be on the boundary condition being not exactly respected for a short time.
+The force will be integrated correctly.
+
+The direct filling of a cell don't pose problem because we don't have discontinuity in speed, because in the first region we force speed,
+in the second the derivative.
+
+The jump is only caused because we force speed differently for the two region.
+
+
+Taking the same problem with one particle, given by. A particle with 0 initial speed, without viscosity.
+The speed will be constant. So only the gravity force act and the extrapolation operator will copy speed vertically.
+The result will then be equivalent to the integration of the purely particle problem where the speed is change is calculated at particle position.
+The order of the method is then $k$.
+
+\section{Extrapolation}
+
+One important point is how we enforce the boundary condition in discretize grid.
+
+In the boundary we have (for 3d case):
+\begin{align}
+	\sum_{i,j}\sigma_{ij}n_{i}n_{j}&=0\\
+	\sum_{i,j}\sigma_{ij}t^{1}_{i}n_{j}&=0\\
+	\sum_{i,j}\sigma_{ij}t^{2}_{i}n_{j}&=0\\
+\end{align}
+
+$n$ is the normal vector of the surface.
+$t^{1}$ and $t^{2}$ are none colinear tangent vector.
+
+In 2d we only have one tangent vector.
+
+$\sigma_{ij}$ is given by:
+\begin{equation}
+	\sigma_{ij}=-p \delta_{ij}+\nu\left(\frac{\partial v_{i}}{\partial x_{j}}+\frac{\partial v_{j}}{\partial x_{i}}\right)
+\end{equation}
+
+The first equation can be used to find boundary condition for $p$.
+With:
+\begin{equation}
+	p=O(\nu)
+\end{equation}
+
+$\nu$ is small for water. This justify the often used boundary condition of 0.
+
+The other equation only depend of speed, because $n$ is orthogonal to $t^{1}$ and $t^{2}$.
+The value of $\nu$ is not relevant for the condition (a global none zero constant).
+The constraint is linear. With sufficiently equation and know value we can find an unique solution.
+
+We now will treat the different possible case in 2d. This will then be generalized in 3d.
+
+\subsection{Plane}
+
+The first case is a surface witch is a plane following one of the cell boundary.
+
+Without loss of generality we consider the plane in the $x$ direction.
+
+The normal and tangent vector are then given by:
+\begin{align}
+	\vect{n}&=\begin{pmatrix}
+	         	0\\
+	         	1
+	         \end{pmatrix}\\
+	\vect{t}&=\begin{pmatrix}
+	          	1\\
+	          	0
+	          \end{pmatrix}
+\end{align}
+
+The equation are then given by:
+\begin{align}
+	\sum_{i,j}\sigma_{ij}t_{i}n_{j}&=0\\
+	\sigma_{12}&=0\\
+	-p \delta_{12}+\nu\left(\frac{\partial v_{1}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{1}}\right)&=0\\
+	\frac{\partial v_{1}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{1}}&=0\\
+\end{align}
+
+We discretize this equation at point $i+\frac{1}{2},j+\frac{1}{2}$:
+\begin{equation}
+\label{var:extr:droitCont}
+	\frac{v^{1}_{i+\frac{1}{2},j+1}-v^{1}_{i+\frac{1}{2},j}}{\Delta x_{2}}+\frac{v^{2}_{i+1,j+\frac{1}{2}}-v^{2}_{i,j+\frac{1}{2}}}{\Delta x_{1}}=0
+\end{equation}
+
+Where $\Delta x_{1}$ and $\Delta x_{2}$ is the spacing in $x$ and $y$.
+We have one equation for 3 unknows, only $v^{1}_{i+\frac{1}{2},j}$ is know.
+But we can add two equation using the divergence free condition in the fluid for cell $i,j$ and $i+1,j$.
+
+This give us:
+\begin{align}
+\label{var:extr:droitContA}
+	\frac{v^{1}_{i+\frac{1}{2},j}-v^{1}_{i-\frac{1}{2}},j}{\Delta x_{1}}+\frac{v^{2}_{i,j+\frac{1}{2}}-v^{2}_{i,j-\frac{1}{2}}}{\Delta x_2}&=0\\
+\label{var:extr:droitContB}
+	v^{2}_{i,j+\frac{1}{2}}&=v^{2}_{i,j-\frac{1}{2}}-\frac{v^{1}_{i+\frac{1}{2},j}-v^{1}_{i-\frac{1}{2},j}}{\Delta x_{1}}\Delta x_{2}\\
+\label{var:extr:droitContC}
+	\frac{v^{1}_{i+\frac{3}{2},j}-v^{1}_{i+\frac{1}{2}},j}{\Delta x_{1}}+\frac{v^{2}_{i+1,j+\frac{1}{2}}-v^{2}_{i,j-\frac{1}{2}}}{\Delta x_2}&=0\\
+\label{var:extr:droitContD}
+	v^{2}_{i+1,j+\frac{1}{2}}&=v^{2}_{i+1,j-\frac{1}{2}}-\frac{v^{1}_{i+\frac{3}{2},j}-v^{1}_{i+\frac{1}{2},j}}{\Delta x_{1}}\Delta x_{2}
+\end{align}
+
+We substitute the two equation \ref{var:extr:droitContB} and \ref{var:extr:droitContD} in equation \ref{var:extr:droitCont}.
+Witch will now only depend on one unknows $v^{1}_{i+\frac{1}{2},j+1}$ witch depend on quantity that can be found using the speed in the domain.
+
+We can only do the thing that we have done only if we have a depth of minimal two cell.
+If we have only one cell, we have no $y$ speed in the domain in calculation.
+For this case, consider the speed $y$ at boundary as in the domain.
+
+\subsection{\unit{45}{\degree} Plane}
+
+If we have a cell in domain with two adjacent cell witch are not in the domain.
+We take as normal a \unit{45}{\degree} Plane.
+
+The normal and tangent vector are then:
+\begin{align}
+	\vect{n}&=\begin{pmatrix}
+	\frac{\sqrt{2}}{2}\\
+	\frac{\sqrt{2}}{2}
+	  \end{pmatrix}\\
+	\vect{t}&=\begin{pmatrix}
+	          	\frac{\sqrt{2}}{2}\\
+	          	-\frac{\sqrt{2}}{2}
+	          \end{pmatrix}
+\end{align}
+
+The constraint is given by:
+\begin{align}
+	\sum_{ij}\sigma_{ij}n_{i}t_{j}&=0
+	\sigma_{11}n_{1}t_{1}+\sigma_{22}n_{2}t_{2}+\sigma_{12}(n_{1}t_{2}+n_{2}t_{1})&=0\\
+	2\frac{\partial v_{1}}{\partial x_{1}}\frac{1}{2}-2\frac{\partial v_{2}}{\partial x_{2}}\frac{1}{2}&=0\\
+	\frac{\partial v_{1}}{\partial x_{1}}-\frac{\partial v_{2}}{\partial x_{2}}&=0
+\end{align}
+
+We discretize at cell center $i,j$ witch give:
+\begin{equation}
+	\frac{v^{1}_{i+\frac{1}{2},j}-v^{1}_{i-\frac{1}{2},j}}{\Delta x_{1}}-\frac{v^{2}_{i,j+\frac{1}{2}}-v^{2}_{i,j-\frac{1}{2}}}{\Delta x_{2}}=0
+\end{equation}
+
+We have two unknows $v^{1}_{i+\frac{1}{2},j}$ and $v^{2}_{i,j+\frac{1}{2}}$.
+
+We add an additional equation using the divergence free condition at cell $i,j$:
+\begin{equation}
+	\frac{v^{1}_{i+\frac{1}{2},j}-v^{1}_{i-\frac{1}{2}},j}{\Delta x_{1}}+\frac{v^{2}_{i,j+\frac{1}{2}}-v^{2}_{i,j-\frac{1}{2}}}{\Delta x_2}=0
+\end{equation}
+
+For this too work, we need to have the left and below boundary speed to be know.
+The boundary need to be like that because in the contrary we will have no data in the $x$ or $y$ direction.
+
+\subsection{Continuation}
+
+We now have the extrapolation method for speed directly at the boundary.
+We can generate the other case in ``filling'' the cell and using the same condition recursively.
+
+\subsection{Speed domain}
+
+We have noted in the previous section that we allow speed at boundary to be in the domain, if the contrary will make a domain without speed in domain
+horizontally or vertically.
+
+\section{Interpolation}
+
+For interpolation, we don't have constraint on the sheme. A simple one can be for example $n$-linear interpolation.
+
+
+
+
+
