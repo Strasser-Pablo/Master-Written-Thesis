@@ -1,0 +1,74 @@
+\usepackage{amsmath,amssymb}
+\usepackage{psfrag}
+\usepackage{graphicx}
+
+%Package used by Pablo
+
+%Package inclusion
+%\usepackage{fontspec}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{listings}
+\usepackage{tikz}
+\usepackage{verbatim}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{caption}
+\usepackage{float}
+\usepackage[amssymb,thickspace,thickqspace]{SIunits}
+
+%Float Style
+\floatstyle{ruled}
+\restylefloat*{table}
+\restylefloat*{figure}
+
+%Tikz library inclusion
+\usepgflibrary{shapes.geometric}
+\usetikzlibrary{fit}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{pgfplots.external}
+\usetikzlibrary{pgfplots.units} 
+\usepgfplotslibrary{external}
+\tikzexternalize
+
+%External command
+\tikzset{external/system call={lualatex \tikzexternalcheckshellescape -halt-on-error
+-interaction=batchmode -jobname "\image" "\texsource"}}
+
+\tikzset{external/mode=list and make}
+
+\tikzsetexternalprefix{figures/}
+
+%New command for identifier style
+\newcommand{\identifiera}[0]{\setmonofont }
+\newcommand{\identifier}[1]{ {\identifiera #1}}
+
+%listings option set
+% Warning use newcommand for identifier style
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=5, numbersep=5pt}
+\lstset{escapeinside={(*@}{@*)}}
+\lstset{basicstyle=\small, language=c++}
+\lstset{breaklines=true,
+    breakindent=0pt,
+    tabsize=2,
+    identifierstyle=\identifiera}
+\lstset{morekeywords={iterator,stack,pair}}
+\lstset{emphstyle=\underbar}
+\lstset{escapeinside={@}{@}}
+
+%New filename command for typseting file
+\DeclareUrlCommand\filename{\urlstyle{tt}}
+
+%New command Bold for vector in math mode
+\newcommand{\vect}[1]{ {\boldsymbol {#1}}}
+
+%New command for kronecker product.
+\newcommand{\kron}{\bigotimes}
+%New command for identity matrice.
+\newcommand{\eye}{1}
+
+%Debug for lua
+\newwrite\luadebug
+\immediate\openout\luadebug luadebug.lua
+\AtEndDocument{\immediate\closeout\luadebug}

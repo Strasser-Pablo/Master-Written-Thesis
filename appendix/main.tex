@@ -1,0 +1,1368 @@
+\appendix
+\chapter{Implementation Details}
+
+\section{Introduction}
+The code is mainly written in c++ with an object oriented approach.
+It make a heavy use of template.
+
+The heavy use of template make the code very easy to adapt. Change a behavior normally only consist to copy a class,
+rename it and modify it as we like.
+
+All the math and algorithmic principle was given in the main part. 
+
+To understand the code it's important to see that it has 3 sort of code:
+\begin{description}
+	\item[Data:] This consist of code forming all the data structure.
+	This is done with a hierarchy of class that will form all the data stored.
+	This contain the notion of topology, the notion of data on grid.
+	The notion of multiple copy of data and so on.
+	\item[Algorithm:] A algorithm make an action on the data structure, modifying it.
+	It take as argument policies witch allow to modify the behavior of the algorithm.
+	For example the algorithm to calculate the motion of particle, will use as policy a functor returning the speed for every position.
+	The choice of the policies allow to change the algorithm without touching it's code.
+	\item[Policies:] Policies are method defined with a given prototype. An algorithm can use a policy in calling it's method using the given prototype.
+\end{description}
+
+Note that because of use of template, at compilation the requirement will be checked.
+The use of Policies and other technique will not have cost on performance,
+because the structure is defined at compile time. The compiler will inline the code where needed.
+
+\section{Data}
+
+Three type of data are used:
+\begin{description}
+	\item[Particles:] This consist of a list of particle.
+	\item[Cell Data:] This consist of data stored on cell like speed and pressure.
+	\item[Simple Data:] Other ``Simple Data'' as time, time step, viscosity are used.
+\end{description}
+
+
+\chapter{Experimental Figure}
+\minitoc
+\section{Fixed Topology}
+\subsection{Heat equation}
+\pgfplotstableread{fixed/solheat/sol_0.txt}\HeatSolaa
+%\pgfplotstabletypeset[columns={x,u}]\HeatSolaa
+
+\pgfplotstableread{fixed/solheat/sol_1.txt}\HeatSola
+%\pgfplotstabletypeset[columns={x,u}]\HeatSola
+
+\pgfplotstableread{fixed/solheat/sol_10.txt}\HeatSolb
+%\pgfplotstabletypeset[columns={x,u}]\HeatSolb
+
+\pgfplotstableread{fixed/solheat/sol_100.txt}\HeatSolc
+%\pgfplotstabletypeset[columns={x,u}]\HeatSolc
+
+\pgfplotstableread{fixed/solheat/sol_200.txt}\HeatSold
+%\pgfplotstabletypeset[columns={x,u}]\HeatSold
+
+\pgfplotstableread{fixed/solheat/sol_300.txt}\HeatSole
+%\pgfplotstabletypeset[columns={x,u}]\HeatSole
+
+\pgfplotstableread{fixed/solheat/sol_400.txt}\HeatSolf
+%\pgfplotstabletypeset[columns={x,u}]\HeatSolf
+
+\pgfplotstableread{fixed/solheat/sol_500.txt}\HeatSolg
+%\pgfplotstabletypeset[columns={x,u}]\HeatSolg
+
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[x=x,y=u]{\HeatSolaa};
+		\label{fix:heatSol0}
+		\addlegendentry{$t=0s$}
+		\addplot table[x=x,y=u]{\HeatSola};
+		\label{fix:heatSol1}
+		\addlegendentry{$t=1s$}
+		\addplot table[x=x,y=u]{\HeatSolb};
+		\label{fix:heatSol10}
+		\addlegendentry{$t=10s$}
+		\addplot table[x=x,y=u]{\HeatSolc};
+		\label{fix:heatSol100}
+		\addlegendentry{$t=100s$}
+		\addplot table[x=x,y=u]{\HeatSold};
+		\label{fix:heatSol200}
+		\addlegendentry{$t=200s$}
+		\addplot table[x=x,y=u]{\HeatSole};
+		\label{fix:heatSol300}
+		\addlegendentry{$t=300s$}
+		\addplot table[x=x,y=u]{\HeatSolf};
+		\label{fix:heatSol400}
+		\addlegendentry{$t=400s$}
+		\addplot table[x=x,y=u]{\HeatSolg};
+		\label{fix:heatSol500}
+		\addlegendentry{$t=500s$}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+Plot for the analytical solution truncated to $n_{max}=1'000'000$ with $2L=\unit{0.1}{\meter}$ and $\nu=\unit{1.307\cdot 10^{-6}}{\pascal\second}$.
+With the following time.
+\begin{align*}
+\ref{fix:heatSol0} t&=\unit{0}{\second}& \ref{fix:heatSol100} t&=\unit{100}{\second}&\ref{fix:heatSol400} t&=\unit{400}{\second}&\\
+\ref{fix:heatSol1} t&=\unit{1}{\second}&\ref{fix:heatSol200} t&=\unit{200}{\second}&\ref{fix:heatSol500} t&=\unit{500}{\second}&\\
+\ref{fix:heatSol10} t&=\unit{10}{\second}&\ref{fix:heatSol300} t&=\unit{300}{\second}&\\
+\end{align*}
+}
+\label{fixed:solheat:fig:sol}
+\end{figure}
+
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data0_1.csv};
+		\label{fix:heatdata0_1}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data2_1.csv};
+		\label{fix:heatdata2_1}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data4_1.csv};
+		\label{fix:heatdata4_1}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data5_1.csv};
+		\label{fix:heatdata5_1}
+		\addplot table[x=x,y=u]{\HeatSola};
+		\label{fix:heatsol_1}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+Numerical solution for $t=\unit{1}{s}$.
+For the following method:
+\begin{align*}
+&\text{Euler}&&\text{Runge-Kutta}&\\
+\ref{fix:heatdata2_1} dt&=\unit{0.1}{\second}& \ref{fix:heatdata5_1} dt&=\unit{0.1}{\second}&\\
+\ref{fix:heatdata0_1} dt&=\unit{1}{\second}&\ref{fix:heatdata4_1} dt&=\unit{1}{\second}&
+\end{align*}
+\begin{center}
+\ref{fix:heatsol_1} Analytical
+\end{center}
+}
+\label{fix:solheat:fig:num1}
+\end{figure}
+
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data2_100.csv};
+		\label{fix:heatdata2_100}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data0_100.csv};
+		\label{fix:heatdata0_100}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data5_100.csv};
+		\label{fix:heatdata5_100}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data4_100.csv};
+		\label{fix:heatdata4_100}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data6_100.csv};
+		\label{fix:heatdata6_100}
+		\addplot table[x=x,y=u]{\HeatSolc};
+		\label{fix:heatsol_100}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+Numerical solution for $t=\unit{100}{\second}$.
+For the following method:
+\begin{align*}
+&\text{Euler}&&\text{Runge-Kutta}&\\
+\ref{fix:heatdata2_100} dt&=\unit{0.1}{\second}& \ref{fix:heatdata5_100} dt&=\unit{0.1}{\second}&\\
+\ref{fix:heatdata0_100} dt&=\unit{1}{\second}&\ref{fix:heatdata4_100} dt&=\unit{1}{\second}&\\
+\end{align*}
+\begin{center}
+\ref{fix:heatsol_100} Analytical
+\end{center}
+}
+\label{fix:solheat:fig:num100}
+\end{figure}
+
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data2_300.csv};
+		\label{fix:heatdata2_300}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data0_300.csv};
+		\label{fix:heatdata0_300}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data5_300.csv};
+		\label{fix:heatdata5_300}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data4_300.csv};
+		\label{fix:heatdata4_300}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data6_300.csv};
+		\label{fix:heatdata6_300}
+		\addplot table[x=x,y=u]{\HeatSole};
+		\label{fix:heatsol_300}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+Numerical solution for $t=\unit{300}{\second}$.
+For the following method:
+\begin{align*}
+&\text{Euler}&&\text{Runge-Kutta}&\\
+\ref{fix:heatdata2_300} dt&=\unit{0.1}{\second}& \ref{fix:heatdata5_300} dt&=\unit{0.1}{\second}&\\
+\ref{fix:heatdata0_300} dt&=\unit{1}{\second}&\ref{fix:heatdata4_300} dt&=\unit{1}{\second}&\\
+&&\ref{fix:heatdata6_300} dt&=2\second&
+\end{align*}
+\begin{center}
+\ref{fix:heatsol_300} Analytical
+\end{center}
+}
+\label{fix:solheat:fig:num300}
+\end{figure}
+
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data2_500.csv};
+		\label{fix:heatdata2_500}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data0_500.csv};
+		\label{fix:heatdata0_500}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data5_500.csv};
+		\label{fix:heatdata5_500}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data4_500.csv};
+		\label{fix:heatdata4_500}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data6_500.csv};
+		\label{fix:heatdata6_500}
+		\addplot table[x=x,y=u]{\HeatSolg};
+		\label{fix:heatsol_500}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+Numerical solution for $t=\unit{500}{\second}$.
+For the following method:
+\begin{align*}
+&\text{Euler}&&\text{Runge-Kutta}&\\
+\ref{fix:heatdata2_500} dt&=\unit{0.1}{\second}& \ref{fix:heatdata5_500} dt&=\unit{0.1}{\second}&\\
+\ref{fix:heatdata0_500} dt&=\unit{1}{\second}&\ref{fix:heatdata4_500} dt&=\unit{1}{\second}&\\
+&&\ref{fix:heatdata6_500} dt&=\unit{2}{\second}&
+\end{align*}
+\begin{center}
+\ref{fix:heatsol_500} Analytical
+\end{center}
+}
+\label{fix:solheat:fig:num500}
+\end{figure}
+
+
+
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.01,y=u]{fixed/solheat/data8_1.csv};
+		\label{fix:heatdata8_1}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.01,y=u]{fixed/solheat/data9_1.csv};
+		\label{fix:heatdata9_1}
+		\addplot table[x=x,y=u]{\HeatSola};
+		\label{fix:heatsolb_1}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+Numerical solution for $t=\unit{1}{s}$.
+For the following method:
+\begin{align*}
+&\text{Euler}&&\text{Runge-Kutta}&\\
+\ref{fix:heatdata8_1} dt&=\unit{1}{\second}& \ref{fix:heatdata9_1} dt&=\unit{1}{\second}&
+\end{align*}
+\begin{center}
+\ref{fix:heatsolb_1} Analytical
+\end{center}
+}
+\label{fix:solheat:fig:num1b}
+\end{figure}
+
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.01,y=u]{fixed/solheat/data8_100.csv};
+		\label{fix:heatdata8_100}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.01,y=u]{fixed/solheat/data9_100.csv};
+		\label{fix:heatdata9_100}
+		\addplot table[x=x,y=u]{\HeatSolc};
+		\label{fix:heatsolb_100}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+Numerical solution for $t=\unit{100}{\second}$.
+For the following method:
+\begin{align*}
+&\text{Euler}&&\text{Runge-Kutta}&\\
+\ref{fix:heatdata8_100} dt&=\unit{1}{\second}& \ref{fix:heatdata9_100} dt&=\unit{1}{\second}&\\
+\end{align*}
+\begin{center}
+\ref{fix:heatsolb_100} Analytical
+\end{center}
+}
+\label{fix:solheat:fig:num100b}
+\end{figure}
+
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.01,y=u]{fixed/solheat/data8_300.csv};
+		\label{fix:heatdata8_300}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.01,y=u]{fixed/solheat/data9_300.csv};
+		\label{fix:heatdata9_300}
+		\addplot table[x=x,y=u]{\HeatSole};
+		\label{fix:heatsolb_300}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+Numerical solution for $t=\unit{300}{\second}$.
+For the following method:
+\begin{align*}
+&\text{Euler}&&\text{Runge-Kutta}&\\
+\ref{fix:heatdata8_300} dt&=\unit{1}{\second}& \ref{fix:heatdata9_300} dt&=\unit{1}{\second}&
+\end{align*}
+\begin{center}
+\ref{fix:heatsolb_300} Analytical
+\end{center}
+}
+\label{fix:solheat:fig:num300b}
+\end{figure}
+
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.01,y=u]{fixed/solheat/data8_500.csv};
+		\label{fix:heatdata8_500}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.01,y=u]{fixed/solheat/data9_500.csv};
+		\label{fix:heatdata9_500}
+		\addplot table[x=x,y=u]{\HeatSolg};
+		\label{fix:heatsolb_500}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+Numerical solution for $t=\unit{500}{\second}$.
+For the following method:
+\begin{align*}
+&\text{Euler}&&\text{Runge-Kutta}&\\
+\ref{fix:heatdata8_500} dt&=\unit{0.1}{\second}& \ref{fix:heatdata9_500} dt&=\unit{0.1}{\second}&
+\end{align*}
+\begin{center}
+\ref{fix:heatsolb_500} Analytical
+\end{center}
+}
+\label{fix:solheat:fig:num500b}
+\end{figure}
+
+\clearpage 
+\subsection{Irrotational}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_10_11_1.pdf}
+\caption{$x$ speed Numerical solution for $N=50$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 11 at time $\unit{1.04785}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_10_11_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_10_11_1.pdf}
+\caption{$x$ speed comparaison to numerical solution ($|v_{anal}-v_{num}|$) for $N=50$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 11 at time $\unit{1.04785}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_10_11_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_10_11_2.pdf}
+\caption{$y$ speed Numerical solution for $N=50$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 11 at time $\unit{1.04785}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_10_11_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_10_11_2.pdf}
+\caption{$y$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=50$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 11 at time $\unit{1.04785}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_10_11_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_10_16_1.pdf}
+\caption{$x$ speed Numerical solution for $N=50$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 16 at time $\unit{1.35871}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_10_16_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_10_16_1.pdf}
+\caption{$x$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=50$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 16 at time $\unit{1.35871}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_10_16_1}
+}
+\end{figure}
+
+\clearpage
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_10_16_2.pdf}
+\caption{$y$ speed Numerical solution for $N=50$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 16 at time $\unit{1.35871}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_10_16_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_10_16_2.pdf}
+\caption{$y$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=50$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 16 at time $\unit{1.35871}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_10_16_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_10_20_1.pdf}
+\caption{$x$ speed Numerical solution for $N=50$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 20 at time $\unit{1.39177}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_10_20_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_10_20_1.pdf}
+\caption{$x$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=50$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 20 at time $\unit{1.39177}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_10_20_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_10_20_2.pdf}
+\caption{$y$ speed Numerical solution for $N=50$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 20 at time $\unit{1.39177}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_10_20_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_10_20_2.pdf}
+\caption{$y$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=50$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 20 at time $\unit{1.39177}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_10_20_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_11_10_1.pdf}
+\caption{$x$ speed Numerical solution for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 10 at time $\unit{1.0}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_11_10_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_11_10_1.pdf}
+\caption{$x$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 10 at time $\unit{1.0}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_11_10_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_11_10_2.pdf}
+\caption{$y$ speed Numerical solution for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 10 at time $\unit{1.0}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_11_10_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_11_10_2.pdf}
+\caption{$y$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 10 at time $\unit{1.0}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_11_10_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_11_20_1.pdf}
+\caption{$x$ speed Numerical solution for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 20 at time $\unit{2.0}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_11_20_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_11_20_1.pdf}
+\caption{$x$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 20 at time $\unit{2.0}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_11_20_1}
+}
+\end{figure}
+
+\clearpage
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_11_20_2.pdf}
+\caption{$y$ speed Numerical solution for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 20 at time $\unit{2.0}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_11_20_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_11_20_2.pdf}
+\caption{$y$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 20 at time $\unit{2.0}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_11_20_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_11_27_1.pdf}
+\caption{$x$ speed Numerical solution for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 27 at time $\unit{2.7}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_11_27_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_11_27_1.pdf}
+\caption{$x$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 27 at time $\unit{2.7}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_11_27_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_11_27_2.pdf}
+\caption{$y$ speed Numerical solution for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 27 at time $\unit{2.7}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_11_27_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_11_27_2.pdf}
+\caption{$y$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 27 at time $\unit{2.7}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_11_27_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_11_32_1.pdf}
+\caption{$x$ speed Numerical solution for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 32 at time $\unit{2.85096}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_11_32_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_11_32_1.pdf}
+\caption{$x$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 32 at time $\unit{2.85096}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_11_32_1}
+}
+\end{figure}
+\begin{figure}
+\includegraphics{fixed/irrot/plot_11_32_2.pdf}
+\caption{$y$ speed Numerical solution for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 32 at time $\unit{2.85096}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_11_32_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_11_32_2.pdf}
+\caption{$y$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Euler method
+for iteration 32 at time $\unit{2.85096}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_11_32_2}
+}
+\end{figure}
+
+\clearpage
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_12_7_1.pdf}
+\caption{$x$ speed Numerical solution for $N=50$ with $\alpha=10$ witch don't respect the CFL condition and solved with Runge-Kutta method
+for iteration 7 at time $\unit{0.7}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_12_7_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_12_7_1.pdf}
+\caption{$x$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=50$ with $\alpha=10$ witch don't respect the CFL condition and solved with Runge-Kutta method
+for iteration 7 at time $\unit{0.7}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_12_7_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_12_7_2.pdf}
+\caption{$y$ speed Numerical solution for $N=50$ with $\alpha=10$ witch don't respect the CFL condition and solved with Runge-Kutta method
+for iteration 7 at time $\unit{0.7}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_12_7_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_12_7_2.pdf}
+\caption{$y$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=50$ with $\alpha=10$ witch don't respect the CFL condition and solved with Runge-Kutta method
+for iteration 7 at time $\unit{0.7}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_12_7_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_12_8_1.pdf}
+\caption{$x$ speed Numerical solution for $N=50$ with $\alpha=10$ witch don't respect the CFL condition and solved with Runge-Kutta method
+for iteration 8 at time $\unit{0.770046}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_12_8_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_12_8_1.pdf}
+\caption{$x$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=50$ with $\alpha=10$ witch don't respect the CFL condition and solved with Runge-Kutta method
+for iteration 8 at time $\unit{0.770046}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_12_8_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_12_8_2.pdf}
+\caption{$y$ speed Numerical solution for $N=50$ with $\alpha=10$ witch don't respect the CFL condition and solved with Runge-Kutta method
+for iteration 8 at time $\unit{0.770046}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_12_8_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_12_8_2.pdf}
+\caption{$y$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=50$ with $\alpha=10$ witch don't respect the CFL condition and solved with Runge-Kutta method
+for iteration 8 at time $\unit{0.770046}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_12_8_2}
+}
+\end{figure}
+
+\clearpage
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_13_10_1.pdf}
+\caption{$x$ speed Numerical solution for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Runge-Kutta method
+for iteration 10 at time $\unit{1.0}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_13_10_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_13_10_1.pdf}
+\caption{$x$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Runge-Kutta method
+for iteration 10 at time $\unit{1.0}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_13_10_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_13_10_2.pdf}
+\caption{$y$ speed Numerical solution for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Runge-Kutta method
+for iteration 13 at time $\unit{1.0}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_13_10_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_13_10_2.pdf}
+\caption{$y$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Runge-Kutta method
+for iteration 13 at time $\unit{1.0}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_13_10_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_13_20_1.pdf}
+\caption{$x$ speed Numerical solution for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Runge-Kutta method
+for iteration 20 at time $\unit{2.0}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_13_20_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_13_20_1.pdf}
+\caption{$x$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Runge-Kutta method
+for iteration 20 at time $\unit{2.0}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_13_20_1}
+}
+\end{figure}
+\begin{figure}
+\includegraphics{fixed/irrot/plot_13_20_2.pdf}
+\caption{$y$ speed Numerical solution for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Runge-Kutta method
+for iteration 20 at time $\unit{2.0}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_13_20_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_13_20_2.pdf}
+\caption{$y$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Runge-Kutta method
+for iteration 20 at time $\unit{2.0}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_13_20_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_13_21_1.pdf}
+\caption{$x$ speed Numerical solution for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Runge-Kutta method
+for iteration 21 at time $\unit{2.1}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_13_21_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_13_21_1.pdf}
+\caption{$x$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Runge-Kutta method
+for iteration 21 at time $\unit{2.1}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_13_21_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_13_21_2.pdf}
+\caption{$y$ speed Numerical solution for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Runge-Kutta method
+for iteration 21 at time $\unit{2.1}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_13_21_2}
+}
+\end{figure}
+
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_13_21_2.pdf}
+\caption{$y$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Runge-Kutta method
+for iteration 21 at time $\unit{2.1}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_13_21_2}
+}
+\end{figure}
+
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_13_10_1.pdf}
+\caption{$x$ speed Numerical solution for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Runge-Kutta method
+for iteration 10 at time $\unit{1.0}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_13_10_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_13_10_1.pdf}
+\caption{$x$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Runge-Kutta method
+for iteration 10 at time $\unit{1.0}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_13_10_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_13_10_2.pdf}
+\caption{$y$ speed Numerical solution for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Runge-Kutta method
+for iteration 13 at time $\unit{1.0}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_13_10_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_13_10_2.pdf}
+\caption{$y$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=10$ witch don't respect the CFL condition and solved with Runge-Kutta method
+for iteration 13 at time $\unit{1.0}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_13_10_2}
+}
+\end{figure}
+
+\clearpage
+ 
+ 
+\begin{figure}
+\includegraphics{fixed/irrot/plot_14_68_1.pdf}
+\caption{$x$ speed Numerical solution for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Euler method
+for iteration 68 at time $\unit{1.00271}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_14_68_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_14_68_1.pdf}
+\caption{$x$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Euler method
+for iteration 68 at time $\unit{1.00271}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_14_68_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_14_68_2.pdf}
+\caption{$y$ speed Numerical solution for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Euler method
+for iteration 68 at time $\unit{1.00271}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_14_68_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_14_68_2.pdf}
+\caption{$y$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Euler method
+for iteration 68 at time $\unit{1.00271}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_14_68_2}
+}
+\end{figure}
+
+\clearpage
+
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_14_274_1.pdf}
+\caption{$x$ speed Numerical solution for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Euler method
+for iteration 274 at time $\unit{2.00347}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_14_274_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_14_274_1.pdf}
+\caption{$x$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Euler method
+for iteration 274 at time $\unit{2.00347}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_14_274_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_14_274_2.pdf}
+\caption{$y$ speed Numerical solution for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Euler method
+for iteration 274 at time $\unit{2.00347}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_14_274_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_14_274_2.pdf}
+\caption{$y$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Euler method
+for iteration 274 at time $\unit{2.00347}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_14_274_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_14_1713_1.pdf}
+\caption{$x$ speed Numerical solution for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Euler method
+for iteration 1713 at time $\unit{5.00005}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_14_1713_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_14_1713_1.pdf}
+\caption{$x$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Euler method
+for iteration 1713 at time $\unit{5.00005}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_14_1713_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_14_1713_2.pdf}
+\caption{$y$ speed Numerical solution for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Euler method
+for iteration 1713 at time $\unit{5.00005}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_14_1713_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_14_1713_2.pdf}
+\caption{$y$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Euler method
+for iteration 1713 at time $\unit{5.00005}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_14_1713_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_15_14_1.pdf}
+\caption{$x$ speed Numerical solution for $N=10$ with $\alpha=1$ witch respect the CFL condition and solved with Euler method
+for iteration 14 at time $\unit{1.01468}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_15_14_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_15_14_1.pdf}
+\caption{$x$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=1$ witch respect the CFL condition and solved with Euler method
+for iteration 14 at time $\unit{1.01468}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_15_14_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_15_14_2.pdf}
+\caption{$y$ speed Numerical solution for $N=10$ with $\alpha=1$ witch respect the CFL condition and solved with Euler method
+for iteration 14 at time $\unit{1.01468}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_15_14_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_15_14_2.pdf}
+\caption{$y$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=1$ witch respect the CFL condition and solved with Euler method
+for iteration 14 at time $\unit{1.01468}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_15_14_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_15_50_1.pdf}
+\caption{$x$ speed Numerical solution for $N=10$ with $\alpha=1$ witch respect the CFL condition and solved with Euler method
+for iteration 50 at time $\unit{2.01325}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_15_50_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_15_50_1.pdf}
+\caption{$x$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=1$ witch respect the CFL condition and solved with Euler method
+for iteration 50 at time $\unit{2.01325}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_15_50_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_15_50_2.pdf}
+\caption{$y$ speed Numerical solution for $N=10$ with $\alpha=1$ witch respect the CFL condition and solved with Euler method
+for iteration 50 at time $\unit{2.01325}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_15_50_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_15_50_2.pdf}
+\caption{$y$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=1$ witch respect the CFL condition and solved with Euler method
+for iteration 50 at time $\unit{2.01325}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_15_50_2}
+}
+\end{figure}
+
+\clearpage
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_15_302_1.pdf}
+\caption{$x$ speed Numerical solution for $N=10$ with $\alpha=1$ witch respect the CFL condition and solved with Euler method
+for iteration 302 at time $\unit{5.00548}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_15_302_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_15_302_1.pdf}
+\caption{$x$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=1$ witch respect the CFL condition and solved with Euler method
+for iteration 302 at time $\unit{5.00548}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_15_302_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_15_302_2.pdf}
+\caption{$y$ speed Numerical solution for $N=10$ with $\alpha=1$ witch respect the CFL condition and solved with Euler method
+for iteration 302 at time $\unit{5.00548}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_15_302_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_15_302_2.pdf}
+\caption{$y$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=1$ witch respect the CFL condition and solved with Euler method
+for iteration 302 at time $\unit{5.00548}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_15_302_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_16_68_1.pdf}
+\caption{$x$ speed Numerical solution for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Runge-Kutta method
+for iteration 69 at time $\unit{1.00271}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_16_68_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_16_68_1.pdf}
+\caption{$x$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Runge-Kutta method
+for iteration 69 at time $\unit{1.00271}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_16_68_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_16_68_2.pdf}
+\caption{$y$ speed Numerical solution for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Runge-Kutta method
+for iteration 68 at time $\unit{1.00271}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_16_68_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_16_68_2.pdf}
+\caption{$y$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$)  for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Runge-Kutta method
+for iteration 68 at time $\unit{1.00271}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_16_68_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_16_274_1.pdf}
+\caption{$x$ speed Numerical solution for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Runge-Kutta method
+for iteration 274 at time $\unit{2.00347}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_16_274_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_16_274_1.pdf}
+\caption{$x$ speed comparaison to Numerical solution  ($|v_{anal}-v_{num}|$) for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Runge-Kutta method
+for iteration 274 at time $\unit{2.00347}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_16_274_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_16_274_2.pdf}
+\caption{$y$ speed Numerical solution for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Runge-Kutta method
+for iteration 274 at time $\unit{2.00347}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_16_274_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_16_274_2.pdf}
+\caption{$y$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Runge-Kutta method
+for iteration 274 at time $\unit{2.00347}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_16_274_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_16_1713_1.pdf}
+\caption{$x$ speed Numerical solution for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Runge-Kutta method
+for iteration 1713 at time $\unit{5.00005}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_16_1713_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_16_1713_1.pdf}
+\caption{$x$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Runge-Kutta method
+for iteration 1713 at time $\unit{5.00005}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_16_1713_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_16_1713_2.pdf}
+\caption{$y$ speed Numerical solution for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Runge-Kutta method
+for iteration 1713 at time $\unit{5.00005}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_16_1713_2}
+}
+\end{figure}
+
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_16_1713_2.pdf}
+\caption{$y$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Runge-Kutta method
+for iteration 1713 at time $\unit{5.00005}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_16_1713_2}
+}
+\end{figure}
+
+\clearpage
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_17_14_1.pdf}
+\caption{$x$ speed Numerical solution for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Runge-Kutta method
+for iteration 14 at time $\unit{1.00271}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_17_14_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_17_14_1.pdf}
+\caption{$x$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=50$ with $\alpha=1$ witch respect the CFL condition and solved with Runge-Kutta method
+for iteration 14 at time $\unit{1.00271}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_17_14_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_17_14_2.pdf}
+\caption{$y$ speed Numerical solution for $N=10$ with $\alpha=1$ witch respect the CFL condition and solved with Runge-Kutta method
+for iteration 14 at time $\unit{1.00271}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_17_14_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_17_14_2.pdf}
+\caption{$y$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=1$ witch respect the CFL condition and solved with Runge-Kutta method
+for iteration 14 at time $\unit{1.00271}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_17_14_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_17_50_1.pdf}
+\caption{$x$ speed Numerical solution for $N=10$ with $\alpha=1$ witch respect the CFL condition and solved with Runge-Kutta method
+for iteration 50 at time $\unit{2.01325}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_17_50_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_17_50_1.pdf}
+\caption{$x$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=1$ witch respect the CFL condition and solved with Runge-Kutta method
+for iteration 50 at time $\unit{2.01325}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_17_50_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_17_50_2.pdf}
+\caption{$y$ speed Numerical solution for $N=10$ with $\alpha=1$ witch respect the CFL condition and solved with Runge-Kutta method
+for iteration 50 at time $\unit{2.01325}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_17_50_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_17_50_2.pdf}
+\caption{$y$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=1$ witch respect the CFL condition and solved with Runge-Kutta method
+for iteration 50 at time $\unit{2.01325}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_17_50_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_17_302_1.pdf}
+\caption{$x$ speed Numerical solution for $N=10$ with $\alpha=1$ witch respect the CFL condition and solved with Runge-Kutta method
+for iteration 302 at time $\unit{5.00548}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_17_302_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_17_302_1.pdf}
+\caption{$x$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=1$ witch respect the CFL condition and solved with Runge-Kutta method
+for iteration 302 at time $\unit{5.00548}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_17_302_1}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/plot_17_302_2.pdf}
+\caption{$y$ speed Numerical solution for $N=10$ with $\alpha=1$ witch respect the CFL condition and solved with Runge-Kutta method
+for iteration 302 at time $\unit{5.000548}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:plot_17_302_2}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics{fixed/irrot/comp_17_302_2.pdf}
+\caption{$y$ speed comparaison to Numerical solution ($|v_{anal}-v_{num}|$) for $N=10$ with $\alpha=1$ witch respect the CFL condition and solved with Runge-Kutta method
+for iteration 302 at time $\unit{5.000548}{\second}$.
+An time step limiter of $dt_{max}=\unit{0.1}{\second}$ and $dt_{min}=\unit{0}{\second}$ was used.
+The blue region indicate the domain of the fluid. The exterior speed come from the analytical solution.
+\label{fix:comp_17_302_2}
+}
+\end{figure}

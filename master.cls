@@ -40,10 +40,12 @@
 \usepackage{minitoc}
 \usepackage{pgfplots}
 \usepackage{pgfplotstable}
-\usepackage{caption}
+
 \usepackage{float}
 \usepackage[amssymb,thickspace,thickqspace]{SIunits}
-
+\usepackage{algpseudocode,algorithm}
+\usepackage{caption}
+\usepackage{subcaption}
 %Float Style
 \floatstyle{ruled}
 \restylefloat*{table}
@@ -56,10 +58,29 @@
 \usetikzlibrary{pgfplots.external}
 \usetikzlibrary{pgfplots.units} 
 \usepgfplotslibrary{external}
-\tikzexternalize
+\usetikzlibrary{shapes.multipart}
+
+%Algorythms
+\renewcommand\And{\mathbin{\textbf{and}}}
+\newcommand\Or{\mathbin{\textbf{or}}}
+\newcommand\True{\mathop{\textbf{true}}}
+\newcommand\False{\mathop{\textbf{false}}}
+\newcommand\Nan{\mathop{\textbf{nan}}}
+
+\newcommand\Step{\mathbin{\textbf{step}}}
+
+\newcommand\To{\mathbin{\textbf{to}}}
+
+\newcommand\Not{\mathop{\textbf{not}}}
+
+\newcommand\Break{\mathop{\textbf{break}}}
+
+%\renewcommand\Return{\mathop{\textbf{return}}}
+
+\newcommand\FuncCall[1]{\mathop{\textbf{#1}}}
 
 %External command
-\tikzset{external/system call={lualatex \tikzexternalcheckshellescape -halt-on-error
+\tikzset{external/system call={lualatex --shell-escape \tikzexternalcheckshellescape -halt-on-error
 -interaction=batchmode -jobname "\image" "\texsource"}}
 
 \tikzset{external/mode=list and make}
@@ -111,7 +132,6 @@
 \newtheorem{corollary}[theorem]{\bf Corollary}
 \newtheorem{proposition}[theorem]{\bf Proposition}
 \newtheorem{definition}{\bf Definition}[section]
-\newtheorem{algorithm}{\bf Algorithm}[section]
 \renewenvironment{proof}{\noindent{\bf Proof\ }}{\QED\\}
 \newcommand{\QED}{\hspace*{\fill}\rule{2.5mm}{2.5mm}}
 \newtheorem{remark}{\bf  Remark}[section]
