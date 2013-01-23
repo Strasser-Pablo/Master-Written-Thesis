@@ -111,6 +111,8 @@ The gradient of a vector is Divergence Free.
   \begin{equation}
    \vect{v_{new}}=\vect{\nabla}\cdot\vect{v}-\Delta p=\vect{\nabla}\cdot\vect{v}-\vect{\nabla}\cdot\vect{v}=0
   \end{equation}
+  \end{proof}
+  
   \begin{remark}
  This work as long as:
  \begin{equation}
@@ -118,7 +120,7 @@ The gradient of a vector is Divergence Free.
  \end{equation}
  So this can be used in discretized case and will be exact as long as \ref{introduction:ProjectionDelta} is respected.
  \end{remark}
-\end{proof}
+
 
 \begin{definition}
 \label{introduction:projectiondef}
@@ -131,12 +133,12 @@ We define the projection operator $P(\vect{v})$
     \vect{v}_{new}=\vect{v}+P(\vect{v})
   \end{equation}
 
-  In case where we use boundary condition that are not 0 Dirichlet or Von Neumann boundary condition.
+  In case where we use boundary condition that are not 0 Dirichlet or Neumann boundary condition.
   The projection operator is no more linear, but affine.
 
   \begin{definition}
-  We denote this by $P(v,T)=Av+T$.
-  Where $A$ is a matrix.
+  We denote affine projection by $P(v,T)=Av+T$.
+  Where $A$ is the matrix that give the linear part.
   \end{definition}
   
   The important change is that the projection of a divergence free vector field is no more 0.
