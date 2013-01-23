@@ -1,7 +1,7 @@
 \chapter{Analytical}
 \minitoc
 \section{Introduction}
-In this chapter, i will discuss the analytical problem that we want to solve.
+In this chapter, we will discuss the analytical problem that we want to solve.
 The other numerical chapter will consist of a numerical sheme to solve the problem given in this chapter.
 
 \section{Variable and Parameter}
@@ -72,8 +72,7 @@ The density is a mass per unit volume.
 
 Density play the same role as mass in Newton's mechanic.
 
-In the incompressible Navier-Stokes equation density is more a constant depending
-of the domain because incompressibility tell us that density doesn't change.
+In the incompressible Navier-Stokes equation density is a constant because incompressibility tell us that density doesn't change.
 
 The density is noted $\rho$.
 
@@ -94,9 +93,15 @@ The incompressible Navier-Stokes equation are given by:
 \label{analytical:navierStokesA}
 \vect{\nabla} \cdot \vect{v}(\vect{x} ,t)&=0\\
 \label{analytical:navierStokesB}
-\partial_t \vect{v}(\vect{x} ,t)+(\vect{v}(\vect{x},t)\cdot\vect{\nabla} ) \vect{v}(\vect{x} ,t)&=-\frac{\vect{\nabla} p(\vect{x},t)}{\rho(\vect{x},t)}+\frac{\vect{F}(\vect{x},t)}{\rho(\vect{x},t)}+\nu \Delta \vect{u}(\vect{x},t)
+\partial_t \vect{v}(\vect{x} ,t)+(\vect{v}(\vect{x},t)\cdot\vect{\nabla} ) \vect{v}(\vect{x} ,t)&=-\vect{\nabla} p(\vect{x},t)+\frac{\vect{F}(\vect{x},t)}{\rho(\vect{x},t)}+\nu \Delta \vect{u}(\vect{x},t)
 \end{align}
 \end{subequations}
+
+$p$ is not the pressure but pressure divided by density, pressure is $\tilde{p}$:
+\begin{equation}
+ \tilde{p}=\frac{p}{\rho}
+\end{equation}
+Because in incompressible Navier-Stokes $\rho$ is constant this doesn't pose problem in derivative.
 
 Equation \ref{analytical:navierStokesA}, tell us that the speed is a divergence free field.
 Equation \ref{analytical:navierStokesB} is an equation of evolution. The presence of $p$ allow to maintain the speed always divergence free.
@@ -110,21 +115,20 @@ We can rewrite Navier-Stokes equation as:
 \label{analytical:navierStokesRewA}
 \vect{\nabla} \cdot \vect{v}(\vect{x} ,t)&=0\\
 \label{analytical:navierStokesRewB}
-\partial_t \vect{v}(\vect{x} ,t)&=f(\vect{v}(\vect{x},t))-\vect{\nabla}\phi
+\partial_t \vect{v}(\vect{x} ,t)&=f(\vect{v}(\vect{x},t))-\vect{\nabla}p
 \intertext{Where}
-f(\vect{v}(\vect{x},t))&=-(\vect{v}(\vect{x},t)\cdot\vect{\nabla} ) \vect{v}(\vect{x} ,t)+\frac{\vect{F}(\vect{x},t)}{\rho(\vect{x},t)}+\nu \Delta \vect{u}(\vect{x},t)\\
-\vect{\nabla}\phi&=\frac{\vect{\nabla}p}{\rho}
+f(\vect{v}(\vect{x},t))&=-(\vect{v}(\vect{x},t)\cdot\vect{\nabla} ) \vect{v}(\vect{x} ,t)+\frac{\vect{F}(\vect{x},t)}{\rho(\vect{x},t)}+\nu \Delta \vect{u}(\vect{x},t)
 \end{align}
 \end{subequations}
 
 Taking the divergence of equation \ref{analytical:navierStokesRewB} we found:
 \begin{equation}
-  \Delta \phi=\vect{\nabla}\cdot f(\vect{v})
+  \Delta p=\vect{\nabla}\cdot f(\vect{v})
 \end{equation}
 
 But using the notation of \ref{introduction:projectiondef}:
 \begin{equation}
-	-\vect{\nabla}\phi=P(f(\vect{v}))
+	-\vect{\nabla}p=P(f(\vect{v}))
 \end{equation}
 
 The equation of Navier-Stokes is then equivalent to solve:
@@ -136,7 +140,7 @@ The equation of Navier-Stokes is then equivalent to solve:
 When topology is variable, we need to add another equation to tell where is the domain of computation.
 A natural boundary condition is the free surface, witch move with the speed at given point.
 
-We define $\lambda$ a system of representative. And $\vect{\xi{x}}_{\lambda}$ the position of point given by $\lambda$.
+We define $\lambda$ a system of representative. And $\vect{\xi}_{\lambda}$ the position of point given by $\lambda$.
 The domain is given by the union of $\vect{\xi}$ for all $\lambda$.
 
 The Navier-Stokes equation are now:
@@ -145,16 +149,18 @@ The Navier-Stokes equation are now:
 \label{analytical:navierStokesMobA}
 \vect{\nabla} \cdot \vect{v}(\vect{x} ,t)&=0\\
 \label{analytical:navierStokesMobB}
-\partial_t \vect{v}(\vect{x} ,t)+(\vect{v}(\vect{x},t)\cdot\vect{\nabla} ) \vect{v}(\vect{x} ,t)&=-\frac{\vect{\nabla} p(\vect{x},t)}{\rho(\vect{x},t)}+\frac{\vect{F}(\vect{x},t)}{\rho(\vect{x},t)}+\nu \Delta \vect{u}(\vect{x},t)\\
+\partial_t \vect{v}(\vect{x} ,t)+(\vect{v}(\vect{x},t)\cdot\vect{\nabla} ) \vect{v}(\vect{x} ,t)&=-\vect{\nabla} p(\vect{x},t)+\frac{\vect{F}(\vect{x},t)}{\rho(\vect{x},t)}+\nu \vect{\Delta} \vect{u}(\vect{x},t)\\
 \partial_t \vect{\xi}_{\lambda}(t)&=\vect{v}(\vect{\xi}_{\lambda},t)
 \end{align}
 \end{subequations}
 
 We can as in section \ref{analytical:fixe_eulerian} eliminate the constrain on the divergence with the same notation:
+\begin{subequations}
 \begin{align}
 \partial_t \vect{v}(\vect{x} ,t)&=f(\vect{v}(\vect{x},t))+P(f(\vect{v}(\vect{x},t))=(\eye+P)f(\vect{v}(\vect{x},t))\\
 \partial_t \vect{\xi}_{\lambda}(t)&=\vect{v}(\vect{\xi}_{\lambda},t)
 \end{align}
+\end{subequations}
 
 \subsection{Convective term}
 \label{analytical:convectif}
@@ -188,7 +194,7 @@ Taking the total derivative(the derivative of everything that depend on time) of
 
 This can be rewritten:
 \begin{equation}
-\frac{d \vect{u}_{\lambda}(t)}{d t}=\partial_t \vect{v}+\left(\vect{v} cdot\vect{\nabla}\right)\vect{v}
+\frac{d \vect{u}_{\lambda}(t)}{d t}=\partial_t \vect{v}+\left(\vect{v} \cdot\vect{\nabla}\right)\vect{v}
 \end{equation}
 
 This is exactly the lhs of equation \ref{analytical:navierStokesB}.
@@ -199,7 +205,7 @@ We then can rewrite Navier-Stokes equation as:
 \label{analytical:navierStokesLagA}
 \vect{\nabla} \cdot \vect{u}_{\lambda}(t)&=0\\
 \label{analytical:navierStokesLagB}
-\frac{d \vect{u}_{\lambda}(t)}{d t}&=-\frac{\vect{\nabla} p(\vect{\xi}_{\lambda}(t),t)}{\rho(\vect{\xi}_{\lambda},t)}+\frac{\vect{F}(\vect{\xi}_{\lambda}(t),t)}{\rho(\vect{x},t)}+\nu \Delta \vect{v}_{\lambda}(t)
+\frac{d \vect{u}_{\lambda}(t)}{d t}&=-\vect{\nabla} p(\vect{\xi}_{\lambda}(t),t)+\frac{\vect{F}(\vect{\xi}_{\lambda}(t),t)}{\rho(\vect{x},t)}+\nu \Delta \vect{v}_{\lambda}(t)
 \end{align}
 \end{subequations}
 
