@@ -20,7 +20,7 @@ We use the work of section \ref{analytical:fixe_eulerian} that Navier-Stokes equ
 \end{equation}
 
 $\eye+P$ project a none divergence free vector to a divergence free vector.
-The solution $\vect{v}$ is a divergence free vector. Because the integral of a divergence free vector is again a divergence free vector.
+The solution $\vect{v}$ is a divergence free vector as long that initial condition are divergence free. Because the integral of a divergence free vector is again a divergence free vector.
 
 But a priori the numerical solution is not necessary divergence free.
 
@@ -39,7 +39,7 @@ We have the certitude to be always divergence free by construction.
 
 \section{Runge-Kutta}
 
-A Runge-Kutta method is a method to solve the ODE (I drop the $\vect{x}$ dependence, but it's understood that this equation is for a vector formed in concatenating every speed):
+A Runge-Kutta method is a method to solve the ODE (We drop the $\vect{x}$ dependence, but it's understood that this equation is for a vector formed in concatenating every speed):
 \begin{equation}
 \partial_t \vect{v}(t)=f(\vect{v})
 \end{equation}
@@ -47,8 +47,8 @@ A Runge-Kutta method is a method to solve the ODE (I drop the $\vect{x}$ depende
 The solution at time $n+1$ is given from the solution at time $n$ with $\Delta t$ the time step and $a$, $b$ parameter of the method.
 \begin{subequations}
 \begin{align}
-	\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}k_{i}\\
-	k_{j}&=\Delta t f(\vect{v}_{n}+\sum_{i=1}^{j-1}a_{j,i}k_{i})
+	\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
+	k_{j}&=\Delta t f(\vect{v}_{n}+\sum_{i=1}^{j-1}a_{j,i}\vect{k}_{i})
 \end{align}
 \end{subequations}
 
@@ -59,8 +59,8 @@ We now integrate method \ref{fixed:analytical} and \ref{fixed:proj} with a Runge
 Scheme for projection at every evaluation of speed:
 \begin{subequations}
 \begin{align}
-\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i}+P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i}\right)\\
-\tilde{k}_{i}&=\Delta t f\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\tilde{k}_{j}+P\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\tilde{k}_{j}\right)\right)
+\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}\right)\\
+\vect{\tilde{k}}_{i}&=\Delta t f\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}\right)\right)
 \end{align}
 \end{subequations}
 
@@ -69,8 +69,8 @@ We project at every estimation of speed. Making by construction every speed dive
 Scheme for analytical expression for pressure:
 \begin{subequations}
 \begin{align}
-	\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}k_{i}\\
-	k_{i}&=\Delta t f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}k_{j}\right)+\Delta t P\left(f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}k_{j}\right)\right)
+	\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
+	k_{i}&=\Delta t f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right)+\Delta t P\left(f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right)\right)
 \end{align}
 \end{subequations}
 
@@ -83,39 +83,39 @@ If $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ is divergence free then 
 We begin by prove the following lemma.
 \begin{lemma}
 \begin{equation}
-  k_{i}=\tilde{k}_{i}+P(\tilde{k}_{i})
+  \vect{k}_{i}=\vect{\tilde{k}}_{i}+P(\vect{\tilde{k}}_{i})
 \end{equation}
 \end{lemma}
 \begin{proof}
 By recurrence on $i$.
 We begin with $i=1$:
 \begin{equation}
-  k_{1}=\Delta tf\left(\vect{v}_n\right)+\Delta tP\left(f\left(\vect{v}_n\right)\right)
+  \vect{k}_{1}=\Delta tf\left(\vect{v}_n\right)+\Delta tP\left(f\left(\vect{v}_n\right)\right)
 \end{equation}
 \begin{equation}
-\tilde{k}_{1}=\Delta tf\left(\vect{v}_n\right)
+\vect{\tilde{k}}_{1}=\Delta tf\left(\vect{v}_n\right)
 \end{equation}
 \begin{equation}
-  k_{1}=\Delta t f\left(\vect{v}_n\right)+\Delta tP\left(f\left(\vect{v}_n\right)\right)=\tilde{k}_1+P\left(\tilde{k}_1\right)
+  \vect{k}_{1}=\Delta t f\left(\vect{v}_n\right)+\Delta tP\left(f\left(\vect{v}_n\right)\right)=\vect{\tilde{k}}_1+P\left(\vect{\tilde{k}}_1\right)
 \end{equation}
 
 Assuming true for smaller $i$:
 \begin{align*}
-  k_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{n}a_{ij}k_{j}\right)+\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}k_{ij}\right)\right)\\
-  &=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\tilde{k}_{j}+P\left(\tilde{k}_{j}\right)\right)\right)+\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\tilde{k}_{j}+P\left(\tilde{k}_{j}\right)\right)\right)\right)\\
-  \tilde{k}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\tilde{k}_{j}+P\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\tilde{k}_{j}\right)\right)\\
-  &=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\tilde{k}_{j}+P\left(\tilde{k}_{j}\right)\right)\right)\\
-  k_{i}&=\tilde{k}_{i}+P\left(\tilde{k}_{i}\right)
+  \vect{k}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{n}a_{ij}k_{j}\right)+\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right)\right)\\
+  &=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{k}}_{j}\right)\right)\right)+\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{k}}_{j}\right)\right)\right)\right)\\
+  \vect{\tilde{k}}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}+P\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}\right)\right)\\
+  &=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{k}}_{j}\right)\right)\right)\\
+  \vect{k}_{i}&=\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{k}}_{i}\right)
 \end{align*}
 \end{proof}
 
 We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ using the lemma.
 
 \begin{align*}
-\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}k_{i}\\
-&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\tilde{k}_{i}+P\left(\tilde{k}_{i}\right)\right)\\
-\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i}+P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i}\right)\\
-&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\tilde{k}_{i}+P\left(\tilde{k}_{i}\right)\right)\\
+\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
+&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{k}}_{i}\right)\right)\\
+\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}\right)\\
+&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{k}}_{i}\right)\right)\\
 \intertext{Using that $\vect{v}_{n}=\tilde{\vect{v}_{n}}$}
 \vect{v}_{n+1}&=\vect{\tilde{v}}_{n+1}
 \end{align*}
@@ -129,29 +129,29 @@ If $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ is divergence free then 
 \begin{proof}
 We begin by prove the following lemma.
 \begin{lemma}
-After relabeling noting $k_{i}^{j}$ the $j$ solution of $k_{i}$.
+After relabeling noting $\vect{k}_{i}^{j}$ the $j$ solution of $\vect{k}_{i}$.
 We have for every $j$.
 \begin{equation}
-  k_{i}=\tilde{k}_{i}^{j}+P(\tilde{k}_{i}^{j})
+  \vect{k}_{i}=\vect{\tilde{k}}_{i}^{j}+P(\vect{\tilde{k}}_{i}^{j})
 \end{equation}
-This doesn't say that we have existence and unicity of the solution only that if we have a set of solution for $k$ we have a bijection
-to solution of $\tilde{k}$
+This doesn't say that we have existence and unicity of the solution only that if we have a set of solution for $\vect{k}$ we have a bijection
+to solution of $\vect{\tilde{k}}$
 \end{lemma}
 \begin{proof}
 Because the sum goes to $s$ and not $i-1$ we cannot use recurrence.
 We now will use vector notation for $k$.
 
-We construct $k$ and $\tilde{k}$ vector with the vector $k_{i}$ and $\tilde{k}_{i}$
+We construct $k$ and $\tilde{k}$ vector with the vector $\vect{k}_{i}$ and $\vect{\tilde{k}}_{i}$
 \begin{align}
 k&=\begin{pmatrix}
-    k_{1}\\
+    \vect{k}_{1}\\
     \vdots\\
-    k_{s}\\
+    \vect{k}_{s}\\
   \end{pmatrix}\\
 \tilde{k}&=\begin{pmatrix}
-    \tilde{k}_{1}\\
+    \vect{\tilde{k}}_{1}\\
     \vdots\\
-    \tilde{k}_{s}\\
+    \vect{\tilde{k}}_{s}\\
   \end{pmatrix}
 \end{align}
 
@@ -170,9 +170,9 @@ We form $\hat{P}$ and $\hat{f}$ from a Kronecker product:
 We now define $\hat{v}_n$:
 \begin{equation}
 \hat{v}_{n}=\begin{pmatrix}
-	      v_{n}\\
+	      \vect{v}_{n}\\
 	      \vdots\\
-	      v_{n}
+	      \vect{v}_{n}
 	      \end{pmatrix}
 \end{equation}
 
@@ -226,9 +226,9 @@ We now substitute $g$ in $\tilde{g}$
 $(1+\hat{P})\tilde{k}$ is a fixed point of $g$.
 But fixed point of $g$ is $k$.
 
-This directly give the result with $k^{j}$ the $j$ solution:
+This directly give the result with $\vect{k}^{j}$ the $j$ solution:
 \begin{equation}
-k^{j}=(1+\hat{P})\tilde{k}^{j}
+\vect{k}^{j}=(1+\hat{P})\vect{\tilde{k}}^{j}
 \end{equation}
 This is exactly the vector version of what we wanted to prove.
 \end{proof}
@@ -238,10 +238,10 @@ The rest is exactly the same than in the first case.
 To not overload the proof with notation, we drop the $j$ label to indicate witch solution we take.
 We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ using the lemma.
 \begin{align*}
-\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}k_{i}\\
-&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\tilde{k}_{i}+P\left(\tilde{k}_{i}\right)\right)\\
-\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i}+P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i}\right)\\
-&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\tilde{k}_{i}+P\left(\tilde{k}_{i}\right)\right)\\
+\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
+&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{k}}_{i}\right)\right)\\
+\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}\right)\\
+&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{k}}_{i}\right)\right)\\
 \intertext{Using that $\vect{v}_{n}=\tilde{\vect{v}_{n}}$}
 \vect{v}_{n+1}&=\vect{\tilde{v}}_{n+1}
 \end{align*}
@@ -260,12 +260,12 @@ Is exactly divergence free at every approximation of speed.
 \end{proof}
 
 \begin{corollary}
-  Using the expression for $v$ or $\tilde{v}$ we are $k$ order precise in time. Where $k$ is the order of the Runge-Kutta method.
+  Using the expression for $\vect{v}$ or $\vect{\tilde{v}}$ we are $k$ order precise in time. Where $k$ is the order of the Runge-Kutta method.
 \end{corollary}
 \begin{proof}
-  $v$ and $\tilde{v}$ are the same.
-  $v$ consist only of a Runge-Kutta method with a good chosen function.
-  So the order in time of $v$ and $\tilde{v}$ is the same that the method order.
+  $\vect{v}$ and $\vect{\tilde{v}}$ are the same.
+  $\vect{v}$ consist only of a Runge-Kutta method with a good chosen function.
+  So the order in time of $\vect{v}$ and $\vect{\tilde{v}}$ is the same that the method order.
 \end{proof}
 
 
@@ -277,8 +277,8 @@ We use the notation of \ref{introduction:projectiondef}.
 Scheme for projection at every evaluation of speed:
 \begin{subequations}
 \begin{align}
-\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i}+P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i},\tilde{T}_0\right)\\
-\tilde{k}_{i}&=\Delta t f\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\tilde{k}_{j}+P\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\tilde{k}_{j},\tilde{T}_i\right)\right)
+\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i},\vect{\tilde{T}}_0\right)\\
+\vect{\tilde{k}}_{i}&=\Delta t f\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j},\vect{\tilde{T}}_i\right)\right)
 \end{align}
 \end{subequations}
 
@@ -287,8 +287,8 @@ We project at every estimation of speed. Making by construction every speed dive
 Scheme for analytical expression for pressure:
 \begin{subequations}
 \begin{align}
-	\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}k_{i}\\
-	k_{i}&=\Delta t f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}k_{j}\right)+\Delta t P\left(f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}k_{j}\right),T_{i}\right)
+	\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
+	\vect{k}_{i}&=\Delta t f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right)+\Delta t P\left(f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right),\vect{T}_{i}\right)
 \end{align}
 \end{subequations}
 
@@ -299,8 +299,8 @@ If $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ is divergence free then 
 With the relation for the translation:
 \begin{align}
 \intertext{For $i\geq s$}
-  \tilde{T}_i&=\sum_{j=1}^{i-1}a_{ij}\Delta t T_{j}\\
-  \tilde{T}_0&=\sum_{i=1}^{s}b_{i}\Delta t T_{i}
+  \vect{\tilde{T}}_i&=\sum_{j=1}^{i-1}a_{ij}\Delta t \vect{T_{j}}\\
+  \vect{\tilde{T}}_0&=\sum_{i=1}^{s}b_{i}\Delta t \vect{T}_{i}
 \end{align}
 
 \end{theorem}
@@ -308,47 +308,47 @@ With the relation for the translation:
 We begin by prove the following lemma.
 \begin{lemma}
 \begin{equation}
-  k_{i}=\tilde{k}_{i}+P(\tilde{k}_{i},\Delta t T_{i})
+  \vect{k}_{i}=\vect{\tilde{k}}_{i}+P(\vect{\tilde{k}}_{i},\Delta t \vect{T}_{i})
 \end{equation}
 \end{lemma}
 \begin{proof}
 By recurrence on $i$.
 We begin with $i=1$:
 \begin{equation}
-  k_{1}=\Delta tf\left(\vect{v}_n\right)+\Delta tP\left(f\left(\vect{v}_n\right),T_{1}\right)
+  \vect{k}_{1}=\Delta tf\left(\vect{v}_n\right)+\Delta tP\left(f\left(\vect{v}_n\right),\vect{T}_{1}\right)
 \end{equation}
 \begin{equation}
-\tilde{k}_{1}=\Delta tf\left(\vect{v}_n\right)
+\vect{\tilde{k}}_{1}=\Delta tf\left(\vect{\vect{v}}_n\right)
 \end{equation}
 \begin{equation}
-  k_{1}=\Delta t f\left(\vect{v}_n\right)+\Delta tP\left(f\left(\vect{v}_n\right),T_{1}\right)=\tilde{k}_1+P\left(\tilde{k}_1,\Delta t T_{1}\right)
+  \vect{k}_{1}=\Delta t f\left(\vect{v}_n\right)+\Delta tP\left(f\left(\vect{v}_n\right),\vect{T}_{1}\right)=\vect{\tilde{k}}_1+P\left(\vect{\tilde{k}}_1,\Delta t \vect{T}_{1}\right)
 \end{equation}
 
 Assuming true for smaller $i$:
 \begin{align*}
-  k_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{n}a_{ij}k_{j}\right)+\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}k_{j}\right),T_{i}\right)\\
-  &=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\tilde{k}_{j}+P\left(\tilde{k}_{j},\Delta t T_{j}\right)\right)\right)+\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\tilde{k}_{j}+P\left(\tilde{k}_{j},\Delta t T_{j}\right)\right)\right),T_{i}\right)\\
-  \tilde{k}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\tilde{k}_{j}+P\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\tilde{k}_{j},\tilde{T}_{i}\right)\right)\\
-  &=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\tilde{k}_{j}+P\left(\tilde{k}_{j},\hat{T}_{j}^{i}\right)\right)\right)\\
-  \tilde{T_i}&=\sum_{j}^{i-1}a_{ij}\hat{T}_{j}^{i}\\
-  \hat{T}^{i}_{j}&=\Delta t T_{j}\\
-  k_{i}&=\tilde{k}_{i}+P\left(\tilde{k}_{i},\Delta tT_j\right)
+  \vect{k}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{n}a_{ij}\vect{k}_{j}\right)+\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right),\vect{T}_{i}\right)\\
+  &=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{k}}_{j},\Delta t \vect{T}_{j}\right)\right)\right)+\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{k}}_{j},\Delta t \vect{T}_{j}\right)\right)\right),\vect{T}_{i}\right)\\
+  \vect{\tilde{k}}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\tilde{k}_{j}+P\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j},\vect{\vect{\tilde{T}}}_{i}\right)\right)\\
+  &=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{k}}_{j},\vect{\hat{T}}_{j}^{i}\right)\right)\right)\\
+  \vect{\tilde{T}}_i&=\sum_{j}^{i-1}a_{ij}\vect{\hat{T}}_{j}^{i}\\
+  \vect{\hat{T}}^{i}_{j}&=\Delta t \vect{T}_{j}\\
+  \vect{k}_{i}&=\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{k}}_{i},\Delta t\vect{T}_j\right)
 \end{align*}
 This prove the relation and give the relation between the two.
 \begin{equation}
-  \tilde{T_i}=\sum_{j}^{i-1}a_{ij}\Delta t T_{j}
+  \vect{\tilde{T}}_i=\sum_{j}^{i-1}a_{ij}\Delta t \vect{T}_{j}
 \end{equation}
 \end{proof}
 
 We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ using the lemma.
 
 \begin{align*}
-\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}k_{i}\\
-&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\tilde{k}_{i}+P\left(\tilde{k}_{i},\Delta tT_{i}\right)\right)\\
-\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i}+P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i},\tilde{T}_{0}\right)\\
-&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\tilde{k}_{i}+P\left(\tilde{k}_{i},\hat{T}_{i}^{0}\right)\right)\\
-\tilde{T}_{0}&=\sum_{i=1}^{s}b_{i}\hat{T}_{i}^{0}\\
-\tilde{T}_{0}&=\sum_{i=1}^{s}b_{i}\Delta t T_{i}\\
+\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
+&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\tilde{k}_{i}+P\left(\vect{\tilde{k}}_{i},\Delta t\vect{T}_{i}\right)\right)\\
+\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i},\vect{\tilde{T}}_{0}\right)\\
+&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{k}}_{i},\vect{\hat{T}}_{i}^{0}\right)\right)\\
+\vect{\tilde{T}}_{0}&=\sum_{i=1}^{s}b_{i}\vect{\hat{T}}_{i}^{0}\\
+\vect{\tilde{T}}_{0}&=\sum_{i=1}^{s}b_{i}\Delta t \vect{T}_{i}\\
 \intertext{Using that $\vect{v}_{n}=\tilde{\vect{v}_{n}}$}
 \vect{v}_{n+1}&=\vect{\tilde{v}}_{n+1}
 \end{align*}
@@ -362,18 +362,18 @@ For the implicit Runge-Kutta case, where the sum on $i-1$ go now to $s$.
 If $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ is divergence free then $\vect{v}_{n+1}=\vect{\tilde{v}}_{n+1}$.
 And the translation is given by:
 \begin{align}
-  \tilde{T_{i}}&=\Delta t\sum_{j}a_{ij}T_{j}\\
-  \tilde{T_{0}}&=\Delta t\sum_{j}b_{j}T_{j}
+  \vect{\tilde{T}}_{i}&=\Delta t\sum_{j}a_{ij}\vect{T}_{j}\\
+  \vect{\tilde{T}}_{0}&=\Delta t\sum_{j}b_{j}\vect{T}_{j}
 \end{align}
 
 \end{theorem}
 \begin{proof}
 We begin by prove the following lemma.
 \begin{lemma}
-After relabeling noting $k_{i}^{j}$ the $j$ solution of $k_{i}$.
+After relabeling noting $\vect{k}_{i}^{j}$ the $j$ solution of $\vect{k}_{i}$.
 We have for every $j$.
 \begin{equation}
-  k_{i}=\tilde{k}_{i}^{j}+P(\tilde{k}_{i}^{j},\Delta t T_{i})
+  \vect{k}_{i}=\vect{\tilde{k}}_{i}^{j}+P(\vect{\tilde{k}}_{i}^{j},\Delta t \vect{T}_{i})
 \end{equation}
 This doesn't say that we have existence and unicity of the solution only that if we have a set of solution for $k$ we have a bijection
 to solution of $\tilde{k}$
@@ -382,17 +382,17 @@ to solution of $\tilde{k}$
 Because the sum goes to $s$ and not $i-1$ we cannot use recurrence.
 We now will use vector notation for $k$.
 
-We construct $k$ and $\tilde{k}$ vector with the vector $k_{i}$ and $\tilde{k}_{i}$
+We construct $k$ and $\tilde{k}$ vector with the vector $\vect{k}_{i}$ and $\vect{\tilde{k}}_{i}$
 \begin{align}
 k&=\begin{pmatrix}
-    k_{1}\\
+    \vect{k}_{1}\\
     \vdots\\
-    k_{s}\\
+    \vect{k}_{s}\\
   \end{pmatrix}\\
 \tilde{k}&=\begin{pmatrix}
-    \tilde{k}_{1}\\
+    \vect{\tilde{k}}_{1}\\
     \vdots\\
-    \tilde{k}_{s}\\
+    \vect{\tilde{k}}_{s}\\
   \end{pmatrix}
 \end{align}
 
@@ -405,25 +405,25 @@ We form $\hat{L}$ the linear part of the projection from $L$ the linear part fro
 \end{align}
 
 
-$\tau_{i}$ the translation vector from $T_i$ the translation part of $P$.
+$\tau_{i}$ the translation vector from $\vect{T}_i$ the translation part of $P$.
 $\tau$ is the sum of all individual translation.
 \begin{align}
 	\tau_i&=\begin{pmatrix}
-			0\\
+			\vect{0}\\
 			\vdots\\
-			T_{i}\\
+			\vect{T}_{i}\\
 			\vdots\\
-			0\\
+			\vect{0}\\
 	\end{pmatrix}
 	\\
 	\tau&=\sum_{i}\tau_{i}=\begin{pmatrix}
-			T_{1}\\
+			\vect{T}_{1}\\
 			\vdots\\
-			T_{s}\\
+			\vect{T}_{s}\\
 	\end{pmatrix}
 \end{align}
 
-Same for $\tilde{\tau}_{i}$ with $T_{i}$ changed with $\tilde{T}_i$
+Same for $\tilde{\tau}_{i}$ with $\vect{T}_{i}$ changed with $\vect{\tilde{T}}_i$
 
 We now form the function $\hat{f}$ from $f$ with:
 \begin{align}
@@ -436,9 +436,9 @@ We now form the function $\hat{f}$ from $f$ with:
 We now define $\hat{v}_n$:
 \begin{equation}
 \hat{v}_{n}=\begin{pmatrix}
-	      v_{n}\\
+	      \vect{v}_{n}\\
 	      \vdots\\
-	      v_{n}
+	      \vect{v}_{n}
 	      \end{pmatrix}
 \end{equation}
 
@@ -509,11 +509,11 @@ The rest is exactly the same than in the first case.
 To not overload the proof with notation, we drop the $j$ label to indicate witch solution we take.
 We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ using the lemma.
 \begin{align*}
-\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}k_{i}\\
-&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\left(\eye+L\right)\tilde{k}_i+\Delta t T_{i}\right)\\
-\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i}+L\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\tilde{k}_{i}\right)+\tilde{T}_0\\
-&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\eye+L\right)\tilde{k}_{i}+\tilde{T}_0\\
-\tilde{T}_0&=\Delta t\sum_{i=1}^{s}b_{i}T_{i}\\
+\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
+&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\left(\eye+L\right)\vect{\tilde{k}}_i+\Delta t \vect{T}_{i}\right)\\
+\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}+L\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}\right)+\vect{\tilde{T}}_0\\
+&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\eye+L\right)\vect{\tilde{k}}_{i}+\vect{\tilde{T}}_0\\
+\vect{\tilde{T}}_0&=\Delta t\sum_{i=1}^{s}b_{i}\vect{T}_{i}\\
 \intertext{Using that $\vect{v}_{n}=\tilde{\vect{v}_{n}}$}
 \vect{v}_{n+1}&=\vect{\tilde{v}}_{n+1}
 \end{align*}
