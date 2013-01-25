@@ -1,28 +1,24 @@
-\chapter{Analytical}
+\chapter{Analytical Problem And Analytical Result}
+
 \minitoc
-\section{Introduction}
+\section*{Introduction}
 In this chapter, we will discuss the analytical problem that we want to solve.
-The other numerical chapter will consist of a numerical sheme to solve the problem given in this chapter.
+The other numerical chapter will consist of numericals schemes to solve the problem given in this chapter.
 
 \section{Variable and Parameter}
 
-The problem will consist to find a function of space and time respecting some condition and equation.
+The problem will consist to find a function of space and time in a certain domain respecting some condition and equation.
 
-\subsection{Space and Time}
-
-The space consist of a vector in fixed cartesian coordinate with dimension typically 2 or 3 (Navier-Stokes on 1d is trivial).
+We begin to define space time and domaine:
+\begin{description}
+\item[The \emph{space}] consist of a vector in fixed Cartesian coordinate with dimension typically 2 or 3 (Navier-Stokes on 1d is trivial).
 Space is noted $\vect{x}$.
-The time consist of a indice indicating the evolution of the function in time.
+\item[The \emph{time}] consist of a indice indicating the evolution of the function in time.
 Time is noted $t$.
-
-\subsection{Domain}
-
-A domain is the spatial region where a field is defined. This consist physically in the spatial region where water lay.
+\item[The \emph{domain}] is the spatial region where a field is defined. This consist physically in the spatial region where water lay.
 Boundary condition need to be provided.
-
-The Domain can vary with respect of time and can vary with respect of the solution at previous time.
-
-The Domain don't need to be connected. But can be decomposed in union of connected Subdomain.
+The domain can vary with respect of time and can vary with respect of the solution at previous time.
+The domain don't need to be connected. But can be decomposed in union of connected subdomain.
 
 \begin{example}
  If we take a drop of water falling in a glass of water. The domain consist of the region where the water lie.
@@ -31,61 +27,46 @@ The Domain don't need to be connected. But can be decomposed in union of connect
 \end{example}
 
 The Domain is generally noted $\Omega$ or $\Omega(t)$ to emphasis that it can be variable with respect of time.
+\end{description}
 
-\subsection{Field}
-
-A Field consist of a function with respect of space in the domain and time in the temporal domain.
+The variable of the equation are named \emph{Field} and consist of a function with respect of space in the spacial domain and time in the temporal domain.
 \begin{equation}
  F(x,t)\qquad \text{With $x\in\Omega(t)$ and $t_0\leq t \leq t_f$}
 \end{equation}
 
-\subsubsection{Vector Field}
-A vector field is a field that is a vector.
+We have the following field:
+\begin{description}
+\item[The \emph{speed}:] A vector field consisting of the speed in space and time.
+The speed is noted $\vect{v}$.
+\item[The \emph{pressure}:] A scalar field consisting of an internal force per unit area in the fluid.
+We will not use the pressure in this work, but the pressure divided by density.
+If we note the pressure $\tilde{p}$ we use:
+\begin{equation}
+ p=\frac{\tilde{p}}{\rho}
+\end{equation}
+Because we use incompressible Navier-Stokes equation, $\rho$ is constant. This can be view as a change of unit.
+\end{description}
 
-We only have one Vector Field named speed and noted $\vect{v}$.
-
-The speed physically represent the speed of water at a given position.
-\subsubsection{Scalar Field}
-A scalar field is a field that is a scalar.
-
-We only have one Scalar Field named pressure and noted $p$.
-
-The pressure physically represent an internal force per unit area between water particle.
-
-\subsection{Parameter}
-
-The following parameter are used in this work.
-
-\subsubsection{Viscosity}
-The viscosity represent how much water particle stick together.
-
-Higher is the viscosity less abrupt speed change is possible.
-
+The following constant parameter are used:
+\begin{description}
+\item[The \emph{viscosity}] represent how much water particle stick together.
+Higher is the viscosity less abrupt speed change are possible.
 The viscosity is noted $\mu$. We use allot $\nu$ that is the viscosity divided by the density.
 \begin{equation}
  \nu=\frac{\mu}{\rho}
 \end{equation}
-
-\subsubsection{Density}
-
-The density is a mass per unit volume.
-
+\item[The \emph{density}] is a mass per unit volume.
 Density play the same role as mass in Newton's mechanic.
-
 In the incompressible Navier-Stokes equation density is a constant because incompressibility tell us that density doesn't change.
-
 The density is noted $\rho$.
-
-\subsubsection{Force}
-
-The force is a user defined vector field that represent the external force applied to the water.
+\item[The \emph{external force}] is a user defined vector field that represent the external force applied to the water.
 It can possibly depend on the solution for previous time.
+The force is noted $\vect{F}$.
+\end{description}
 
-The force is noted $\vect{F}$
+\section{Navier-Stokes equation}
 
-\section{Navier Stokes}
-
-\subsection{Fixed Eulerian}
+\subsection{Fixed Topology Eulerian}
 \label{analytical:fixe_eulerian}
 The incompressible Navier-Stokes equation are given by:
 \begin{subequations}
@@ -96,12 +77,6 @@ The incompressible Navier-Stokes equation are given by:
 \partial_t \vect{v}(\vect{x} ,t)+(\vect{v}(\vect{x},t)\cdot\vect{\nabla} ) \vect{v}(\vect{x} ,t)&=-\vect{\nabla} p(\vect{x},t)+\frac{\vect{F}(\vect{x},t)}{\rho(\vect{x},t)}+\nu \Delta \vect{u}(\vect{x},t)
 \end{align}
 \end{subequations}
-
-$p$ is not the pressure but pressure divided by density, pressure is $\tilde{p}$:
-\begin{equation}
- \tilde{p}=\frac{p}{\rho}
-\end{equation}
-Because in incompressible Navier-Stokes $\rho$ is constant this doesn't pose problem in derivative.
 
 Equation \ref{analytical:navierStokesA}, tell us that the speed is a divergence free field.
 Equation \ref{analytical:navierStokesB} is an equation of evolution. The presence of $p$ allow to maintain the speed always divergence free.
@@ -125,7 +100,6 @@ Taking the divergence of equation \ref{analytical:navierStokesRewB} we found:
 \begin{equation}
   \Delta p=\vect{\nabla}\cdot f(\vect{v})
 \end{equation}
-
 But using the notation of \ref{introduction:projectiondef}:
 \begin{equation}
 	-\vect{\nabla}p=P(f(\vect{v}))
@@ -135,8 +109,9 @@ The equation of Navier-Stokes is then equivalent to solve:
 \begin{equation}
   \partial_t \vect{v}(\vect{x} ,t)=f(\vect{v}(\vect{x},t))+P(f(\vect{v}(\vect{x},t))=(\eye+P)f(\vect{v}(\vect{x},t))
 \end{equation}
+$(\eye+P)$ is a projector on a divergence free space without changing the rotational.
 
-\subsection{Mobile Eulerian}
+\subsection{Mobile Topology Eulerian}
 When topology is variable, we need to add another equation to tell where is the domain of computation.
 A natural boundary condition is the free surface, witch move with the speed at given point.
 
@@ -153,30 +128,26 @@ The Navier-Stokes equation are now:
 \partial_t \vect{\xi}_{\lambda}(t)&=\vect{v}(\vect{\xi}_{\lambda},t)
 \end{align}
 \end{subequations}
-
 We can as in section \ref{analytical:fixe_eulerian} eliminate the constrain on the divergence with the same notation:
 \begin{subequations}
 \begin{align}
 \partial_t \vect{v}(\vect{x} ,t)&=f(\vect{v}(\vect{x},t))+P(f(\vect{v}(\vect{x},t))=(\eye+P)f(\vect{v}(\vect{x},t))\\
-\partial_t \vect{\xi}_{\lambda}(t)&=\vect{v}(\vect{\xi}_{\lambda},t)
+\partial_t \vect{\xi}_{\lambda}(t)&=\vect{v}(\vect{\xi}_{\lambda},t)\label{ana:move:equ}
 \end{align}
 \end{subequations}
 
-\subsection{Convective term}
+\subsection{Lagrangian form of Navier-Stokes equation}
 \label{analytical:convectif}
 We will in this section rewrite \ref{analytical:navierStokesB} in another form.
-
-We begin to define a new position system $\vect{\xi}_{\lambda}(t)$:
+We begin to define a new position system(witch is similar to the particle position used in previous section) $\vect{\xi}_{\lambda}(t)$:
 \begin{subequations}
 \begin{align}
  \partial_t \vect{\xi}_{\lambda}(t)&=v(\vect{\xi}_{\lambda}(t),t)\\
  \vect{\xi}_{\lambda}(t_0)&=\vect{\xi}^{0}_{\lambda}
 \end{align}
 \end{subequations}
-
 $\lambda$ is a system of representative that is initialized by initial condition.
 For a given $\lambda$, $\vect{\xi}_{\lambda}(t)$ follow the speed at the given point.
-
 This position system is called particle coordinate or Lagrangian.
 $\vect{\xi}_\lambda(t)$ is called the characteristic.
 
@@ -184,19 +155,16 @@ We then can define the Lagrangian speed.
 \begin{equation}
  \vect{u}_{\lambda}(t)=\vect{v}(\vect{\xi}_{\lambda}(t),t)
 \end{equation}
-
 The Lagrangian speed is the speed following a characteristic.
 
 Taking the total derivative(the derivative of everything that depend on time) of the Lagrangian speed with respect of time, we have:
 \begin{equation}
 \frac{d \vect{u}_{\lambda}(t)}{d t}=\frac{d \vect{v}(\xi_{\lambda},t)}{d t}=\partial_t \vect{v}+\left(\frac{\partial \vect{\xi}_{\lambda}(t)}{\partial t}\cdot\vect{\nabla}\right)\vect{v}
 \end{equation}
-
 This can be rewritten:
 \begin{equation}
 \frac{d \vect{u}_{\lambda}(t)}{d t}=\partial_t \vect{v}+\left(\vect{v} \cdot\vect{\nabla}\right)\vect{v}
 \end{equation}
-
 This is exactly the lhs of equation \ref{analytical:navierStokesB}.
 
 We then can rewrite Navier-Stokes equation as:
@@ -205,14 +173,51 @@ We then can rewrite Navier-Stokes equation as:
 \label{analytical:navierStokesLagA}
 \vect{\nabla} \cdot \vect{u}_{\lambda}(t)&=0\\
 \label{analytical:navierStokesLagB}
-\frac{d \vect{u}_{\lambda}(t)}{d t}&=-\vect{\nabla} p(\vect{\xi}_{\lambda}(t),t)+\frac{\vect{F}(\vect{\xi}_{\lambda}(t),t)}{\rho(\vect{x},t)}+\nu \Delta \vect{v}_{\lambda}(t)
+\frac{d \vect{u}_{\lambda}(t)}{d t}&=-\vect{\nabla} p(\vect{\xi}_{\lambda}(t),t)+\frac{\vect{F}(\vect{\xi}_{\lambda}(t),t)}{\rho(\vect{x},t)}+\nu \Delta \vect{u}_{\lambda}(t)
 \end{align}
 \end{subequations}
 
 \begin{remark}
 We remark that with this notation some expression like spatial derivative of $\vect{u}$ is not defined.
 In an analytical procedure, we can transform $\vect{u}$ to $\vect{v}$ with the help of the expression of $\vect{\xi}$, then the derivative is well defined.
-But in a numerical procedure, the point where the value is know are particle in the case of $\vect{u}$. This demand to define derivative on unstructured grid
+But in a numerical procedure, the point where the value are know are particle. This demand to define derivative on unstructured grid
 or to interpolate at grid point.
 \end{remark}
 
+\section{Boundary Condition}
+
+We will be interested in two kind of boundary condition.
+\begin{description}
+ \item[\emph{Inflow} Boundary:]
+ An inflow boundary is a source of water.
+ \item[\emph{free surface} Boundary:]
+ A free surface boundary is a freely moving boundary where the other fluid is inert.
+\end{description}
+
+\subsection{Inflow}
+
+Inflow boundary condition have constant prescribed speed.
+This give the following constraint on pressure:
+\begin{equation}
+\nabla p(\vect{x},t)=f(\vect{v}(\vect{x},t))
+\end{equation}
+
+\subsection{Free Surface Boundary Condition}
+\label{ana:free:surface}
+To define the free surface boundary condition, we need to define the stress tensor:
+\begin{equation}
+	\sigma_{ij}=-p \delta_{ij}+\nu\left(\frac{\partial v_{i}}{\partial x_{j}}+\frac{\partial v_{j}}{\partial x_{i}}\right)
+\end{equation}
+The boundary condition are then given by(for 3d):
+\begin{align}
+	\sum_{i,j}\sigma_{ij}n_{i}n_{j}&=0\\
+	\sum_{i,j}\sigma_{ij}t^{1}_{i}n_{j}&=0\\
+	\sum_{i,j}\sigma_{ij}t^{2}_{i}n_{j}&=0\\
+\end{align}
+Where $\vect{n}$ are the normal vector and $\vect{t}^1$ and $\vect{t}^2$ are two none-colinear tangent vector.
+For 2d only one tangent vector is needed.
+
+The first equation can be used to find boundary condition for $p$.
+The other equation only depend of speed, because $\vect{n}$ is orthogonal to $\vect{t}^{1}$ and $\vect{t}^{2}$.
+The value of $\nu$ is not relevant for the condition (a global none zero constant).
+The constraint is linear.

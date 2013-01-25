@@ -1,16 +1,21 @@
-\chapter{Fixed}
+\chapter{Numerical Treatement of The Fixed Domain Case}
 \minitoc
+
 \section{Introduction}
 
 We will in this chapter be interested in the case of fixed domain Navier-Stokes with grid discretization.
 This case is easier than the variable domain case and serve as basis to more complicated case.
 
-\section{Overview}
+We will treat the discretization of time and space separately.
+We will first begin by time discretization.
+The space discretization will only be used to evaluate derivative.
 
 We will in this chapter present two way to solve Navier-Stokes equation.
 We will show that this two method are equivalent if a Runge-Kutta method is used to solve.
+And that we are exactly divergence free.
 
-The two method are presented at next section.
+In next subsection we will present an overwiew of the two methods.
+
 \subsection{Analytical expression for pressure}
 \label{fixed:analytical}
 
@@ -34,10 +39,11 @@ We can project every speed in a divergence free space:
   \vect{v}(\vect{x},t)&=(\eye+P)\vect{\tilde{v}}
 \end{align}
 \end{subequations}
-
 We have the certitude to be always divergence free by construction.
 
-\section{Runge-Kutta}
+\section{Time Discretization and Integration}
+\label{fixed:timesec}
+\subsection{Runge-Kutta Method}
 
 A Runge-Kutta method is a method to solve the ODE (We drop the $\vect{x}$ dependence, but it's understood that this equation is for a vector formed in concatenating every speed):
 \begin{equation}
@@ -48,22 +54,20 @@ The solution at time $n+1$ is given from the solution at time $n$ with $\Delta t
 \begin{subequations}
 \begin{align}
 	\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
-	k_{j}&=\Delta t f(\vect{v}_{n}+\sum_{i=1}^{j-1}a_{j,i}\vect{k}_{i})
+	\vect{k}_{j}&=\Delta t f(\vect{v}_{n}+\sum_{i=1}^{j-1}a_{j,i}\vect{k}_{i})
 \end{align}
 \end{subequations}
 
-\section{Runge-Kutta based scheme}
+\subsection{Runge-Kutta Based Scheme Linear Projection}
 \label{fixed:sect:runge-kutta}
 We now integrate method \ref{fixed:analytical} and \ref{fixed:proj} with a Runge-Kutta method.
-
-Scheme for projection at every evaluation of speed:
+The numerical scheme is:
 \begin{subequations}
 \begin{align}
 \vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}\right)\\
 \vect{\tilde{k}}_{i}&=\Delta t f\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}\right)\right)
 \end{align}
 \end{subequations}
-
 We project at every estimation of speed. Making by construction every speed divergence free.
 
 Scheme for analytical expression for pressure:
@@ -89,50 +93,48 @@ We begin by prove the following lemma.
 \begin{proof}
 By recurrence on $i$.
 We begin with $i=1$:
-\begin{equation}
-  \vect{k}_{1}=\Delta tf\left(\vect{v}_n\right)+\Delta tP\left(f\left(\vect{v}_n\right)\right)
-\end{equation}
-\begin{equation}
-\vect{\tilde{k}}_{1}=\Delta tf\left(\vect{v}_n\right)
-\end{equation}
-\begin{equation}
-  \vect{k}_{1}=\Delta t f\left(\vect{v}_n\right)+\Delta tP\left(f\left(\vect{v}_n\right)\right)=\vect{\tilde{k}}_1+P\left(\vect{\tilde{k}}_1\right)
-\end{equation}
+\begin{align}
+  \vect{k}_{1}&=\Delta tf\left(\vect{v}_n\right)+\Delta tP\left(f\left(\vect{v}_n\right)\right)\\
+\vect{\tilde{k}}_{1}&=\Delta tf\left(\vect{v}_n\right)\\
+  \vect{k}_{1}&=\Delta t f\left(\vect{v}_n\right)+\Delta tP\left(f\left(\vect{v}_n\right)\right)=\vect{\tilde{k}}_1+P\left(\vect{\tilde{k}}_1\right)
+\end{align}
 
 Assuming true for smaller $i$:
 \begin{align*}
   \vect{k}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{n}a_{ij}k_{j}\right)+\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right)\right)\\
+  \intertext{Using the recurrence relation we have:}
   &=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{k}}_{j}\right)\right)\right)+\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{k}}_{j}\right)\right)\right)\right)\\
   \vect{\tilde{k}}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}+P\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}\right)\right)\\
+  \intertext{Using the linearity of $P$ and that $P\vect{v}_{n}=0$:}
   &=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{k}}_{j}\right)\right)\right)\\
   \vect{k}_{i}&=\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{k}}_{i}\right)
 \end{align*}
 \end{proof}
 
-We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ using the lemma.
-
+We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ using the lemma:
 \begin{align*}
 \vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
 &=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{k}}_{i}\right)\right)\\
 \vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}\right)\\
+\intertext{Using the linearity of $P$ and that $P\vect{\tilde{v}}_{n}=0$}
 &=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{k}}_{i}\right)\right)\\
-\intertext{Using that $\vect{v}_{n}=\tilde{\vect{v}_{n}}$}
+\intertext{Using that $\vect{v}_{n}=\tilde{\vect{v}}_{n}$}
 \vect{v}_{n+1}&=\vect{\tilde{v}}_{n+1}
 \end{align*}
 
 \end{proof}
 
 \begin{theorem}
-For the implicit Runge-Kutta case, where the sum to $i-i$ go now to $s$.
+For the implicit Runge-Kutta case, where the sum to $i-1$ go now to $s$.
 If $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ is divergence free then $\vect{v}_{n+1}=\vect{\tilde{v}}_{n+1}$ 
 \end{theorem}
 \begin{proof}
 We begin by prove the following lemma.
 \begin{lemma}
-After relabeling noting $\vect{k}_{i}^{j}$ the $j$ solution of $\vect{k}_{i}$.
+After relabeling noting $\vect{k}_{i}^{j}$ the $j$-th solution of $\vect{k}_{i}$.
 We have for every $j$.
 \begin{equation}
-  \vect{k}_{i}=\vect{\tilde{k}}_{i}^{j}+P(\vect{\tilde{k}}_{i}^{j})
+  \vect{k}_{i}^{j}=\vect{\tilde{k}}_{i}^{j}+P(\vect{\tilde{k}}_{i}^{j})
 \end{equation}
 This doesn't say that we have existence and unicity of the solution only that if we have a set of solution for $\vect{k}$ we have a bijection
 to solution of $\vect{\tilde{k}}$
@@ -159,13 +161,21 @@ We form $\hat{P}$ and $\hat{f}$ from a Kronecker product:
 \begin{align}
 \hat{P}&=\eye_{s}\kron P=\begin{pmatrix}P	&\ldots	&0\\
 			\vdots &\ddots 	&\vdots\\
-			0	&0	&P\\
+			0	&\ldots		&P\\
 	\end{pmatrix}\\
-\hat{f}&=\eye_{s}\kron f\begin{pmatrix}f	&\ldots	&0\\
+\hat{f}&=\eye_{s}\kron f=\begin{pmatrix}f	&\ldots	&0\\
 			\vdots &\ddots 	&\vdots\\
-			0	&0	&f\\
+			0	&\ldots	&f\\
 	\end{pmatrix}
 \end{align}
+Where for $\hat{f}$ we have used a notation where:
+\begin{equation}
+ \hat{f}\left(k\right)=\begin{pmatrix}f(\vect{k}_1)\\
+			\vdots\\
+			f(\vect{k}_n)\\
+	\end{pmatrix}
+\end{equation}
+
 
 We now define $\hat{v}_n$:
 \begin{equation}
@@ -214,19 +224,24 @@ $k$ and $\tilde{k}$ are fixed point of function $g$ and $\tilde{g}$.
 
 We now calculate:
 \begin{align}
-(1+\hat{P})\tilde{g}(x)&=(1+\hat{P})\Delta t \hat{f}((1+\hat{P})(\hat{v}_{n}+\hat{A}x))=(1+\hat{P})\Delta t \hat{f}(\hat{v}_{n}+\hat{A} (1+\hat{P})x)\\
+(1+\hat{P})\tilde{g}(x)&=(1+\hat{P})\Delta t \hat{f}((1+\hat{P})(\hat{v}_{n}+\hat{A}x))\\
+\intertext{Using:}
+\hat{P}\hat{v}_{n}=0
+\intertext{Using that $\hat{A}$ and $\hat{P}$ commute}
+(1+\hat{P})\tilde{g}(x)&=(1+\hat{P})\Delta t \hat{f}(\hat{v}_{n}+\hat{A} (1+\hat{P})x)\\
 &=g((1+\hat{P})x)
 \end{align}
 
-We now substitute $g$ in $\tilde{g}$
-\begin{equation}
-(1+\hat{P})\tilde{k}=g((1+\hat{P})\tilde{k})
-\end{equation}
-
+We now substitute $x$ with $\tilde{k}$
+\begin{align}
+(1+\hat{P})\tilde{g}(\tilde{k})&=g((1+\hat{P})\tilde{k})
+\intertext{by definition $\tilde{k}$ is a fixed point of $\tilde{g}$}
+(1+\hat{P})\tilde{k}&=g((1+\hat{P})\tilde{k})
+\end{align}
 $(1+\hat{P})\tilde{k}$ is a fixed point of $g$.
 But fixed point of $g$ is $k$.
 
-This directly give the result with $\vect{k}^{j}$ the $j$ solution:
+With relabeling of solution if needed, this directly give the result with $\vect{k}^{j}$ the $j$-th solution:
 \begin{equation}
 \vect{k}^{j}=(1+\hat{P})\vect{\tilde{k}}^{j}
 \end{equation}
@@ -234,8 +249,8 @@ This is exactly the vector version of what we wanted to prove.
 \end{proof}
 
 The rest is exactly the same than in the first case.
-
 To not overload the proof with notation, we drop the $j$ label to indicate witch solution we take.
+
 We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ using the lemma.
 \begin{align*}
 \vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
@@ -249,14 +264,12 @@ We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ us
 \end{proof}
 
 \begin{corollary}
-Solving Navier-Stokes equation with the analytical good choice of pressure.
-Is exactly divergence free at every approximation of speed.
+Solving Navier-Stokes equation with the analytical good choice of pressure is exactly divergence free at every approximation of speed.
 \end{corollary}
 \begin{proof}
-  The expression of $v$ is the solution of the Navier-Stokes equation with the good choice of pressure.
-  $\tilde{v}$ is the solution of Runge-Kutta equation without pressure witch is projected at every speed estimation.
-  This is divergence free.
-  $v$ and $\tilde{v}$ are the same. With end the proof.
+  The expression of $\vect{v}$ is the solution of the Navier-Stokes equation with the good choice of pressure.
+  $\vect{\tilde{v}}$ is the solution of Runge-Kutta equation without pressure witch is projected at every speed estimation.
+  $\vect{v}$ and $\vect{\tilde{v}}$ are the same by the theorem.
 \end{proof}
 
 \begin{corollary}
@@ -269,7 +282,7 @@ Is exactly divergence free at every approximation of speed.
 \end{proof}
 
 
-\section{Runge-Kutta based scheme Affine Projection}
+\subsection{Runge-Kutta based scheme Affine Projection}
 \label{fixed:sect:runge-kutta:affine}
 We will repeat the work in section \ref{fixed:sect:runge-kutta} but where the projection is an affine operator.
 We use the notation of \ref{introduction:projectiondef}.
@@ -281,7 +294,6 @@ Scheme for projection at every evaluation of speed:
 \vect{\tilde{k}}_{i}&=\Delta t f\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j},\vect{\tilde{T}}_i\right)\right)
 \end{align}
 \end{subequations}
-
 We project at every estimation of speed. Making by construction every speed divergence free.
 
 Scheme for analytical expression for pressure:
@@ -292,14 +304,14 @@ Scheme for analytical expression for pressure:
 \end{align}
 \end{subequations}
 
-The following theorem show that the two scheme are the same. And given the relation between $T$ and $\tilde{T}$.
+The following theorem show that the two scheme are the same and give the relation between $T$ and $\tilde{T}$.
 
 \begin{theorem}
 If $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ is divergence free then $\vect{v}_{n+1}=\vect{\tilde{v}}_{n+1}$.
 With the relation for the translation:
 \begin{align}
-\intertext{For $i\geq s$}
-  \vect{\tilde{T}}_i&=\sum_{j=1}^{i-1}a_{ij}\Delta t \vect{T_{j}}\\
+\intertext{For $0< i\leq s$}
+  \vect{\tilde{T}}_i&=\sum_{j=1}^{i-1}a_{ij}\Delta t \vect{T}_{j}\\
   \vect{\tilde{T}}_0&=\sum_{i=1}^{s}b_{i}\Delta t \vect{T}_{i}
 \end{align}
 
@@ -314,21 +326,18 @@ We begin by prove the following lemma.
 \begin{proof}
 By recurrence on $i$.
 We begin with $i=1$:
-\begin{equation}
-  \vect{k}_{1}=\Delta tf\left(\vect{v}_n\right)+\Delta tP\left(f\left(\vect{v}_n\right),\vect{T}_{1}\right)
-\end{equation}
-\begin{equation}
-\vect{\tilde{k}}_{1}=\Delta tf\left(\vect{\vect{v}}_n\right)
-\end{equation}
-\begin{equation}
-  \vect{k}_{1}=\Delta t f\left(\vect{v}_n\right)+\Delta tP\left(f\left(\vect{v}_n\right),\vect{T}_{1}\right)=\vect{\tilde{k}}_1+P\left(\vect{\tilde{k}}_1,\Delta t \vect{T}_{1}\right)
-\end{equation}
+\begin{align}
+  \vect{k}_{1}&=\Delta tf\left(\vect{v}_n\right)+\Delta tP\left(f\left(\vect{v}_n\right),\vect{T}_{1}\right)\\
+\vect{\tilde{k}}_{1}&=\Delta tf\left(\vect{\vect{v}}_n\right)\\
+  \vect{k}_{1}&=\Delta t f\left(\vect{v}_n\right)+\Delta tP\left(f\left(\vect{v}_n\right),\vect{T}_{1}\right)=\vect{\tilde{k}}_1+P\left(\vect{\tilde{k}}_1,\Delta t \vect{T}_{1}\right)
+\end{align}
 
 Assuming true for smaller $i$:
 \begin{align*}
   \vect{k}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{n}a_{ij}\vect{k}_{j}\right)+\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right),\vect{T}_{i}\right)\\
   &=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{k}}_{j},\Delta t \vect{T}_{j}\right)\right)\right)+\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{k}}_{j},\Delta t \vect{T}_{j}\right)\right)\right),\vect{T}_{i}\right)\\
-  \vect{\tilde{k}}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\tilde{k}_{j}+P\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j},\vect{\vect{\tilde{T}}}_{i}\right)\right)\\
+  \vect{\tilde{k}}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}+P\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j},\vect{\vect{\tilde{T}}}_{i}\right)\right)\\
+  \intertext{Using the linearity of $P$ and $P\vect{v}_n=0$ and defining $\vect{\hat{T}}_{j}^i$}
   &=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{k}}_{j},\vect{\hat{T}}_{j}^{i}\right)\right)\right)\\
   \vect{\tilde{T}}_i&=\sum_{j}^{i-1}a_{ij}\vect{\hat{T}}_{j}^{i}\\
   \vect{\hat{T}}^{i}_{j}&=\Delta t \vect{T}_{j}\\
@@ -341,10 +350,9 @@ This prove the relation and give the relation between the two.
 \end{proof}
 
 We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ using the lemma.
-
 \begin{align*}
 \vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
-&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\tilde{k}_{i}+P\left(\vect{\tilde{k}}_{i},\Delta t\vect{T}_{i}\right)\right)\\
+&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{k}}_{i},\Delta t\vect{T}_{i}\right)\right)\\
 \vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i},\vect{\tilde{T}}_{0}\right)\\
 &=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{k}}_{i},\vect{\hat{T}}_{i}^{0}\right)\right)\\
 \vect{\tilde{T}}_{0}&=\sum_{i=1}^{s}b_{i}\vect{\hat{T}}_{i}^{0}\\
@@ -352,8 +360,6 @@ We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ us
 \intertext{Using that $\vect{v}_{n}=\tilde{\vect{v}_{n}}$}
 \vect{v}_{n+1}&=\vect{\tilde{v}}_{n+1}
 \end{align*}
-
-This end the proof.
 
 \end{proof}
 
@@ -370,10 +376,10 @@ And the translation is given by:
 \begin{proof}
 We begin by prove the following lemma.
 \begin{lemma}
-After relabeling noting $\vect{k}_{i}^{j}$ the $j$ solution of $\vect{k}_{i}$.
+After relabeling $j$ noting $\vect{k}_{i}^{j}$ the $j$ solution of $\vect{k}_{i}$.
 We have for every $j$.
 \begin{equation}
-  \vect{k}_{i}=\vect{\tilde{k}}_{i}^{j}+P(\vect{\tilde{k}}_{i}^{j},\Delta t \vect{T}_{i})
+  \vect{k}_{i}^{j}=\vect{\tilde{k}}_{i}^{j}+P(\vect{\tilde{k}}_{i}^{j},\Delta t \vect{T}_{i})
 \end{equation}
 This doesn't say that we have existence and unicity of the solution only that if we have a set of solution for $k$ we have a bijection
 to solution of $\tilde{k}$
@@ -400,10 +406,15 @@ We form $\hat{L}$ the linear part of the projection from $L$ the linear part fro
 \begin{align}
 \hat{L}&=\eye_{s}\kron L=\begin{pmatrix}L	&\ldots	&0\\
 			\vdots &\ddots 	&\vdots\\
-			0	&0	&L\\
+			0	&\ldots	&L\\
 	\end{pmatrix}
 \end{align}
-
+We have the following property:
+\begin{equation}
+\hat{L}\hat{v}_{n}=0
+\end{equation}
+This is true because $\hat{v}_{n}$ is divergence free.
+$\hat{L}$ is the linear part and consist to make the projection with 0 boundary condition.
 
 $\tau_{i}$ the translation vector from $\vect{T}_i$ the translation part of $P$.
 $\tau$ is the sum of all individual translation.
@@ -429,7 +440,7 @@ We now form the function $\hat{f}$ from $f$ with:
 \begin{align}
 \hat{f}&=\eye_{s}\kron f=\begin{pmatrix}f	&\ldots	&0\\
 			\vdots &\ddots 	&\vdots\\
-			0	&0	&f\\
+			0	&\ldots	&f\\
 	\end{pmatrix}
 \end{align}
 
@@ -478,26 +489,29 @@ g(x)&=(1+\hat{L})\Delta t \hat{f}(\hat{v}_{n}+\hat{A}x)+\Delta t\tau\\
 
 $k$ and $\tilde{k}$ are fixed point of function $g$ and $\tilde{g}$.
 
-We now calculate:
+We now calculate using that $L$ is linear and $L\hat{v}=0$:
 \begin{align}
 (1+\hat{L})\tilde{g}(x)&=(1+\hat{L})\Delta t \hat{f}((1+\hat{L})(\hat{v}_{n}+\hat{A}x)+\tilde{\tau})=(1+\hat{L})\Delta t \hat{f}(\hat{v}_{n}+\hat{A} (1+\hat{L})x+\tilde{\tau})\\
-&=(1+\hat{L})\Delta t \hat{f}(\hat{v}_{n}+\hat{A} ((1+\hat{L})x+\hat{A}^{-1}\tilde{\tau}))=g((1+\hat{L})x+\tilde{A}^{-1}\tilde{\tau})-\Delta t \tau
+&=(1+\hat{L})\Delta t \hat{f}(\hat{v}_{n}+\hat{A} ((1+\hat{L})x+\hat{A}^{-1}\tilde{\tau}))\\
+\intertext{By definition of $g$ we have:}
+&=g((1+\hat{L})x+\hat{A}^{-1}\tilde{\tau})-\Delta t \tau
 \end{align}
 
-We now substitute $g$ in $\tilde{g}$
-\begin{equation}
-(1+\hat{L})\tilde{k}+\Delta t \tau=g((1+\hat{L})\tilde{k}+\hat{A}^{-1}\tilde{\tau})
-\end{equation}
-
-If
-\begin{equation}
-  \tilde{\tau}=\Delta t \hat{A}\tau
-\end{equation}
-
+We now substitute $\tilde{k}$ in $x$
+\begin{align}
+(1+\hat{L})\tilde{g}(\tilde{k})&=g((1+\hat{L})\tilde{k}+\hat{A}^{-1}\tilde{\tau})-\Delta t \tau\\
+\intertext{$\tilde{k}$ is a fixed point of $\tilde{g}$}
+(1+\hat{L})\tilde{k}&=g((1+\hat{L})\tilde{k}+\hat{A}^{-1}\tilde{\tau})-\Delta t \tau\\
+(1+\hat{L})\tilde{k}+\Delta t \tau&=g((1+\hat{L})\tilde{k}+\hat{A}^{-1}\tilde{\tau})\\
+\intertext{If}
+\tilde{\tau}=\Delta t \hat{A}\tau
+\intertext{Then}
+(1+\hat{L})\tilde{k}+\Delta t \tau&=g((1+\hat{L})\tilde{k}+\Delta t \tau)
+\end{align}
 $(1+\hat{L})\tilde{k}+\Delta t \tau$ is a fixed point of $g$.
 But fixed point of $g$ is $k$.
 
-This directly give the result with $k^{j}$ the $j$ solution:
+After relabeling of solution, this directly give the result with $k^{j}$ the $j$-th solution:
 \begin{equation}
 k^{j}=(1+\hat{L})\tilde{k}^{j}+\Delta t \tau
 \end{equation}
@@ -505,8 +519,8 @@ This is exactly the vector version of what we wanted to prove.
 \end{proof}
 
 The rest is exactly the same than in the first case.
-
 To not overload the proof with notation, we drop the $j$ label to indicate witch solution we take.
+
 We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ using the lemma.
 \begin{align*}
 \vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
@@ -520,30 +534,26 @@ We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ us
 
 \end{proof}
 
-\section{Spatial discretization}
+\section{Spatial Discretization}
 
-\subsection{Non-Staggered grid grid}
+\subsection{Non-Staggered Grid}
 
-On an Non-Staggered grid grid we put the variable like figure \ref{fixed:unstaggered}.
-
+On a Non-Staggered grid we put the variable like figure \ref{fixed:unstaggered}.
 \begin{figure}
 \directlua{dofile('fixed/unstaggered.lua')}
-\caption{Position of variable for Non-Staggered grid grid}
+\caption{Position of variable for Non-Staggered grid}
 \label{fixed:unstaggered}
 \end{figure}
-
-The problem with Non-Staggered grid grid, is that obvious center difference discretization lead to wrong divergence free vector.
+The problem with Non-Staggered  grid, is that obvious center difference discretization lead to wrong divergence free vector.
 
 We define the derivative of a scalar by:
 \begin{equation}
   \partial_x a_i=\frac{a_{i+1}-a{i-1}}{\Delta x}
 \end{equation}
-
 The divergence discretization is then given by (notation for 2d, but for 3d it's the same):
 \begin{equation}
   \vect{\nabla} \cdot \vect{v}_{i,j}=\frac{{v_{x}}_{i+1,j}-{v_{x}}_{i-1,j}}{\Delta x}+\frac{{v_{y}}_{i+1,j}-{v_{y}}_{i-1,j}}{\Delta y}
 \end{equation}
-
 The problem can be see in figure \ref{fixed:unstaggered_div} is that the divergence at red point only use value at blue point and not the point at center (red point).
 This allow to have none physical solution that are divergence free.
 
@@ -553,7 +563,8 @@ This allow to have none physical solution that are divergence free.
 \label{fixed:unstaggered_div}
 \end{figure}
 
-In figure \ref{fixed:unstaggered_div2} we have solution that is numerically divergence free. But this solution is not continuous and we expect that is not divergence free.
+In figure \ref{fixed:unstaggered_div2} we have solution that is numerically divergence free.
+But this solution is not continuous and we expect that is not divergence free.
 
 \begin{figure}
 \directlua{dofile('fixed/unstaggered_div2.lua')}
@@ -563,17 +574,18 @@ In figure \ref{fixed:unstaggered_div2} we have solution that is numerically dive
 
 The problem with this kind of solution, is that it's very stable.
 The projection operator $P$ will be 0, and don't correct this kind of speed. We cannot correct it in general for every choice of $f$.
+Note that all the work done in section \ref{fixed:timesec} is true. In particular the theorem will be true and will correctly project
+in a divergence free space. It's only that our divergence free space contain solution that are not wanted.
 
-We can recall one of the formulation of the so call Murphy's law, ``If anything can go wrong, it will.''
+We can recall one of the formulation of the so called Murphy's law, ``If anything can go wrong, it will.''
 
 We can correct this problem with using a forward or backward expression. But this kind of expression is only first order accurate.
-
 Another solution is to use another grid.
 
+\FloatBarrier
 \subsection{Staggered grid}
 
 On a staggered grid we put the variable in the position shown if figure \ref{fixed:staggered}.
-
 \begin{figure}
 \directlua{dofile('fixed/staggered.lua')}
 \caption{Position of variable on a staggered grid}
@@ -581,9 +593,7 @@ On a staggered grid we put the variable in the position shown if figure \ref{fix
 \end{figure}
 
 This can seem to be strange to have different component of speed at different place. But it make discretization more easy.
-
 To label variable, we label by cell and then took the lower,left component (cf. figure \ref{fixed:staggered_label}).
-
 \begin{figure}
 \directlua{dofile('fixed/staggered_label.lua')}
 \caption{Labeling on staggered grid}
@@ -598,12 +608,10 @@ We now define the divergence and the gradient:
                       \end{pmatrix}\\
   \vect{\nabla}\cdot \vect{v}_{i,j}&=\frac{{v_{x}}_{i+1,j}-{v_{x}}_{i,j}}{\Delta x}+\frac{{v_{y}}_{i,j+1}-{v_{y}}_{i,j}}{\Delta y}
 \end{align}
-
 This two expression are geometrically very clear.
 
 In figure \ref{fixed:staggered_gradient}, the gradient at red speed component use component at blue point.
 Contrary at case with center difference we cannot create a none constant vector with 0 gradient.
-
 \begin{figure}
 \directlua{dofile('fixed/staggered_gradient.lua')}
 \caption{Point used to calculate the red gradient component are in blue}
@@ -612,7 +620,6 @@ Contrary at case with center difference we cannot create a none constant vector 
 
 The divergence is given by the sum of inflow around a cell.
 In figure \ref{fixed:staggered_divergence}, the divergence at red point use component at blue point.
-
 \begin{figure}
 \directlua{dofile('fixed/staggered_divergence.lua')}
 \caption{Point used to calculate red divergence are in blue}
@@ -627,37 +634,33 @@ We now look at different possible scheme for staggered grid discretization.
 
 \paragraph{Gradient}
 \label{fixed:gradient}
-The gradient is discretized with center difference.
 
+The gradient is discretized with center difference.
 \begin{equation}
   \vect{\nabla}p_{i,j}=\begin{pmatrix}
                        	\frac{p_{i-1,j}-p_{i,j}}{\Delta x}\\
                        	\frac{p_{i,j-1}-p_{i,j}}{\Delta y}\\
                        \end{pmatrix}
 \end{equation}
-
-Center difference is second order accurate to the contrary to forward or backward difference.
+Center difference is second order accurate to the contrary of forward or backward difference.
 
 \paragraph{Divergence}
 \label{fixed:divergence}
-The divergence is discretized with center difference.
 
+The divergence is discretized with center difference.
 \begin{equation}
 	\vect{\nabla}\cdot \vect{v}_{i,j}=\frac{{v_{x}}_{i,j}-{v_{x}}_{i-1,j}}{\Delta x}+\frac{{v_{y}}_{i,j}-{v_{y}}_{i,j-1}}{\Delta y}
 \end{equation}
-
 Because of center difference, it's second order accurate.
 
 \paragraph{Laplacian}
 \label{fixed:Laplacian}
-The discretization of the Laplacian is the combination of the application of the gradient and divergence.
 
+The discretization of the Laplacian is the combination of the application of the gradient and divergence.
 \begin{equation}
   \Delta p_{i,j}=\frac{p_{i+1,j}-2p_{i,j}+p_{i-1,j}}{(\Delta x)^2}+\frac{p_{i,j+1}-2p_{i,j}+p_{i,j-1}}{(\Delta y)^2}
 \end{equation}
-
 This formula is of order 2.
-
 We prove it for the one dimensional case:
 \begin{align*}
   f(x+\Delta x)-2f(x)+f(x-\Delta x)&=\\
@@ -671,21 +674,17 @@ We prove it for the one dimensional case:
 \paragraph{Vector Laplacian}
 \label{fixed:vect:laplacian}
 For vector Laplacian we use the same scheme as in section \ref{fixed:Laplacian} but for every component of speed.
-
 Staggered grid don't pose problem because we don't have mixed term with derivative and none derivative.
 
 \paragraph{Convection}
 
 Convection term is the more difficult term to treat, because it's none linear and use mixed term.
-
-We need to consider two type of term. Let $i\neq j$. And $\vect{k}$ be a integer vector of the position on the grid.
-And $\vect{e}_i$ the i\th unit vector.
-
-We first consider as i\th component:
+We need to consider two type of term. Let $i\neq j$. And $\vect{k}$ be an integer vector of the position on the grid.
+And $\vect{e}_i$ the $i$-th unit vector.
+We first consider as $i$-th component:
 \begin{equation}
 \left(v_{i}\partial_{i}v_{i}\right)^{i}_{\vect{k}}
 \end{equation}
-
 We can discretize this in two manner:
 
 \subparagraph{Central difference}
@@ -706,7 +705,6 @@ We use the same method, but instead to use center difference, we use upwind:
 \intertext{if ${v_{i}}_{\vect{k}}=0$}
 \left(v_{i}\partial_{i}v_{i}\right)_{\vect{k}}&=0
 \end{align}
-
 Upwind is considered more stable (can be proof easily in one dimension for burger's equation) but more diffusive.
 
 We now consider:
@@ -715,17 +713,16 @@ We now consider:
 \end{equation}
 
 \begin{remark}
-  Contrary to the other case, we need to have the speed at a position not know for $v_{j}$. This come because of the staggered grid sheme.
-  For this, we can interpolated the know speed of neighbor cell taking for example the average of the 4 neighbor (cf. figure \ref{fixed:staggered_convection_upwind}).
+  Contrary to the other case, we need to have the speed at a position not know for $v_{j}$. This come because of the staggered grid scheme.
+  For this, we can interpolate the know speed of neighbor cell taking for example the average of the 4 neighbor (cf. figure \ref{fixed:staggered_convection_upwind}).
   We will use as notation $v_{j}^{i}$ for the speed component $j$ at position for the component $i$.
   
   \begin{figure}
     \directlua{dofile('fixed/staggered_convection_upwind.lua')}
-    \caption{We need the value of the red arrow. For this we can interpolated from the blue arrow.}
+    \caption{We need the value of the red arrow. For this we can interpolate from the blue arrow.}
     \label{fixed:staggered_convection_upwind}
     \end{figure}
 \end{remark}
-
 We can discretize this in two manner:
 
 \subparagraph{Central difference}
@@ -736,7 +733,6 @@ We can discretize this in two manner:
 \subparagraph{Upwind difference}
 
 We use the same method, but instead to use center difference, we use upwind:
-
 \begin{align}
 \intertext{if ${v_{j}^{i}}_{\vect{k}}<0$}
 \left(v_{j}\partial_{j}v_{i}\right)^{i}_{\vect{k}}&={v_{j}^{i}}_{\vect{k}}\frac{{v_{i}}_{\vect{k}+\vect{e}_j}-{v_{i}}_{\vect{k}}}{\Delta x_{j}}\\
@@ -745,9 +741,9 @@ We use the same method, but instead to use center difference, we use upwind:
 \intertext{if ${v_{j}^{i}}_{\vect{k}}=0$}
 \left(v_{j}\partial_{j}v_{i}\right)^{i}_{\vect{k}}&=0
 \end{align}
-
 Upwind is considered more stable (can be proven easily in one dimension for burger's equation) but more diffusive.
 
+\FloatBarrier
 \section{Pseudo Code}
 
 The pseudo code is not very complicate in principle.
@@ -790,12 +786,12 @@ We will in the next section show the implementation of principal part.
 
 The notation of pseudo code is inspired of \textbf{C-like} language.
 
-Variable are introduced when used by giving there name.
-Affectation are done with $\gets$ witch indicate that the left variable take the right value.
-
-Boolean operation are done with there standard mathematical notation ($=$, $\neq$,$<$,$>$,$\leq$,$\geq$).
-
-Arithmetic operation use the standard mathematical operation ($+$,$-$,$\cdot$,$\frac{x}{x}$).
+\begin{description}
+ \item[Variable] are introduced when used by giving there name.
+\item[Affectation] are done with $\gets$ witch indicate that the left variable take the right value.
+\item[Boolean] operation are done with there standard mathematical notation ($=$, $\neq$,$<$,$>$,$\leq$,$\geq$).
+\item[Arithmetic] operation use the standard mathematical operation ($+$,$-$,$\cdot$,$\frac{x}{x}$).
+\end{description}
 
 The following special control flow operation are used:
 \begin{description}
@@ -806,15 +802,15 @@ The following special control flow operation are used:
 \subsubsection{Container}
 
 The following container will be used:
-\begin{enumerate}
+\begin{description}
  \item[Grid:] Consist of all cell. Used in expression like $\mathop{\textbf{for all}}(it \in Grid)$.
  \item[Unordered Stack:] A container where element can be added and accessed in a $\mathop{\textbf{for all}}$. The order are not important.
- And after usage, the stack is no more used.
- A new Unordered Stack is created with the function call $\FuncCall{newunorderedstack}()$.
+ And after usage, the stack is no more used. Duplicate element are inserted more than one time.
+ A new unordered stack is created with the function call $\FuncCall{newunorderedstack}()$.
  \item[Set:] A set is a container witch is like a mathematical set, where element can be added and each element accessed.
- The difference with a Stack is that in a set duplicate element are stored once.
+ The difference with a stack is that in a set duplicate element are stored once and the set element are not discarded after usage.
  A new set is created with the function call $\FuncCall{newset}()$.
-\end{enumerate}
+\end{description}
 
 \subsubsection{Data Type}
 
@@ -863,7 +859,6 @@ that touch fluid.
 
 To apply the viscosity we need to calculate the Laplacian and a condition of when apply.
 The same condition as for gravity work.
-
 The application is in algorithm \ref{code:ApplyViscosity} the calculation of the Laplacian is in algorithm \ref{code:GetLaplacianSpeed}.
 
 For the convection the application is in algorithm \ref{code:ApplyConvection} the condition are similar than for Gravity.
@@ -1019,14 +1014,12 @@ The projection of acceleration is done in following the following step:
  \begin{equation}
   \Delta p=b
  \end{equation}
- \item change the acceleration to:
+ \item Change the acceleration to:
  \begin{equation}
   a_{new}=a+\nabla p
  \end{equation}
 \end{enumerate}
-
 If we have boundary condition, the $b$ vector need to be translated.
-
 The divergence is calculated by algorithm \ref{code:GetDivergence}, the gradient by algorithm \ref{code:GetGradiant}.
 A function $\FuncCall{GetIsInDomain}(cell)$ is used, we can consider it similar to $cell.\FuncCall{GetIsFluid}()$.
 The pressure is then solved with algorithm \ref{code:ProjectAcceleration}.
@@ -1077,7 +1070,7 @@ In this case we assume a case whit 0 Dirichlet boundary condition.}
 			\If{$it.\FuncCall{GetIsInDomain}()$}
 			\Comment{If we are in the domain for the Laplacian. We copy the result in the pressure.}
 				\State $it.PressureSet(p[it.ID()])$
-			\ElsIf
+			\Else
 			\Comment{For Dirichlet boundary condition, we set pressure to 0.}
 				\State $PressureSet(0)$
 			\EndIf
@@ -1092,12 +1085,12 @@ In this case we assume a case whit 0 Dirichlet boundary condition.}
 			 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Runge-Kutta integration}
+\subsection{Runge-Kutta Integration}
 
 To implement the Runge-Kutta method, some new element are needed.
 We need to have copy of speed. To do this we add a method $\FuncCall{GetArray}(i)$ witch get the array $i$.
 We need to set the default array if no array is precised this is done by function $SetArraySpeed(i)$.
-By default if not changer array $0$ is used.
+By default if not changed array $0$ is used.
 The function $\FuncCall{CalculateAcceleration}()$ calculate the acceleration using the default array.
 The only part of code that use explicit array are this one.
 
@@ -1105,7 +1098,6 @@ The function $\FuncCall{CalculateAcceleration}()$ consist to calculate the accel
 This is show in algorithm \ref{code:CalculateAcceleration}.
 
 The Runge-Kutta algorithm for order $4$ is shown in algorithm \ref{code:RungeKutta}.
-
 Depending of the Runge-Kutta scheme choosed the number of copy of speed needed change.
 
 \begin{algorithm}
@@ -1180,16 +1172,15 @@ The complexity is dominated by the $4$ call to $\FuncCall{CalculateAcceleration}
 Function $\FuncCall{CalculateAcceleration}()$ then call the function to calculate acceleration.
 This function consist for cell where the acceleration apply calculate a term witch depend of the cell itself and his neighbor.
 The complexity is then linear on the number of cell.
-The complexity for the projection of acceleration. Will depend of the complexity to solve the Laplacian witch depending
+The complexity for the projection of acceleration will depend of the complexity to solve the Laplacian witch depending
 on the method used can be linear (multigrid for example is linear). The complexity to calculate the gradient is linear to.
-
 The complexity is then dominated by the complexity to solve the Laplacian.
 
 A more technical complexity is the storage of data on grid. For fixed topology we can use a fixed size array.
 But for variable topology we need to choose how we store the data.
 To be robust, our method need to be able to do dynamic allocation of memory to be able to represent all possible topology.
-Depending the choice made the access time can be constant or $\log(n)$.
-The method $\FuncCall{GetNeighbour(dir,s)}()$ was used instead of index vector manipulation because it allow to create storage
+Depending the choice made the average access time can be constant or $\log(n)$ and the worst case can be $n$.
+The method $\FuncCall{GetNeighbour}(dir,s)$ was used instead of index vector manipulation because it allow to create storage
 with fast access to neighbor cell.
 
 \subsection{Parralelism}
@@ -1213,7 +1204,8 @@ This pseudo code is part of the simplified version of the original \textbf{C++} 
 As linear solver Umfpack direct solver was used. Other iteratif library were tester too.
 The storage method are constructed around \textbf{C++11} standard library \textbf{Unordered Map} container witch consist of a hash table.
 
-\section{Numerical experiment}
+\FloatBarrier
+\section{Numerical Experiment}
 
 We will now do some numerical experiment in fixed boundary condition to show how it work.
 
@@ -1223,7 +1215,6 @@ The more complicated term in the Navier-Stokes equation in grid representation i
 \begin{equation}
 	(\vect{v}\cdot \vect{\nabla})\vect{v}
 \end{equation}
-
 We can have this term 0 everywhere, if we ensure that the direction of variation is orthogonal to the direction of speed.
 
 For example, for a two dimensional problem we work with a flow with a speed only in the $y$ direction. And the value depending only on the position on the $x$ axis.
@@ -1238,23 +1229,17 @@ The convection term is then:
 	         	0\\f(x,t)
 	         \end{pmatrix}=0
 \end{equation}
-
 The Navier-Stokes equation reduce then to:
 \begin{align}
 \label{fix:solheat:a}
 	\partial_{y}f(x,t)&=0\\
 	\frac{\partial f(x,t)}{\partial t}&=F(x,t)+\nu\frac{\partial^2 f(x,t)}{\partial x^2}-\vect{\nabla}p
 \end{align}
-
 Equation \ref{fix:solheat:a} is automatically true because we have no dependence on $x$.
-
-The pressure term role is only to cancel non divergence free part coming from the force. Because the part with the viscosity $\nu$ is a linear operator
+The pressure term role is only to cancel none divergence free part coming from the force. Because the part with the viscosity $\nu$ is a linear operator
 of a divergence free term.
-
 For a potential force like gravity, the force can be absorbed in the pressure with a proper account of boundary condition.
-
 This equation is an equation of heat.
-
 We consider no external force as gravity.
 We will consider as domain $x=[0,2L]$ with fixed speed in $x=0$ and $x=L$,  Neumann boundary condition for pressure in $x=0$ and $x=L$.
 Analytically the domain in $y$ expand from $-\infty$ to $\infty$. Numerically, we use Dirichlet boundary condition $y=[0,2L]$ for pressure.
@@ -1284,50 +1269,39 @@ The equation then give:
 \begin{equation}
 	\frac{\dot{T}}{\nu T}=\frac{X''}{X}
 \end{equation}
-
 Because the rhs only depend on $x$ and the lhs only depend on $t$. This need to depend only on a constant value $-\lambda$.
-
 This give use two uncoupled equation depending on $\lambda$.
-
 \begin{align}
 \dot{T}&=-\lambda \nu T\\
 X''&=-\lambda X
 \end{align}
-
 The solution for $T$ is:
 \begin{equation}
   T\propto e^{-\lambda \nu t}
 \end{equation}
-
 The solution for $X$ is:
 \begin{equation}
 	X\propto \sin(\sqrt{\lambda} x)
 \end{equation}
-
 We only have $\sin$ because $\sin(0)=0$.
-Because we ask $\sin(2L)=0$.
+Because we ask $\sin(2L)=0$:
 \begin{equation}
 	0=\sin(2\sqrt{\lambda} L)=\sin\left(n\frac{\pi}{2L}\right)
 \end{equation}
-
 This then give the condition on $\lambda$:
 \begin{equation}
 	\sqrt{\lambda}=n\frac{\pi}{2L}
 \end{equation}
-
 A linear combination of this for different $n$ is solution too.
-We found the good linear combination from the Fourier series of the initial condition $f(0,t)$.
-
+We found the good linear combination from the Fourier series of the initial condition $f(0,t)$:
 \begin{align}
   f_0(x,t)&=\sum_{n=1}^{\infty}C_{n}\sin\left(\frac{n\pi}{2L}x\right)e^{-\frac{n^2\pi^2\nu t}{4L^2}}\\
   C_{n}&=\frac{1}{L}\int_{0}^{2L}f(x,0)\sin\left(\frac{n\pi}{2L}x\right) dx
 \end{align}
-
 For a none 0 boundary condition, we need to add a particular solution, so that $f_p(0,0)=1$ and $f_p(2L,0)=-1$.
 \begin{equation}
 	f_{p}(x,t)=-\frac{x-L}{L}
 \end{equation}
-
 $f_{0}(x,0)$ is then given by:
 \begin{equation}
   f_{0}(x,0)=f(x,0)-f_{p}(x,t)=\begin{cases}
@@ -1335,26 +1309,20 @@ $f_{0}(x,0)$ is then given by:
                                	\frac{x-L}{L}-1&\text{if $x\geq L$.}
                                \end{cases}
 \end{equation}
-
 The general solution is then:
 \begin{align}
   f(x,t)&=-\frac{x-L}{L}+\sum_{n=1}^{\infty}C_{n}\sin\left(\frac{n\pi}{2L}x\right)e^{-\frac{n^2\pi^2\nu t}{4L^2}}\\
   C_{n}&=\frac{1}{L}\int_{0}^{2L}f(x,0)\sin\left(\frac{n\pi}{2L}x\right) dx
 \end{align}
-
-This is plotted for $2L=\unit{0.1}{\metre}$ and $\nu=\unit{1.307\cdot 10^{-6}}{\pascal\second}$ witch is the viscosity of Water for $\unit{10}{\degreecelsius}$ and for $n_{max}=1'000'000$ in figure \ref{fixed:solheat:fig:sol}.
+This is plotted for $2L=\unit{0.1}{\metre}$ and $\nu=\unit{1.307\cdot 10^{-6}}{\pascal\second}$ witch is the viscosity of water for $\unit{10}{\degreecelsius}$ and for $n_{max}=1'000'000$ in figure \ref{fixed:solheat:fig:sol}.
 
 Note that the fact that we have truncated the sum can be considered as a slightly change of initial condition, and an analytical solution of this solution.
 Numerically the difference is of the level of the numerical precision.
 
-
-
 The analytical solution show that the effect of viscosity is to smooth the speed distribution. The time needed to do that is of $\unit{500}{\second}$
 witch is a very long time with respect of the distance traveled in this time ($\unit{500}{\meter}$).
-
 But this doesn't say that viscosity is not important, because it's effect is inversely proportional squared of $L$.
 
-\subsection{}
 
 \subsubsection{Numerical solution}
 
@@ -1369,7 +1337,7 @@ The solution with low resolution for different time $t$ are shown in figure \ref
 We are in excellent agreement with this low resolution. The reason can be because the equation is linear. 
 
 
-
+\FloatBarrier
 \subsection{Irrotational}
 
 \subsubsection{Analytical Solution}

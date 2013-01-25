@@ -29,7 +29,7 @@
 %Package used by Pablo
 
 %Package inclusion
-%\usepackage{morefloats}
+\usepackage{morefloats}
 \usepackage{fontspec}
 \usepackage{hyperref}
 \usepackage{amsmath}
@@ -40,6 +40,7 @@
 \usepackage{minitoc}
 \usepackage{pgfplots}
 \usepackage{pgfplotstable}
+\usepackage{placeins}
 
 \usepackage{float}
 \usepackage[amssymb,thickspace,thickqspace]{SIunits}
@@ -48,6 +49,9 @@
 \usepackage{subcaption}
 %Float Style
 \floatstyle{ruled}
+\floatplacement{figure}{hbtp}
+\floatplacement{table}{hbtp}
+\floatplacement{algorithm}{hbtp}
 \restylefloat*{table}
 \restylefloat*{figure}
 
@@ -164,7 +168,6 @@
     \vfill
 
     {\footnotesize
-    Atelier de reproduction de la Section de physique \\
     Geneva, \ \@date \\[-2mm]}
     \hrulefill
 

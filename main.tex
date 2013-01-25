@@ -3,7 +3,8 @@
 
 
 %Information as title and author
-\title{Master Thesis}
+\title{Simulation of Jet D'Eau:\\ Numerical Algorithm to Solve Navier-Stokes Equation\\
+With Marker And Cell based method}
 \author{Pablo Strasser}
 \Supervisor{Prof. Martin Gander and Dr. Felix Kwok}
 \date{\today}
@@ -25,6 +26,16 @@
 %make the title page
 \maketitle
 \dominitoc
+
+\chapter*{Abstract}
+
+\mtcaddchapter[Abstract]
+
+We will in this work present how to solve Navier-Stokes equation with a Marker And Cell method.
+We emphasy the mathematical modularity witch allow to work separatly on every piece of this work.
+Our method work for every Runge-Kutta method (explicit or implicit), if we note $k$ the order of the choosen Runge-Kutta method,
+our method is of order $k$ if we ignore boundary condition and of order $k$ at the better case and of order $1$ for specific complicate case.
+Our method is exactly divergence free (at numerical precision).
 \tableofcontents
 \include{introduction/main}
 \include{analytical/main}
