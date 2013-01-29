@@ -176,6 +176,7 @@ The neglected dirac delta will only have an effect on a boundary speed component
 	\item The given speed is used because a particle fill the domain.
 	This is needed because in the contrary the speed calculated will not be used.
 \end{enumerate}
+This effect is shown in figure \ref{topo:mult_part_error}.
 This effect will change the precision when it happen from order $k$ to order 1.
 And this error will only be on the boundary condition being not exactly respected for a short time.
 The force will be integrated correctly.
@@ -190,6 +191,71 @@ The speed will be constant. So only the gravity force act and the extrapolation 
 The result will then be equivalent to the integration of the purely particle problem where the speed change is calculated at particle position.
 The order of the method is then $k$.
 \end{example}
+
+\tikzsetnextfilename{multiple_part_error_1}
+ \tikzset{external/remake next=true}
+ \tikzifexternalizing{\directlua{dofile('topology/multiple_part_error_1.lua')}}{
+ \IfFileExists{figures/multiple_part_error_1.pdf}{}{
+\begin{tikzpicture}
+\end{tikzpicture}}
+}
+ \tikzsetnextfilename{multiple_part_error_2}
+ \tikzset{external/remake next=true}
+ \tikzifexternalizing{
+\directlua{dofile('topology/multiple_part_error_2.lua')}
+}{
+\IfFileExists{figures/multiple_part_error_2.pdf}{}{
+\begin{tikzpicture}
+\end{tikzpicture}
+}
+}
+  \tikzsetnextfilename{multiple_part_error_3}
+ \tikzset{external/remake next=true}
+ \tikzifexternalizing{
+\directlua{dofile('topology/multiple_part_error_3.lua')}
+}{
+\IfFileExists{figures/multiple_part_error_3.pdf}{}{
+\begin{tikzpicture}
+\end{tikzpicture}
+}
+}
+\begin{figure}
+\centering
+\subcaptionbox{$t_0$, the red speed vector is not in the domain and is obtained by extrapolation.\label{topo:mult_part_error:1}}{%
+\IfFileExists{figures/multiple_part_error_1.pdf}{\includegraphics{figures/multiple_part_error_1}}{}%
+ }
+\subcaptionbox{$t_1$, because the first particle has moved the domain have changed, the speed extrapolation have changed at red point.\label{topo:mult_part_error:2}}{%
+\IfFileExists{figures/multiple_part_error_2.pdf}{\includegraphics{figures/multiple_part_error_2}}{}%
+ }
+\subcaptionbox{$t_2$, because the red point is now in the domain, the speed is given by the acceleration from the Navier-Stokes equation.\label{topo:mult_part_error:3}}{%
+\IfFileExists{figures/multiple_part_error_3.pdf}{\includegraphics{figures/multiple_part_error_3}}{}%
+ }
+\subcaptionbox{Cartoon of speed, the topology at time $t_0$, $t_1$ and $t_2$
+are given in \ref{topo:mult_part_error:1} , \ref{topo:mult_part_error:2} and \ref{topo:mult_part_error:3}.
+$t_{in}$ is the moment when particle $1$ enter in the new cell.$t_{f}$ is the moment when particle $2$ enter in the new cell.
+The red curve is what we will integrate if we neglect the delta of dirac, the black curve is the exact result.\label{topo:mult_part_error:4}}{
+\tikzset{external/export next=false}
+\begin{tikzpicture}
+  \begin{axis}[xtick=\empty,ytick=\empty, extra x ticks={0.5,1,1.5,2,2.5},
+extra x tick style={grid=major},
+extra x tick labels={$t_0$,$t_{int}$,$t_1$,$t_{f}$,$t_2$ },
+xlabel={$t$},
+ylabel={$v$}
+]
+   \addplot[domain=0:1,red] {x^3};
+   \addplot[domain=1:2] {-(x-2)^2+3};
+   \addplot[domain=1:2,red] {-(x-2)^2+2};
+   \addplot[domain=2:3,red] {3*x-4+(x-2)^2};
+   \addplot[domain=2:3] {3*x-3+(x-2)^2};
+  \end{axis}
+
+ \end{tikzpicture}
+}
+\caption{Figure of the situation where the neglected delta has a effect.}
+\label{topo:mult_part_error}
+\end{figure}
+
+
 \section{Extrapolation}
 
 We will now discuss how to define the extrapolation operator.

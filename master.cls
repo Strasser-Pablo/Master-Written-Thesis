@@ -42,6 +42,9 @@
 \usepackage{pgfplotstable}
 \usepackage{placeins}
 
+\pgfplotsset{compat=1.6}
+
+
 \usepackage{float}
 \usepackage[amssymb,thickspace,thickqspace]{SIunits}
 \usepackage{algpseudocode,algorithm}
