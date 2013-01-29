@@ -158,7 +158,7 @@ The equation is then:
 \end{align}
 Where we have used the notation that vector can be extended with 0 when needed because the extension is not needed because the good column are zero.
 Witch can be rewritten as:
-\begin{align}
+\begin{align}\label{topo:equ:onediff}
 	\dot{\vect{v}}&=E(D_v(D(\vect{x})))\left(\eye+P(D(\vect{x}))\right)\left.f(E(D_v(D(\vect{x})))\vect{v},D_{v}(D(\vect{x})))\right|_{\in D_{v}(D(\vect{x}))}\\
 	\left.\vect{v_{t_0}}\right|_{\notin D_{v_{t_0}}(D(\vect{x}))}&=\left.\left(E(D_v(D(\vect{x})))\left.\vect{v_{t_0}}\right|_{\in D_{v}(D(\vect{x}))}\right)\right|_{\notin D_{v}(D(\vect{x}))}\\
 	\dot{x}&=I\left(\vect{x},E(D_v(D(\vect{x})))\vect{v}\right)\\
@@ -1111,6 +1111,41 @@ We now have all the algorithm to initialize the topology.
 We note that all this step only involve integer calculation, this allow the compiler to do extensive optimization
 to simplify calculation.
 
+We have two different initialization case:
+\begin{enumerate}
+ \item Complete initialization done before a Runge-Kutta step. We create particle and calculate the optimum time step.
+ \item Partial initialization done in a Runge-Kutta step. We don't create particle and don't change time step.
+ But the rest are the same as a complete initialization step.
+\end{enumerate}
+The two algorithm are show in algorithm \ref{code:initialization} and \ref{code:initialization2}.
+
+\begin{algorithm}
+\caption{Complete initialization}
+\label{code:initialization}
+\begin{algorithmic}[1]
+\Procedure{Initialization}{}
+\State $\FuncCall{InitializeLayerAndDepth}()$
+\State $\FuncCall{LayerInitialWithParticleDepth}()$
+\State $\FuncCall{UpdateCellTypeLayerDepth}()$
+\State $\FuncCall{DeleteMacCell}()$
+\State $\FuncCall{CalculateTimeStep}()$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Complete initialization}
+\label{code:initialization2}
+\begin{algorithmic}[1]
+\Procedure{InitializationRungeKutta}{}
+\State $\FuncCall{InitializeLayerAndDepth}()$
+\State $\FuncCall{CreateInteriorDepth}()$
+\State $\FuncCall{UpdateCellTypeLayerDepth}()$
+\State $\FuncCall{DeleteMacCell}()$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
 We will now consider extrapolation method.
 
 \subsection{Boundary Condition Extrapolation}
@@ -1509,7 +1544,7 @@ This is shown in algorithm \ref{code:Do2d}.
 \caption{Algorithm witch calculate the extrapolation given by boundary condition.}
 \label{code:Do2d}
 \begin{algorithmic}[1]
-\Procedure {Do2d}{}
+\Procedure {Do2dBoundaryExtrapolation}{}
 	\ForAll{$cell \in Grid$} \Comment{We don't exchange state between two fonction call because every fonction call substitute is needed unknow from know speed.
 	But we posibly set the same value (from the same mathematical expression) in two fonction call. If concurrent writting of the same value give the said value. Then this loop is thread save.}
 	\State $\FuncCall{ApplySetNan}(cell)$
@@ -1959,12 +1994,134 @@ $i$ is the recursif parameter it's first value should be 1.}
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Conclusion}
+\subsection{Integration}
 
-We have seen there all algorithm for extrapolation and cell initialization.
-The rest are the numerical step show in section \ref{splitting} or \ref{differentialequation} 
-and in the previous chapter.
+For the none splitted case the acceleration is given by \ref{topo:equ:onediff}.
+We use to avoid to rewrite a extrapolation fonction a method $\FuncCall{SetSpeedToAcceleration}(bool)$
+witch toggle that the method to set the speed and get the speed act on acceleration instead.
+This is shown in algorithm \ref{code:CalculateAcceleration2}
 
+We now integrate with the Runge-Kutta method, the difference with respect to the case in section \ref{fixed:sec:rungekutta}
+is that we now have particle. We need to do the same that we have done having a copy of all particle position.
+This is shown in algorithm \ref{code:RungeKutta2p1} and \ref{code:RungeKutta2p2}.
+
+A complete iteration consist of Algorithm \ref{code:RungeKutta3}
+
+\begin{algorithm}
+\caption{Calculate the acceleration for the none splitted method equation \ref{topo:equ:onediff}.}
+\label{code:CalculateAcceleration2}
+\begin{algorithmic}[1]
+\Procedure{CalculateAcceleration2}{}
+	\State $\FuncCall{InitializationRungeKutta}()$
+	\State $\FuncCall{Do2dBoundaryExtrapolation}()$
+	\State $\FuncCall{AlgorithmsExtrapolateNan}()$
+	\State $\FuncCall{CalculateAcceleration}()$
+	\State $\FuncCall{SetSpeedToAcceleration}(\True)$
+	\State $\FuncCall{Do2dBoundaryExtrapolation}()$
+	\State $\FuncCall{AlgorithmsExtrapolateNan}()$
+	\State $\FuncCall{SetSpeedToAcceleration}(\False)$
+\EndProcedure
+        \end{algorithmic}
+\end{algorithm}
+
+
+\begin{algorithm}
+\caption{Algorithm that integrate with the Runge Kutta method first part.}
+\label{code:RungeKutta2p1}
+\begin{algorithmic}[1]
+\Procedure{RungeKutta}{}
+\ForAll{$it\in Grid$}
+            \State $it.\FuncCall{AccelerationSet}(0)$
+            \Comment{We set the acceleration to $0$. So that we can after calculate the acceleration.}
+\EndFor
+	\State $\FuncCall{CalculateAcceleration}()$
+	\Comment{This fonction will add the acceleration to the acceleration array.}
+        \ForAll{$it \in Grid$}
+            \State $it.\FuncCall{GetArray}(2).\FuncCall{SpeedSet}(it.\FuncCall{GetArray}(0).\FuncCall{SpeedGet}()+it.\FuncCall{AccelerationGet}()\cdot dt \cdot 0.5)$
+            \Comment{Array $2$ is set to the speed for the next evaluation. We do not use array $0$ because we need it.}
+            \State $it.\FuncCall{GetArray}(1).\FuncCall{SpeedSet}(it.\FuncCall{GetArray}(0).\FuncCall{SpeedGet}()+it.\FuncCall{AccelerationGet}()\cdot \frac{dt}{6})$
+            \Comment{Array $1$ is set to the accumulation of the result.}
+        \EndFor
+                \ForAll{$it \in Particles$}
+            \State $it.\FuncCall{GetList}(2).\FuncCall{PositionSet}(it.\FuncCall{GetList}(0).\FuncCall{PositionGet}()+it.\FuncCall{GetSpeed}(it.PositionGet())\cdot dt \cdot 0.5)$
+            \Comment{List $2$ is set to the position for the next evaluation. We do not use list $0$ because we need it.}
+            \State $it.\FuncCall{GetList}(1).\FuncCall{PositionSet}(it.\FuncCall{GetList}(0).\FuncCall{PositionGet}()+it.\FuncCall{GetSpeed}(it.PositionGet())\cdot \frac{dt}{6})$
+            \Comment{List $1$ is set to the accumulation of the result.}
+        \EndFor
+        \ForAll{$it \in Grid$}
+            \State $it.\FuncCall{AccelerationSet}(0)$
+        \EndFor
+        \State $\FuncCall{SetArraySpeed}(2)$
+        \Comment{The speed for the next evaluation is in array $2$. We set array $2$ as default.}
+        \State $\FuncCall{SetListPos}(2)$
+        \Comment{The position of particle for the next evaluation is in list $2$. We set list $2$ as default.}
+        \State $t\gets t+0.5\cdot dt$
+        \State $\FuncCall{CalculateAcceleration}()$
+        \ForAll{$it \in Grid$}
+            \State $it.\FuncCall{GetArray}(2).\FuncCall{SpeedSet}(it.\FuncCall{GetArray}(0).\FuncCall{SpeedGet}()+it.\FuncCall{AccelerationGet}()\cdot \frac{dt}{2})$
+            \Comment{Array $2$ is set to the speed for the next evaluation. We do not use array $0$ because we need it.}
+            \State $it.\FuncCall{GetArray}(1).\FuncCall{SpeedSet}(it.\FuncCall{GetArray}(1).\FuncCall{SpeedGet}()+it.\FuncCall{AccelerationGet}()\cdot \frac{dt}{3})$
+	    \Comment{Array $1$ is set to the accumulation of the result.}
+       \EndFor
+       \ForAll{$it \in Particles$}
+            \State $it.\FuncCall{GetList}(2).\FuncCall{PositionSet}(it.\FuncCall{GetList}(0).\FuncCall{PositionGet}()+it.\FuncCall{GetSpeed}(it.PositionGet())\cdot \frac{dt}{2})$
+            \Comment{List $2$ is set to the position for the next evaluation. We do not use list $0$ because we need it.}
+            \State $it.\FuncCall{GeList}(1).\FuncCall{PositionSet}(it.\FuncCall{GetList}(1).\FuncCall{PositionGet}()+it.\FuncCall{GetSpeed}(it.PositionGet())\cdot \frac{dt}{3})$
+	    \Comment{List $1$ is set to the accumulation of the result.}
+       \EndFor
+        \ForAll{$it\in Grid$}
+            \State $it.\FuncCall{AccelerationSet}(0)$
+        \EndFor
+        \State $\FuncCall{CalculateAcceleration}()$
+        \ForAll{$it \in Grid$}
+            \State $it.\FuncCall{GetArray}(2).\FuncCall{SpeedSet}(it.\FuncCall{GetArray}(0).\FuncCall{SpeedGet}()+it.\FuncCall{AccelerationGet}()\cdot dt)$
+            \State $it.\FuncCall{GetArray}(1).\FuncCall{SpeedSet}(it.\FuncCall{GetArray}(1).\FuncCall{SpeedGet}()+it.\FuncCall{AccelerationGet}()\cdot \frac{dt}{3})$
+        \EndFor
+         \ForAll{$it \in Particles$}
+            \State $it.\FuncCall{GetList}(2).\FuncCall{PositionSet}(it.\FuncCall{GetList}(0).\FuncCall{PositionGet}()+it.\FuncCall{GetSpeed}(it.PositionGet())\cdot dt)$
+            \State $it.\FuncCall{GetList}(1).\FuncCall{PositionSet}(it.\FuncCall{GetList}(1).\FuncCall{PositionGet}()+it.\FuncCall{GetSpeed}(it.PositionGet())\cdot \frac{dt}{3})$
+        \EndFor
+        \ForAll{$it \in Grid$}
+            \State $it.\FuncCall{AccelerationSet}(0)$
+        \EndFor
+        \algstore{code:Rungekutta2:break:1}
+             \end{algorithmic}
+\end{algorithm}
+\begin{algorithm}
+\caption{Algorithm that integrate with the Runge Kutta method second part.}
+\label{code:RungeKutta2p2}
+\begin{algorithmic}[1]
+\algrestore{code:Rungekutta2:break:1}
+        \State $t\gets t+\frac{dt}{2}$
+        \State $\FuncCall{CalculateAcceleration}()$
+        \ForAll{$it\in Grid$}
+            \State $it.\FuncCall{GetArray}(0).\FuncCall{SpeedSet}(it.\FuncCall{GetArray}(1).\FuncCall{SpeedGet}()+it.\FuncCall{AccelerationGet}()\cdot \frac{dt}{6})$
+            \Comment{ Array $0$ now contain the new speed.}
+         \EndFor
+         \ForAll{$it\in Particles$}
+            \State $it.\FuncCall{GetList}(0).\FuncCall{PositionSet}(it.\FuncCall{GetList}(1).\FuncCall{PositionGet}()+it.\FuncCall{GetSpeed}(it.PositionGet())\cdot \frac{dt}{6})$
+            \Comment{ Array $0$ now contain the new speed.}
+         \EndFor
+        \State $\FuncCall{SetArraySpeed}(0)$
+        \Comment{We set the default array again to $0$ to be ready for the next time step.}
+        \State $\FuncCall{SetListPosition}(0)$
+        \Comment{We set the default list again to $0$ to be ready for the next time step.}
+        \EndProcedure
+        \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Algorithm one iteration.}
+\label{code:RungeKutta3}
+\begin{algorithmic}[1]
+\Procedure{Iteration}{}
+\State $\FuncCall{Initialisation}()$
+\State $\FuncCall{RungeKutta}()$
+\EndProcedure
+        \end{algorithmic}
+\end{algorithm}
+
+\FloatBarrier
 \section{Numerical experiment}
 
 \subsection{One particle fall}
