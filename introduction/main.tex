@@ -7,18 +7,18 @@
 
 We denote vector with the dimension of physical space (2d or 3d) $\vect{v}$.
 We only use Cartesian coordinate system.
-We indicate a given component of a vector with indices. $\vect{v}_1$ indice first component.
+We indicate a given component of a vector with indices. $\vect{v}_1$ indice the first component.
 
 \subsection{Differential Operator}
 
-We denote derivative  $\partial_i$ where $i$ is the spatial component with witch we derivate.
+We denote derivative  $\partial_i$ where $i$ is the spatial component with wich we derivate.
 \begin{equation}
  \partial_i v(\vect{x})=\frac{\partial v(\vect{x})}{\partial \vect{x}_{i}}
 \end{equation}
 
 \begin{definition}[Nabla]
  In Cartesian coordinate, the $\vect{\nabla}$ is a vector that cannot commute.
- It's expression is given by:
+ Its expression is given by:
  \begin{equation}
  \vect{\nabla}_{i}=\partial_{i}
  \end{equation}
@@ -38,14 +38,14 @@ With $n$ the dimension of the vector:
 
 
 \begin{definition}[Laplacian]
-The Laplacian $\Delta$ consist of a scalar operator:
+The Laplacian $\Delta$ consists of a scalar operator:
 \begin{equation}
 \Delta p=\vect{\nabla}\cdot \vect{\nabla}p=\sum_{i=1}^{n} \partial_{i}\partial_{i}p
 \end{equation}
 \end{definition}
 
 \begin{definition}[Vector Laplacian]
-A vector version of the Laplacian consist to apply the Laplacian to all component of the vector.
+A vector version of the Laplacian consists to apply the Laplacian to all component of the vector.
 \begin{equation}
  \Delta \vect{v}=\begin{pmatrix} \Delta v_{1}\\
                   \vdots\\ \Delta v_{n}
@@ -55,21 +55,21 @@ A vector version of the Laplacian consist to apply the Laplacian to all componen
 \subsection{Divergence Free and Rotational Free Space}
 
 \begin{definition}[Divergence]
- The divergence of a vector consist of:
+ The divergence of a vector consists of:
  \begin{equation}
   \vect{\nabla} \cdot \vect{v}
   \end{equation}
 \end{definition}
 
 \begin{definition}[Rotational]
- The rotational of a vector consist of:
+ The rotational of a vector consists of:
  \begin{equation}
   \vect{\nabla} \times \vect{v}
  \end{equation}
 \end{definition}
 
 \begin{definition}[Gradient]
- The gradient of a scalar consist of:
+ The gradient of a scalar consists of:
  \begin{equation}
   \vect{\nabla} p
  \end{equation}
@@ -92,7 +92,7 @@ The rotational is divergence free.
 \subsection{Projection}
 \label{introduction:projection}
 \begin{property}[Projection of a Divergence Free space]
- Every vector can be projected to a divergence free space without changing it's rotational with the following change:
+ Every vector can be projected to a divergence free space without changing its rotational with the following change:
 \begin{align}
  \vect{v_{new}}&=v-\vect{\nabla}p \label{introduction:ProjectionA}\\
  \Delta p&=\vect{\nabla} \cdot \vect{v} \label{introduction:ProjectionB}
@@ -126,7 +126,7 @@ We define the projection operator $P(\vect{v})$
   \end{equation}
 \end{definition}
 
-  In case where we use boundary condition that are not 0 Dirichlet or Neumann boundary condition.
+  In case where we use boundary conditions that are not 0 Dirichlet or Neumann boundary condition.
   The projection operator is no more linear, but affine.
 
   \begin{definition}[Affine Projection Operator]
@@ -141,7 +141,7 @@ This can be rewritten for Dirchlet or Neumann boundary condition:
  B p=\nabla \cdot v-c
 \end{equation}
 Where $B$ is a matrix form of $\Delta$ witch depend only on quantity of the domain.
-Where $c$ are given by the boundary condition.
+Where $c$ is given by the boundary conditions.
 $p$ is then given by:
 \begin{equation}
  p=B^{-1} \nabla \cdot v-B^{-1}c
@@ -150,7 +150,7 @@ And the projection is:
 \begin{equation}
  P(v,T)=-\nabla p=-\nabla B^{-1}\nabla \cdot v+\nabla B^{-1}c
 \end{equation}
-Witch can be rewritten:
+Wich can be rewritten:
 \begin{align}
 P(v,T)&=Av+T\\
 A&=\nabla B^{-1}\nabla \cdot\\

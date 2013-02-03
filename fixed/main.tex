@@ -8,10 +8,10 @@ This case is easier than the variable domain case and serve as basis to more com
 
 We will treat the discretization of time and space separately.
 We will first begin by time discretization.
-The space discretization will only be used to evaluate derivative.
+The space discretization will only be used to evaluate derivatives.
 
-We will in this chapter present two way to solve Navier-Stokes equation.
-We will show that this two method are equivalent if a Runge-Kutta method is used to solve.
+We will in this chapter present two way to solves Navier-Stokes equations.
+We will show that this two methods are equivalent if a Runge-Kutta method is used to solve.
 And that we are exactly divergence free.
 
 In next subsection we will present an overwiew of the two methods.
@@ -19,13 +19,13 @@ In next subsection we will present an overwiew of the two methods.
 \subsection{Analytical expression for pressure}
 \label{fixed:analytical}
 
-We use the work of section \ref{analytical:fixe_eulerian} that Navier-Stokes equation is analytically equivalent to:
+We use the work of section \ref{analytical:fixe_eulerian} that Navier-Stokes equations are analytically equivalent to:
 \begin{equation}
   \partial_t \vect{v}(\vect{x} ,t)=(\eye+P)f(\vect{v}(\vect{x},t))
 \end{equation}
 
-$\eye+P$ project a none divergence free vector to a divergence free vector.
-The solution $\vect{v}$ is a divergence free vector as long that initial condition are divergence free. Because the integral of a divergence free vector is again a divergence free vector.
+$\eye+P$ projects a none divergence free vector to a divergence free vector.
+The solution $\vect{v}$ is a divergence free vector as long that initial conditions are divergence free. Because the integral of a divergence free vector is again a divergence free vector.
 
 But a priori the numerical solution is not necessary divergence free.
 
@@ -50,7 +50,7 @@ A Runge-Kutta method is a method to solve the ODE (We drop the $\vect{x}$ depend
 \partial_t \vect{v}(t)=f(\vect{v})
 \end{equation}
 
-The solution at time $n+1$ is given from the solution at time $n$ with $\Delta t$ the time step and $a$, $b$ parameter of the method.
+The solution at time $n+1$ is given from the solution at time $n$ with $\Delta t$ the time step and $a$, $b$ parameters of the method.
 \begin{subequations}
 \begin{align}
 	\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
@@ -60,7 +60,7 @@ The solution at time $n+1$ is given from the solution at time $n$ with $\Delta t
 
 \subsection{Runge-Kutta Based Scheme Linear Projection}
 \label{fixed:sect:runge-kutta}
-We now integrate method \ref{fixed:analytical} and \ref{fixed:proj} with a Runge-Kutta method.
+We now integrate equations given by methods \ref{fixed:analytical} and \ref{fixed:proj} with a Runge-Kutta method.
 The numerical scheme is:
 \begin{subequations}
 \begin{align}
@@ -78,13 +78,13 @@ Scheme for analytical expression for pressure:
 \end{align}
 \end{subequations}
 
-The following theorem show that the two scheme are the same.
+The following theorem shows that the two schemes are the same.
 
 \begin{theorem}
 If $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ is divergence free then $\vect{v}_{n+1}=\vect{\tilde{v}}_{n+1}$ 
 \end{theorem}
 \begin{proof}
-We begin by prove the following lemma.
+We begin to prove the following lemma.
 \begin{lemma}
 \begin{equation}
   \vect{k}_{i}=\vect{\tilde{k}}_{i}+P(\vect{\tilde{k}}_{i})
@@ -125,11 +125,11 @@ We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ us
 \end{proof}
 
 \begin{theorem}
-For the implicit Runge-Kutta case, where the sum to $i-1$ go now to $s$.
+For the implicit Runge-Kutta case, where the sum to $i-1$ goes now to $s$.
 If $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ is divergence free then $\vect{v}_{n+1}=\vect{\tilde{v}}_{n+1}$ 
 \end{theorem}
 \begin{proof}
-We begin by prove the following lemma.
+We begin to prove the following lemma.
 \begin{lemma}
 After relabeling noting $\vect{k}_{i}^{j}$ the $j$-th solution of $\vect{k}_{i}$.
 We have for every $j$.
@@ -220,7 +220,7 @@ g(x)&=(1+\hat{P})\Delta t \hat{f}(\hat{v}_{n}+\hat{A}x)\\
 \tilde{g}(x)&=\Delta t \hat{f}((1+\hat{P})(\hat{v}_{n}+\hat{A}x))
 \end{align}
 
-$k$ and $\tilde{k}$ are fixed point of function $g$ and $\tilde{g}$.
+$k$ and $\tilde{k}$ are fixed points of functions $g$ and $\tilde{g}$.
 
 We now calculate:
 \begin{align}
@@ -241,7 +241,7 @@ We now substitute $x$ with $\tilde{k}$
 $(1+\hat{P})\tilde{k}$ is a fixed point of $g$.
 But fixed point of $g$ is $k$.
 
-With relabeling of solution if needed, this directly give the result with $\vect{k}^{j}$ the $j$-th solution:
+With relabeling of solution if needed, this directly gives the result with $\vect{k}^{j}$ the $j$-th solution:
 \begin{equation}
 \vect{k}^{j}=(1+\hat{P})\vect{\tilde{k}}^{j}
 \end{equation}
@@ -249,7 +249,7 @@ This is exactly the vector version of what we wanted to prove.
 \end{proof}
 
 The rest is exactly the same than in the first case.
-To not overload the proof with notation, we drop the $j$ label to indicate witch solution we take.
+To not overload the proof with notation, we drop the $j$ label to indicate which solution we take.
 
 We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ using the lemma.
 \begin{align*}
@@ -268,7 +268,7 @@ Solving Navier-Stokes equation with the analytical good choice of pressure is ex
 \end{corollary}
 \begin{proof}
   The expression of $\vect{v}$ is the solution of the Navier-Stokes equation with the good choice of pressure.
-  $\vect{\tilde{v}}$ is the solution of Runge-Kutta equation without pressure witch is projected at every speed estimation.
+  $\vect{\tilde{v}}$ is the solution of Runge-Kutta equation without pressure which is projected at every speed estimation.
   $\vect{v}$ and $\vect{\tilde{v}}$ are the same by the theorem.
 \end{proof}
 
@@ -277,7 +277,7 @@ Solving Navier-Stokes equation with the analytical good choice of pressure is ex
 \end{corollary}
 \begin{proof}
   $\vect{v}$ and $\vect{\tilde{v}}$ are the same.
-  $\vect{v}$ consist only of a Runge-Kutta method with a good chosen function.
+  $\vect{v}$ consists only of a Runge-Kutta method with a good chosen function.
   So the order in time of $\vect{v}$ and $\vect{\tilde{v}}$ is the same that the method order.
 \end{proof}
 
@@ -304,10 +304,10 @@ Scheme for analytical expression for pressure:
 \end{align}
 \end{subequations}
 
-The following theorem show that the two scheme are the same and give the relation between $T$ and $\tilde{T}$.
+The following theorem shows that the two schemes are the same and give the relation between $T$ and $\tilde{T}$.
 
 \begin{theorem}
-If $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ is divergence free then $\vect{v}_{n+1}=\vect{\tilde{v}}_{n+1}$.
+If $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ are divergence free then $\vect{v}_{n+1}=\vect{\tilde{v}}_{n+1}$.
 With the relation for the translation:
 \begin{align}
 \intertext{For $0< i\leq s$}
@@ -317,7 +317,7 @@ With the relation for the translation:
 
 \end{theorem}
 \begin{proof}
-We begin by prove the following lemma.
+We begin to prove the following lemma.
 \begin{lemma}
 \begin{equation}
   \vect{k}_{i}=\vect{\tilde{k}}_{i}+P(\vect{\tilde{k}}_{i},\Delta t \vect{T}_{i})
@@ -364,8 +364,8 @@ We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ us
 \end{proof}
 
 \begin{theorem}
-For the implicit Runge-Kutta case, where the sum on $i-1$ go now to $s$.
-If $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ is divergence free then $\vect{v}_{n+1}=\vect{\tilde{v}}_{n+1}$.
+For the implicit Runge-Kutta case, where the sum on $i-1$ goes now to $s$.
+If $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ are divergence free then $\vect{v}_{n+1}=\vect{\tilde{v}}_{n+1}$.
 And the translation is given by:
 \begin{align}
   \vect{\tilde{T}}_{i}&=\Delta t\sum_{j}a_{ij}\vect{T}_{j}\\
@@ -374,7 +374,7 @@ And the translation is given by:
 
 \end{theorem}
 \begin{proof}
-We begin by prove the following lemma.
+We begin to prove the following lemma.
 \begin{lemma}
 After relabeling $j$ noting $\vect{k}_{i}^{j}$ the $j$ solution of $\vect{k}_{i}$.
 We have for every $j$.
@@ -388,7 +388,7 @@ to solution of $\tilde{k}$
 Because the sum goes to $s$ and not $i-1$ we cannot use recurrence.
 We now will use vector notation for $k$.
 
-We construct $k$ and $\tilde{k}$ vector with the vector $\vect{k}_{i}$ and $\vect{\tilde{k}}_{i}$
+We construct $k$ and $\tilde{k}$ vectors with the vector $\vect{k}_{i}$ and $\vect{\tilde{k}}_{i}$
 \begin{align}
 k&=\begin{pmatrix}
     \vect{k}_{1}\\
@@ -414,7 +414,7 @@ We have the following property:
 \hat{L}\hat{v}_{n}=0
 \end{equation}
 This is true because $\hat{v}_{n}$ is divergence free.
-$\hat{L}$ is the linear part and consist to make the projection with 0 boundary condition.
+$\hat{L}$ is the linear part and consist to make the projection with 0 boundary conditions.
 
 $\tau_{i}$ the translation vector from $\vect{T}_i$ the translation part of $P$.
 $\tau$ is the sum of all individual translation.
@@ -487,7 +487,7 @@ g(x)&=(1+\hat{L})\Delta t \hat{f}(\hat{v}_{n}+\hat{A}x)+\Delta t\tau\\
 \tilde{g}(x)&=\Delta t \hat{f}((1+\hat{L})(\hat{v}_{n}+\hat{A}x)+\tilde{\tau})
 \end{align}
 
-$k$ and $\tilde{k}$ are fixed point of function $g$ and $\tilde{g}$.
+$k$ and $\tilde{k}$ are fixed points of function $g$ and $\tilde{g}$.
 
 We now calculate using that $L$ is linear and $L\hat{v}=0$:
 \begin{align}
@@ -511,7 +511,7 @@ We now substitute $\tilde{k}$ in $x$
 $(1+\hat{L})\tilde{k}+\Delta t \tau$ is a fixed point of $g$.
 But fixed point of $g$ is $k$.
 
-After relabeling of solution, this directly give the result with $k^{j}$ the $j$-th solution:
+After relabeling of solution, this directly gives the result with $k^{j}$ the $j$-th solution:
 \begin{equation}
 k^{j}=(1+\hat{L})\tilde{k}^{j}+\Delta t \tau
 \end{equation}
@@ -519,7 +519,7 @@ This is exactly the vector version of what we wanted to prove.
 \end{proof}
 
 The rest is exactly the same than in the first case.
-To not overload the proof with notation, we drop the $j$ label to indicate witch solution we take.
+To not overload the proof with notation, we drop the $j$ label to indicate which solution we take.
 
 We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ using the lemma.
 \begin{align*}
@@ -554,16 +554,16 @@ The divergence discretization is then given by (notation for 2d, but for 3d it's
 \begin{equation}
   \vect{\nabla} \cdot \vect{v}_{i,j}=\frac{{v_{x}}_{i+1,j}-{v_{x}}_{i-1,j}}{\Delta x}+\frac{{v_{y}}_{i+1,j}-{v_{y}}_{i-1,j}}{\Delta y}
 \end{equation}
-The problem can be see in figure \ref{fixed:unstaggered_div} is that the divergence at red point only use value at blue point and not the point at center (red point).
-This allow to have none physical solution that are divergence free.
+The problem can be seen in figure \ref{fixed:unstaggered_div} is that the divergence at red point only use value at blue point and not the point at center (red point).
+This allows to have non-physical solutions that are divergence free.
 
 \begin{figure}
 \directlua{dofile('fixed/unstaggered_div.lua')}
-\caption{Value used to calculate the divergence at red point are in blue}
+\caption{Values used to calculate the divergence at red point are in blue}
 \label{fixed:unstaggered_div}
 \end{figure}
 
-In figure \ref{fixed:unstaggered_div2} we have solution that is numerically divergence free.
+In figure \ref{fixed:unstaggered_div2} we have a solution that is numerically divergence free.
 But this solution is not continuous and we expect that is not divergence free.
 
 \begin{figure}
@@ -573,11 +573,11 @@ But this solution is not continuous and we expect that is not divergence free.
 \end{figure}
 
 The problem with this kind of solution, is that it's very stable.
-The projection operator $P$ will be 0, and don't correct this kind of speed. We cannot correct it in general for every choice of $f$.
-Note that all the work done in section \ref{fixed:timesec} is true. In particular the theorem will be true and will correctly project
-in a divergence free space. It's only that our divergence free space contain solution that are not wanted.
+The projection operator $P$ will be 0, and doesn't correct this kind of speed. We cannot correct it in general for every choice of $f$.
+Note that all the work done in section \ref{fixed:timesec} is true. In particular the theorem will be true and will correctly projects
+in a divergence free space. It's only that our divergence free space contains solutions that are not wanted.
 
-We can recall one of the formulation of the so called Murphy's law, ``If anything can go wrong, it will.''
+We can recall one of the formulations of the so called Murphy's law, ``If anything can go wrong, it will.''
 
 We can correct this problem with using a forward or backward expression. But this kind of expression is only first order accurate.
 Another solution is to use another grid.
@@ -592,8 +592,8 @@ On a staggered grid we put the variable in the position shown if figure \ref{fix
 \label{fixed:staggered}
 \end{figure}
 
-This can seem to be strange to have different component of speed at different place. But it make discretization more easy.
-To label variable, we label by cell and then took the lower,left component (cf. figure \ref{fixed:staggered_label}).
+This can seem to be strange to have different component of speed at different places. But it make discretization more easy.
+To label variable, we label by cell and then took the lower left component (cf. figure \ref{fixed:staggered_label}).
 \begin{figure}
 \directlua{dofile('fixed/staggered_label.lua')}
 \caption{Labeling on staggered grid}
@@ -608,29 +608,29 @@ We now define the divergence and the gradient:
                       \end{pmatrix}\\
   \vect{\nabla}\cdot \vect{v}_{i,j}&=\frac{{v_{x}}_{i+1,j}-{v_{x}}_{i,j}}{\Delta x}+\frac{{v_{y}}_{i,j+1}-{v_{y}}_{i,j}}{\Delta y}
 \end{align}
-This two expression are geometrically very clear.
+This two expressions are geometrically very clear.
 
-In figure \ref{fixed:staggered_gradient}, the gradient at red speed component use component at blue point.
+In figure \ref{fixed:staggered_gradient}, the gradient at red speed component uses components at blue point.
 Contrary at case with center difference we cannot create a none constant vector with 0 gradient.
 \begin{figure}
 \directlua{dofile('fixed/staggered_gradient.lua')}
-\caption{Point used to calculate the red gradient component are in blue}
+\caption{Points used to calculate the red gradient component are in blue}
 \label{fixed:staggered_gradient}
 \end{figure}
 
 The divergence is given by the sum of inflow around a cell.
-In figure \ref{fixed:staggered_divergence}, the divergence at red point use component at blue point.
+In figure \ref{fixed:staggered_divergence}, the divergence at red point uses components at blue point.
 \begin{figure}
 \directlua{dofile('fixed/staggered_divergence.lua')}
-\caption{Point used to calculate red divergence are in blue}
+\caption{Points used to calculate red divergence are in blue}
 \label{fixed:staggered_divergence}
 \end{figure}
 
-We cannot have the same situation than without staggered grid, where an nonphysical vector is divergence free.
+We cannot have the same situation than without staggered grid, where a nonphysical vector is divergence free.
 
 \subsubsection{Discretization}
 
-We now look at different possible scheme for staggered grid discretization.
+We now look at different possible schemes for staggered grid discretization.
 
 \paragraph{Gradient}
 \label{fixed:gradient}
@@ -651,7 +651,7 @@ The divergence is discretized with center difference.
 \begin{equation}
 	\vect{\nabla}\cdot \vect{v}_{i,j}=\frac{{v_{x}}_{i,j}-{v_{x}}_{i-1,j}}{\Delta x}+\frac{{v_{y}}_{i,j}-{v_{y}}_{i,j-1}}{\Delta y}
 \end{equation}
-Because of center difference, it's second order accurate.
+Because of center difference its second order accurate.
 
 \paragraph{Laplacian}
 \label{fixed:Laplacian}
@@ -674,18 +674,18 @@ We prove it for the one dimensional case:
 \paragraph{Vector Laplacian}
 \label{fixed:vect:laplacian}
 For vector Laplacian we use the same scheme as in section \ref{fixed:Laplacian} but for every component of speed.
-Staggered grid don't pose problem because we don't have mixed term with derivative and none derivative.
+Staggered grid doesn't pose problem because we don't have mixed terms with derivative and none derivative.
 
 \paragraph{Convection}
 
-Convection term is the more difficult term to treat, because it's none linear and use mixed term.
-We need to consider two type of term. Let $i\neq j$. And $\vect{k}$ be an integer vector of the position on the grid.
-And $\vect{e}_i$ the $i$-th unit vector.
+Convection term is the more difficult term to treat, because it's none linear and uses mixed terms.
+We need to consider two type of terms. Let $i\neq j$ and $\vect{k}$ be an integer vector of the position on the grid
+and $\vect{e}_i$ the $i$-th unit vector.
 We first consider as $i$-th component:
 \begin{equation}
 \left(v_{i}\partial_{i}v_{i}\right)^{i}_{\vect{k}}
 \end{equation}
-We can discretize this in two manner:
+We can discretize this in two manners:
 
 \subparagraph{Central difference}
 \begin{equation}
@@ -696,7 +696,6 @@ We can discretize this in two manner:
 \label{fixed:upwind}
 
 We use the same method, but instead to use center difference, we use upwind:
-
 \begin{align}
 \intertext{if ${v_{i}}_{\vect{k}}<0$}
 \left(v_{i}\partial_{i}v_{i}\right)_{\vect{k}}&={v_{i}}_{\vect{k}}\frac{{v_{i}}_{\vect{k}+\vect{e}_i}-{v_{i}}_{\vect{k}}}{\Delta x_{i}}\\
@@ -713,17 +712,17 @@ We now consider:
 \end{equation}
 
 \begin{remark}
-  Contrary to the other case, we need to have the speed at a position not know for $v_{j}$. This come because of the staggered grid scheme.
-  For this, we can interpolate the know speed of neighbor cell taking for example the average of the 4 neighbor (cf. figure \ref{fixed:staggered_convection_upwind}).
+  Contrary to the other case, we need to have the speed at a position not known for $v_{j}$. This comes because of the staggered grid scheme.
+  For this, we can interpolate the known speed of neighbor cell taking for example the average of the 4 neighbor (cf. figure \ref{fixed:staggered_convection_upwind}).
   We will use as notation $v_{j}^{i}$ for the speed component $j$ at position for the component $i$.
   
   \begin{figure}
     \directlua{dofile('fixed/staggered_convection_upwind.lua')}
-    \caption{We need the value of the red arrow. For this we can interpolate from the blue arrow.}
+    \caption{We need the value of the red arrow. For this we can interpolate from  the blue arrows.}
     \label{fixed:staggered_convection_upwind}
     \end{figure}
 \end{remark}
-We can discretize this in two manner:
+We can discretize this in two manners:
 
 \subparagraph{Central difference}
 \begin{equation}
@@ -747,24 +746,24 @@ Upwind is considered more stable (can be proven easily in one dimension for burg
 \section{Pseudo Code}
 
 The pseudo code is not very complicate in principle.
-We need to put all mathematical discretization and piece together.
+We need to put all mathematical discretizations and pieces together.
 
 We will use the following order of operation:
 \begin{enumerate}
 \item Calculate optimal time step.
- \item Use a Runge-Kutta algorithm. We now have two choice:
+ \item Use a Runge-Kutta algorithm. We now have two choices:
  \begin{enumerate}
   \item We project the acceleration.
 	For this we do the following for every Runge-Kutta step:
 	\begin{enumerate}
-	\item We set the speed to the wanted boundary condition.
+	\item We set the speed to the wanted boundary conditions.
 	 \item We calculate the acceleration from discretization of the function noted $f(\vect{v})$ in this section.
 	 \item We project the given acceleration.
 	\end{enumerate}
  \item We project the speed.
  For this we apply the Runge-Kutta step as in section \ref{fixed:sect:runge-kutta}:
 	\begin{enumerate}
-	\item We set the speed to the wanted boundary condition.
+	\item We set the speed to the wanted boundary conditions.
 	\item We obtain a speed estimation from $f(\vect{v})$.
 	\item We project the speed estimation to be divergence free.
 	\end{enumerate}
@@ -772,43 +771,44 @@ We will use the following order of operation:
 
 \end{enumerate}
 
-The principal difference of the two method are:
+The principal difference of the two methods are:
 \begin{itemize}
  \item If we project on speed we are always divergence free.
- \item If we project on force, we need to have initial speed that are divergence free. Numerical error can accumulate.
+ \item If we project on force, we need to have initial speeds that are divergence free. Numerical error can accumulate.
  We can eliminate them with a projection of speed.
- \item Boundary condition need to be transformed as in section \ref{fixed:sect:runge-kutta:affine}.
+ \item Boundary conditions need to be transformed as in section \ref{fixed:sect:runge-kutta:affine}.
 \end{itemize}
 
-We will in the next section show the implementation of principal part.
+We will in the next section show the implementation of principals parts.
 
 \subsection{Pseudo code semantic and notation.}
 
 The notation of pseudo code is inspired of \textbf{C-like} language.
 
 \begin{description}
- \item[Variable] are introduced when used by giving there name.
-\item[Affectation] are done with $\gets$ witch indicate that the left variable take the right value.
-\item[Boolean] operation are done with there standard mathematical notation ($=$, $\neq$,$<$,$>$,$\leq$,$\geq$).
-\item[Arithmetic] operation use the standard mathematical operation ($+$,$-$,$\cdot$,$\frac{x}{x}$).
+ \item[Variables] are introduced when used by giving their name.
+\item[Affectations] are done with $\gets$ which indicate that the left variable take the right value.
+\item[Boolean operations] are done with there standard mathematical notation ($=$, $\neq$,$<$,$>$,$\leq$,$\geq$).
+\item[Arithmetic operations] uses the standard mathematical operation ($+$,$-$,$\cdot$,$\frac{x}{x}$).
 \end{description}
 
 The following special control flow operation are used:
 \begin{description}
  \item[$\mathop{\textbf{Loop}}$:] An infinite loop, is only stopped by a $\Break$ or \Return statement.
- \item[$\mathop{\textbf{For all}}$:] A loop witch take all element of a container. $\mathop{\textbf{for all}}$ expression are normally good candidate for parallelism.
+ \item[$\mathop{\textbf{For all}}$:] A loop which takes all elements of a container.
+ $\mathop{\textbf{for all}}$ expressions are normally good candidates for parallelism.
 \end{description}
 
 \subsubsection{Container}
 
 The following container will be used:
 \begin{description}
- \item[Grid:] Consist of all cell. Used in expression like $\mathop{\textbf{for all}}(it \in Grid)$.
- \item[Unordered Stack:] A container where element can be added and accessed in a $\mathop{\textbf{for all}}$. The order are not important.
- And after usage, the stack is no more used. Duplicate element are inserted more than one time.
+ \item[Grid:] Consists of all cell. Used in expression like $\mathop{\textbf{for all}}(it \in Grid)$.
+ \item[Unordered Stack:] A container where elements can be added and accessed in a $\mathop{\textbf{for all}}$. The order are not important.
+ After usage, the stack is no more used. Duplicate elements are inserted more than one time.
  A new unordered stack is created with the function call $\FuncCall{newunorderedstack}()$.
- \item[Set:] A set is a container witch is like a mathematical set, where element can be added and each element accessed.
- The difference with a stack is that in a set duplicate element are stored once and the set element are not discarded after usage.
+ \item[Set:] A set is a container which is like a mathematical set, where elements can be added and each element accessed.
+ The difference with a stack is that in a set duplicate elements are stored once and the set element are not discarded after usage.
  A new set is created with the function call $\FuncCall{newset}()$.
 \end{description}
 
@@ -818,31 +818,31 @@ The first data type is the $cell$. The $cell$ are element of the grid container.
 
 The principal method defined on a cell are:
 \begin{description}
- \item[$\FuncCall{SpeedGet}(i)$ :] Witch get the speed at direction $i$. We use staggered grid and consider speed component of a given cell
+ \item[$\FuncCall{SpeedGet}(i)$ :] Which gets the speed at direction $i$. We use staggered grid and consider speed component of a given cell
  to be below left.
-  \item[$\FuncCall{SpeedGet}()$ :] Witch get the speed vector.
- \item[$\FuncCall{SpeedSet}(i,val)$ :] Set the speed component $i$ with value $val$.
- \item[$\FuncCall{SpeedSet}(val)$ :] Set the speed vector to value $val$.
- \item[$\FuncCall{AccelerationGet}(i)$ :] Witch get the acceleration at direction $i$.
- \item[$\FuncCall{AccelerationGet}()$ :] Witch get the acceleration vector.
- \item[$\FuncCall{AccelerationSet}(i,val)$ :] Set the acceleration component $i$ with value $val$.
- \item[$\FuncCall{AccelerationSet}(val)$ :] Set the acceleration vector to value $val$.
- \item[$\FuncCall{PressureGet}()$ :] Get the pressure at given cell.
- \item[$\FuncCall{PressureSet}(val)$ :] Set the pressure at given cell to $val$.
- \item[$\FuncCall{GetIsFluid}()$ :] Indicate if the cell is fluid or not.
- \item[$\FuncCall{GetIsAir()}$ :] Indicate if the cell is air or not. This is the opposite of $\FuncCall{GetIsFluid}()$.
- \item[$\FuncCall{FluidSet()}$ :] Set the cell as fluid.
- \item[$\FuncCall{AirSet()}$ :] Set the cell as air.
- \item[$\FuncCall{GetNeighbour}(dir,s)$ :] Get the neighbor cell in direction $dir$ positif or negatif depending on the sign of $s$.
+  \item[$\FuncCall{SpeedGet}()$ :] Which gets the speed vector.
+ \item[$\FuncCall{SpeedSet}(i,val)$ :] Sets the speed component $i$ with value $val$.
+ \item[$\FuncCall{SpeedSet}(val)$ :] Sets the speed vector to value $val$.
+ \item[$\FuncCall{AccelerationGet}(i)$ :] Which gets the acceleration at direction $i$.
+ \item[$\FuncCall{AccelerationGet}()$ :] Which gets the acceleration vector.
+ \item[$\FuncCall{AccelerationSet}(i,val)$ :] Sets the acceleration component $i$ with value $val$.
+ \item[$\FuncCall{AccelerationSet}(val)$ :] Sets the acceleration vector to value $val$.
+ \item[$\FuncCall{PressureGet}()$ :] Gets the pressure at given cell.
+ \item[$\FuncCall{PressureSet}(val)$ :] Sets the pressure at given cell to $val$.
+ \item[$\FuncCall{GetIsFluid}()$ :] Indicates if the cell is fluid or not.
+ \item[$\FuncCall{GetIsAir()}$ :] Indicates if the cell is air or not. This is the opposite of $\FuncCall{GetIsFluid}()$.
+ \item[$\FuncCall{FluidSet()}$ :] Sets the cell as fluid.
+ \item[$\FuncCall{AirSet()}$ :] Sets the cell as air.
+ \item[$\FuncCall{GetNeighbour}(dir,s)$ :] Gets the neighbor cell in direction $dir$ positif or negatif depending on the sign of $s$.
 \end{description}
 
 We define the following method for vector:
 \begin{description}
- \item[$\FuncCall{Get}(i)$] Get the value at indice $i$ of the vector.
-  \item[$\FuncCall{Set}(i,val)$] Set the value at indice $i$ of the vector with value $val$.
+ \item[$\FuncCall{Get}(i)$] Gets the value at indice $i$ of the vector.
+  \item[$\FuncCall{Set}(i,val)$] Sets the value at indice $i$ of the vector with value $val$.
 \end{description}
 
-The following global variable are used:
+The following global variables are used:
 \begin{description}
  \item[$viscosity$ :] Is the viscosity used.
  \item[$dt$ :] The time step used.
@@ -861,11 +861,11 @@ To apply the viscosity we need to calculate the Laplacian and a condition of whe
 The same condition as for gravity work.
 The application is in algorithm \ref{code:ApplyViscosity} the calculation of the Laplacian is in algorithm \ref{code:GetLaplacianSpeed}.
 
-For the convection the application is in algorithm \ref{code:ApplyConvection} the condition are similar than for Gravity.
+For the convection the application is in algorithm \ref{code:ApplyConvection} the condition is similar than for Gravity.
 The convection speed derivative with upwind is done in algorithm \ref{code:GetConvectionElement} and algorithm \ref{code:GetConvectionSpeed}.
 
 \begin{algorithm}
-\caption{Algorithm witch test if gravity acceleration need to be applied}
+\caption{Algorithm which test if gravity acceleration need to be applied}
 \label{code:NeedToApplyGravity}
 \begin{algorithmic}[1]
 \Function{NeedToApplyGravity}{cell}
@@ -875,7 +875,7 @@ The convection speed derivative with upwind is done in algorithm \ref{code:GetCo
 		\State $cell2 \gets cell.\FuncCall{GetNeighbour}(2,-1)$ 
 		\Comment{We now consider the cell below (the gravity is applied in the $y$ direction), to see if we are bordering a fluid cell.}
 		\If{$\Not(cell2.\FuncCall{IsValid}())$}
-			\State \Return $\False$ \Comment{If the neighbor don't exist we are not near fluid.}
+			\State \Return $\False$ \Comment{If the neighbor doesn't exist we are not near fluid.}
 		\EndIf
 		\If{$cell2.\FuncCall{GetIsFluid}()$}
 			\State \Return $\True$ \Comment{If the neighbor is fluid, we are bordering a fluid cell.}
@@ -886,7 +886,7 @@ The convection speed derivative with upwind is done in algorithm \ref{code:GetCo
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Algorithm witch apply the gravity acceleration.}
+\caption{Algorithm which apply the gravity acceleration.}
 \label{code:ApplyGravity}
 \begin{algorithmic}[1]
 \Function{ApplyGravity}{cell}
@@ -898,7 +898,7 @@ The convection speed derivative with upwind is done in algorithm \ref{code:GetCo
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Algorithm witch apply the gravity acceleration for every cell.}
+\caption{Algorithm which apply the gravity acceleration for every cell.}
 \label{code:ApplyGravityCell}
 \begin{algorithmic}[1]
 \Procedure{ApplyGravityCell}{}
@@ -910,7 +910,7 @@ The convection speed derivative with upwind is done in algorithm \ref{code:GetCo
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Algorithm witch apply the viscosity acceleration.}
+\caption{Algorithm which apply the viscosity acceleration.}
 \label{code:ApplyViscosity}
 \begin{algorithmic}[1]
 \Procedure{ApplyViscosity}{}
@@ -925,11 +925,11 @@ The convection speed derivative with upwind is done in algorithm \ref{code:GetCo
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Algorithm witch apply the vector Laplacian. The discretization is detailed in section \ref{fixed:vect:laplacian}}
+\caption{Algorithm which applies the vector Laplacian. The discretization is detailed in section \ref{fixed:vect:laplacian}}
 \label{code:GetLaplacianSpeed}
 \begin{algorithmic}[1]
 \Function{GetLaplacianSpeed}{cell}
-	\For{$i=1\To dim$}\Comment{A vector Laplacian consist to apply the Laplacian in all component.}
+	\For{$i=1\To dim$}\Comment{A vector Laplacian consist to apply the Laplacian to all component.}
 		\State $temp \gets 0$
 			\For{$j=1\To dim$}\Comment{Calculate the Laplacian}
 				\State $temp\gets temp-2cell.\FuncCall{SpeedGet}(i)\cdot (h.Get(j))^2$
@@ -946,7 +946,7 @@ The convection speed derivative with upwind is done in algorithm \ref{code:GetCo
 
 
 \begin{algorithm}
-\caption{Algorithm to Apply the convection.}
+\caption{Algorithm to apply the convection.}
 \label{code:ApplyConvection}
 \begin{algorithmic}[1]
 \Function{ApplyConvection}{}
@@ -963,7 +963,7 @@ The convection speed derivative with upwind is done in algorithm \ref{code:GetCo
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Algorithm witch calculate $u_{j}\partial_{j}u_{i}$ with upwind scheme. The discretization is detailed in section \ref{fixed:upwind}}
+\caption{Algorithm which calculates $u_{j}\partial_{j}u_{i}$ with upwind scheme. The discretization is detailed in section \ref{fixed:upwind}}
 \label{code:GetConvectionElement}
 \begin{algorithmic}[1]
 \Function {GetConvectionElement}{$i,j,cell$}
@@ -987,7 +987,7 @@ The convection speed derivative with upwind is done in algorithm \ref{code:GetCo
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Algorithm witch calculate the convection.}
+\caption{Algorithm which calculates the convection.}
 \label{code:GetConvectionSpeed}
 \begin{algorithmic}[1]
  \Function{GetConvectionSpeed}{cell,i}
@@ -1019,13 +1019,13 @@ The projection of acceleration is done in following the following step:
   a_{new}=a+\nabla p
  \end{equation}
 \end{enumerate}
-If we have boundary condition, the $b$ vector need to be translated.
+If we have boundary conditions, the $b$ vector need to be translated.
 The divergence is calculated by algorithm \ref{code:GetDivergence}, the gradient by algorithm \ref{code:GetGradiant}.
 A function $\FuncCall{GetIsInDomain}(cell)$ is used, we can consider it similar to $cell.\FuncCall{GetIsFluid}()$.
 The pressure is then solved with algorithm \ref{code:ProjectAcceleration}.
 
 \begin{algorithm}
-\caption{Algorithm that calculate the divergence. The discretization is detailed in section \ref{fixed:divergence}}
+\caption{Algorithm that calculates the divergence. The discretization is detailed in section \ref{fixed:divergence}}
 \label{code:GetDivergence}
 \begin{algorithmic}[1]
 \Function{GetDivergence}{$cell$}
@@ -1040,7 +1040,7 @@ The pressure is then solved with algorithm \ref{code:ProjectAcceleration}.
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Algorithm that calculate the gradient. The discretization is detailed in section \ref{fixed:gradient}.}
+\caption{Algorithm that calculates the gradient. The discretization is detailed in section \ref{fixed:gradient}.}
 \label{code:GetGradiant}
 \begin{algorithmic}[1]
 \Function{GetGradiant}{$cell,i$}
@@ -1052,8 +1052,8 @@ The pressure is then solved with algorithm \ref{code:ProjectAcceleration}.
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Algorithm the correction to acceleration to make divergence free.
-In this case we assume a case whit 0 Dirichlet boundary condition.}
+\caption{Algorithm to calculate the correction to acceleration to make divergence free.
+In this case we assume a case with 0 Dirichlet boundary conditions.}
 \label{code:ProjectAcceleration}
 \begin{algorithmic}[1]
 \Procedure{ProjectAcceleration}{}
@@ -1065,13 +1065,13 @@ In this case we assume a case whit 0 Dirichlet boundary condition.}
 			\EndIf
 		\EndFor
 		\State $Grid.\FuncCall{SolveLinear}(b,p)$
-		\Comment{We solve the Laplacian system. $p$ is the result and $b$ the second member. The discretization of Laplacian is show in section \ref{fixed:Laplacian}.}
+		\Comment{We solve the Laplacian system. $p$ is the result and $b$ the second member. The discretization of Laplacian is shown in section \ref{fixed:Laplacian}.}
 		\ForAll{$it \in Grid$}
 			\If{$it.\FuncCall{GetIsInDomain}()$}
 			\Comment{If we are in the domain for the Laplacian. We copy the result in the pressure.}
 				\State $it.PressureSet(p[it.ID()])$
 			\Else
-			\Comment{For Dirichlet boundary condition, we set pressure to 0.}
+			\Comment{For Dirichlet boundary conditions, we set pressure to 0.}
 				\State $PressureSet(0)$
 			\EndIf
 		\EndFor
@@ -1088,21 +1088,21 @@ In this case we assume a case whit 0 Dirichlet boundary condition.}
 \subsection{Runge-Kutta Integration}
 \label{fixed:sec:rungekutta}
 
-To implement the Runge-Kutta method, some new element are needed.
-We need to have copy of speed. To do this we add a method $\FuncCall{GetArray}(i)$ witch get the array $i$.
+To implement the Runge-Kutta method, some new elements are needed.
+We need to have a copy of speed. To do this we add a method $\FuncCall{GetArray}(i)$ which gets the array $i$.
 We need to set the default array if no array is precised this is done by function $SetArraySpeed(i)$.
 By default if not changed array $0$ is used.
-The function $\FuncCall{CalculateAcceleration}()$ calculate the acceleration using the default array.
-The only part of code that use explicit array are this one.
+The function $\FuncCall{CalculateAcceleration}()$ calculates the acceleration using the default array.
+The only part of code that uses explicit array is this one.
 
-The function $\FuncCall{CalculateAcceleration}()$ consist to calculate the acceleration and then do the projection.
-This is show in algorithm \ref{code:CalculateAcceleration}.
+The function $\FuncCall{CalculateAcceleration}()$ consists to calculate the acceleration and then do the projection.
+This is shown in algorithm \ref{code:CalculateAcceleration}.
 
 The Runge-Kutta algorithm for order $4$ is shown in algorithm \ref{code:RungeKutta}.
 Depending of the Runge-Kutta scheme choosed the number of copy of speed needed change.
 
 \begin{algorithm}
-\caption{Algorithm witch calculate the acceleration.}
+\caption{Algorithm which calculates the acceleration.}
 \label{code:CalculateAcceleration}
 \begin{algorithmic}[1]
  \Procedure{CalculateAcceleration}  {}
@@ -1121,10 +1121,10 @@ Depending of the Runge-Kutta scheme choosed the number of copy of speed needed c
 \Procedure{RungeKutta}{}
 \ForAll{$it\in Grid$}
             \State $it.\FuncCall{AccelerationSet}(0)$
-            \Comment{We set the acceleration to $0$. So that we can after calculate the acceleration.}
+            \Comment{We set the acceleration to $0$. So that we can calculate the acceleration after.}
 \EndFor
 	\State $\FuncCall{CalculateAcceleration}()$
-	\Comment{This fonction will add the acceleration to the acceleration array.}
+	\Comment{This function will add the acceleration to the acceleration array.}
         \ForAll{$it \in Grid$}
             \State $it.\FuncCall{GetArray}(2).\FuncCall{SpeedSet}(it.\FuncCall{GetArray}(0).\FuncCall{SpeedGet}()+it.\FuncCall{AccelerationGet}()\cdot dt \cdot 0.5)$
             \Comment{Array $2$ is set to the speed for the next evaluation. We do not use array $0$ because we need it.}
@@ -1171,10 +1171,10 @@ Depending of the Runge-Kutta scheme choosed the number of copy of speed needed c
 
 The complexity is dominated by the $4$ call to $\FuncCall{CalculateAcceleration}()$.
 Function $\FuncCall{CalculateAcceleration}()$ then call the function to calculate acceleration.
-This function consist for cell where the acceleration apply calculate a term witch depend of the cell itself and his neighbor.
+This function consist for cell where the acceleration apply to calculate a term which depend of the cell itself and his neighbor.
 The complexity is then linear on the number of cell.
-The complexity for the projection of acceleration will depend of the complexity to solve the Laplacian witch depending
-on the method used can be linear (multigrid for example is linear). The complexity to calculate the gradient is linear to.
+The complexity for the projection of acceleration will depend on the complexity to solve the Laplacian which depending
+on the method used can be linear (multigrid for example is linear). The complexity to calculate the gradient is linear too.
 The complexity is then dominated by the complexity to solve the Laplacian.
 
 A more technical complexity is the storage of data on grid. For fixed topology we can use a fixed size array.
@@ -1184,39 +1184,39 @@ Depending the choice made the average access time can be constant or $\log(n)$ a
 The method $\FuncCall{GetNeighbour}(dir,s)$ was used instead of index vector manipulation because it allow to create storage
 with fast access to neighbor cell.
 
-\subsection{Parralelism}
+\subsection{Parallelism}
 
 We remark that we can without problem make parallel the $\mathop{\textbf{for all}}$ loop, because we have no dependency:
 \begin{itemize}
- \item The calculation of the acceleration don't modify the speed and only read there propper acceleration.
- \item The projection of acceleration when applying the gradient use the already calculated pressure.
+ \item The calculation of the acceleration doesn't modify the speed and only reads there propper acceleration.
+ \item The projection of acceleration when applying the gradient uses the already calculated pressure.
  \item The parallelism to solve the linear system will depend on the method used.
 \end{itemize}
 
-But technicaly this is only true if the method of manipulation of speed are thread safe.
+But technically this is only true if the method of manipulation of speed are thread safe.
 
 \subsection{Conclusion}
 
-We have show a working pseudo code that solve the Navier-Stokes equation for fixed boundary condition.
+We have shown a working pseudo code that solve the Navier-Stokes equation for fixed boundary conditions.
 We have shown that the complexity is dominated by the resolution of a Laplacian and can be linear.
 To have a real implementation we need to provide some storage related function to access neighbor for example.
 
 This pseudo code is part of the simplified version of the original \textbf{C++} code.
-As linear solver Umfpack direct solver was used. Other iteratif library were tester too.
-The storage method are constructed around \textbf{C++11} standard library \textbf{Unordered Map} container witch consist of a hash table.
+As linear solver Umfpack direct solver was used. Other iteratif libraries were tested too.
+The storage methods are constructed around \textbf{C++11} standard library \textbf{Unordered Map} container which consist of a hash table.
 
 \FloatBarrier
 \section{Numerical Experiment}
 
-We will now do some numerical experiment in fixed boundary condition to show how it work.
+We will now do some numerical experiment in fixed boundary conditions to show how it works.
 
 \subsection{Heat Equation}
 
-The more complicated term in the Navier-Stokes equation in grid representation is the convection term, because it's none linear.
+The more complicated term in the Navier-Stokes equation in grid representation is the convection term, because it's non linear.
 \begin{equation}
 	(\vect{v}\cdot \vect{\nabla})\vect{v}
 \end{equation}
-We can have this term 0 everywhere, if we ensure that the direction of variation is orthogonal to the direction of speed.
+We can have this term $0$ everywhere, if we ensure that the direction of variation is orthogonal to the direction of speed.
 
 For example, for a two dimensional problem we work with a flow with a speed only in the $y$ direction. And the value depending only on the position on the $x$ axis.
 \begin{equation}
@@ -1230,20 +1230,20 @@ The convection term is then:
 	         	0\\f(x,t)
 	         \end{pmatrix}=0
 \end{equation}
-The Navier-Stokes equation reduce then to:
+The Navier-Stokes equations reduces then to:
 \begin{align}
 \label{fix:solheat:a}
 	\partial_{y}f(x,t)&=0\\
 	\frac{\partial f(x,t)}{\partial t}&=F(x,t)+\nu\frac{\partial^2 f(x,t)}{\partial x^2}-\vect{\nabla}p
 \end{align}
 Equation \ref{fix:solheat:a} is automatically true because we have no dependence on $x$.
-The pressure term role is only to cancel none divergence free part coming from the force. Because the part with the viscosity $\nu$ is a linear operator
+The pressure term role is only to cancel non divergence free part coming from the force. Because the part with the viscosity $\nu$ is a linear operator
 of a divergence free term.
-For a potential force like gravity, the force can be absorbed in the pressure with a proper account of boundary condition.
+For a potential force like gravity, the force can be absorbed in the pressure with a proper account of boundary conditions.
 This equation is an equation of heat.
 We consider no external force as gravity.
-We will consider as domain $x=[0,2L]$ with fixed speed in $x=0$ and $x=L$,  Neumann boundary condition for pressure in $x=0$ and $x=L$.
-Analytically the domain in $y$ expand from $-\infty$ to $\infty$. Numerically, we use Dirichlet boundary condition $y=[0,2L]$ for pressure.
+We will consider as domain $x=[0,2L]$ with fixed speed in $x=0$ and $x=L$,  Neumann boundary conditions for pressure in $x=0$ and $x=L$.
+Analytically the domain in $y$ expand from $-\infty$ to $\infty$. Numerically, we use Dirichlet boundary conditions $y=[0,2L]$ for pressure.
 \begin{align*}
     v(x=0,t)&=1\\
     v(x=2L,t)&=-1\\
@@ -1260,18 +1260,18 @@ $\vect{\nabla}p$ is everywhere 0 because the linear combination of a divergence 
 \frac{\partial f(x,t)}{\partial t}=\nu\frac{\partial^2 f(x,t)}{\partial x^2}
 \end{equation}
 
-We first look for 0 boundary condition. We will denote this case by $f_0$
+We first look for 0 boundary conditions. We will denote this case by $f_0$
 We first use as ansatz that we can separate variable:
 \begin{equation}
  f_0(x,t)=X(x)T(t)
 \end{equation}
 
-The equation then give:
+The equation then gives:
 \begin{equation}
 	\frac{\dot{T}}{\nu T}=\frac{X''}{X}
 \end{equation}
-Because the rhs only depend on $x$ and the lhs only depend on $t$. This need to depend only on a constant value $-\lambda$.
-This give use two uncoupled equation depending on $\lambda$.
+Because the rhs only depends on $x$ and the lhs only depends on $t$. This needs to depend only on a constant value $-\lambda$.
+This gives use two uncoupled equations depending on $\lambda$.
 \begin{align}
 \dot{T}&=-\lambda \nu T\\
 X''&=-\lambda X
@@ -1289,7 +1289,7 @@ Because we ask $\sin(2L)=0$:
 \begin{equation}
 	0=\sin(2\sqrt{\lambda} L)=\sin\left(n\frac{\pi}{2L}\right)
 \end{equation}
-This then give the condition on $\lambda$:
+This then gives the condition on $\lambda$:
 \begin{equation}
 	\sqrt{\lambda}=n\frac{\pi}{2L}
 \end{equation}
@@ -1299,7 +1299,7 @@ We found the good linear combination from the Fourier series of the initial cond
   f_0(x,t)&=\sum_{n=1}^{\infty}C_{n}\sin\left(\frac{n\pi}{2L}x\right)e^{-\frac{n^2\pi^2\nu t}{4L^2}}\\
   C_{n}&=\frac{1}{L}\int_{0}^{2L}f(x,0)\sin\left(\frac{n\pi}{2L}x\right) dx
 \end{align}
-For a none 0 boundary condition, we need to add a particular solution, so that $f_p(0,0)=1$ and $f_p(2L,0)=-1$.
+For a non 0 boundary conditions, we need to add a particular solution, so that $f_p(0,0)=1$ and $f_p(2L,0)=-1$.
 \begin{equation}
 	f_{p}(x,t)=-\frac{x-L}{L}
 \end{equation}
@@ -1315,13 +1315,13 @@ The general solution is then:
   f(x,t)&=-\frac{x-L}{L}+\sum_{n=1}^{\infty}C_{n}\sin\left(\frac{n\pi}{2L}x\right)e^{-\frac{n^2\pi^2\nu t}{4L^2}}\\
   C_{n}&=\frac{1}{L}\int_{0}^{2L}f(x,0)\sin\left(\frac{n\pi}{2L}x\right) dx
 \end{align}
-This is plotted for $2L=\unit{0.1}{\metre}$ and $\nu=\unit{1.307\cdot 10^{-6}}{\pascal\second}$ witch is the viscosity of water for $\unit{10}{\degreecelsius}$ and for $n_{max}=1'000'000$ in figure \ref{fixed:solheat:fig:sol}.
+This is plotted for $2L=\unit{0.1}{\metre}$ and $\nu=\unit{1.307\cdot 10^{-6}}{\pascal\second}$ which is the viscosity of water for $\unit{10}{\degreecelsius}$ and for $n_{max}=1'000'000$ in figure \ref{fixed:solheat:fig:sol}.
 
 Note that the fact that we have truncated the sum can be considered as a slightly change of initial condition, and an analytical solution of this solution.
 Numerically the difference is of the level of the numerical precision.
 
-The analytical solution show that the effect of viscosity is to smooth the speed distribution. The time needed to do that is of $\unit{500}{\second}$
-witch is a very long time with respect of the distance traveled in this time ($\unit{500}{\meter}$).
+The analytical solution shows that the effect of viscosity is to smooth the speed distribution. The time needed to do that is of $\unit{500}{\second}$
+which is a very long time with respect of the distance traveled in this time ($\unit{500}{\meter}$).
 But this doesn't say that viscosity is not important, because it's effect is inversely proportional squared of $L$.
 
 
@@ -1330,9 +1330,9 @@ But this doesn't say that viscosity is not important, because it's effect is inv
 We now use our numerical program to solve the same problem. The effective problem that we will solve is the heat equation with as solver Runge-Kutta.
 The other part of the program as convection and projection are done but should have a negligible effect.
 
-The solution for different time $t$ are shown in figure \ref{fix:solheat:fig:num1}, \ref{fix:solheat:fig:num100}, \ref{fix:solheat:fig:num300} ,\ref{fix:solheat:fig:num500}. We have an excellent agreement with the analytical result.
+The solution for different times $t$ are shown in figure \ref{fix:solheat:fig:num1}, \ref{fix:solheat:fig:num100}, \ref{fix:solheat:fig:num300} ,\ref{fix:solheat:fig:num500}. We have an excellent agreement with the analytical result.
 For $dt=2\second$ for the Euler method and $dt=\unit{3}{\second}$ for the Runge-Kutta method we have divergence (result completely wrong).
-Note that the time step used is bigger than the CFL condition that is $dt_{max}=hu_{max}=\unit{0.002}{\second}$. This can be done because the viscosity is small and the none linear term cancel.
+Note that the time step used is bigger than the CFL condition that is $dt_{max}=hu_{max}=\unit{0.002}{\second}$. This can be done because the viscosity is small and the non linear term cancel.
 
 The solution with low resolution for different time $t$ are shown in figure \ref{fix:solheat:fig:num1b}, \ref{fix:solheat:fig:num100b}, \ref{fix:solheat:fig:num300b} ,\ref{fix:solheat:fig:num500b}.
 We are in excellent agreement with this low resolution. The reason can be because the equation is linear. 

@@ -11,25 +11,25 @@ The problem will consist to find a function of space and time in a certain domai
 
 We begin to define space time and domaine:
 \begin{description}
-\item[The \emph{space}] consist of a vector in fixed Cartesian coordinate with dimension typically 2 or 3 (Navier-Stokes on 1d is trivial).
+\item[The \emph{space}] consists of a vector in fixed Cartesian coordinate with dimension typically 2 or 3 (Navier-Stokes on 1d is trivial).
 Space is noted $\vect{x}$.
-\item[The \emph{time}] consist of a indice indicating the evolution of the function in time.
+\item[The \emph{time}] consists of a indice indicating the evolution of the function in time.
 Time is noted $t$.
-\item[The \emph{domain}] is the spatial region where a field is defined. This consist physically in the spatial region where water lay.
-Boundary condition need to be provided.
+\item[The \emph{domain}] is the spatial region where a field is defined. This consists physically in the spatial region where water lies.
+Boundaries conditions need to be provided.
 The domain can vary with respect of time and can vary with respect of the solution at previous time.
-The domain don't need to be connected. But can be decomposed in union of connected subdomain.
+The domain doesn't need to be connected. But can be decomposed in union of connected subdomain.
 
 \begin{example}
- If we take a drop of water falling in a glass of water. The domain consist of the region where the water lie.
- At the beginning this will consist of domain consisting of two connected subdomain (the drop and the glass)
+ If we take a drop of water falling in a glass of water. The domain consist of the region where the water lies.
+ At the beginning this will consist of domain consisting of two connected subdomains (the drop and the glass)
  that after a given time will merge in one domain.
 \end{example}
 
-The Domain is generally noted $\Omega$ or $\Omega(t)$ to emphasis that it can be variable with respect of time.
+The domain is generally noted $\Omega$ or $\Omega(t)$ to emphasize that it can be variable with respect of time.
 \end{description}
 
-The variable of the equation are named \emph{Field} and consist of a function with respect of space in the spacial domain and time in the temporal domain.
+The variable of the equation are named \emph{Field} and consists of functions with respect of space in the spatial domain and time in the temporal domain.
 \begin{equation}
  F(x,t)\qquad \text{With $x\in\Omega(t)$ and $t_0\leq t \leq t_f$}
 \end{equation}
@@ -47,20 +47,20 @@ If we note the pressure $\tilde{p}$ we use:
 Because we use incompressible Navier-Stokes equation, $\rho$ is constant. This can be view as a change of unit.
 \end{description}
 
-The following constant parameter are used:
+The following constant parameters are used:
 \begin{description}
-\item[The \emph{viscosity}] represent how much water particle stick together.
-Higher is the viscosity less abrupt speed change are possible.
+\item[The \emph{viscosity}] represents how much water particles stick together.
+Higher is the viscosity less abrupt speed changes are possible.
 The viscosity is noted $\mu$. We use allot $\nu$ that is the viscosity divided by the density.
 \begin{equation}
  \nu=\frac{\mu}{\rho}
 \end{equation}
 \item[The \emph{density}] is a mass per unit volume.
 Density play the same role as mass in Newton's mechanic.
-In the incompressible Navier-Stokes equation density is a constant because incompressibility tell us that density doesn't change.
+In the incompressible Navier-Stokes equation density is a constant because incompressibility tells us that density doesn't change.
 The density is noted $\rho$.
-\item[The \emph{external force}] is a user defined vector field that represent the external force applied to the water.
-It can possibly depend on the solution for previous time.
+\item[The \emph{external force}] is a user defined vector field that represents the external force applied to the water.
+It can possibly depends on the solution for previous time.
 The force is noted $\vect{F}$.
 \end{description}
 
@@ -68,7 +68,7 @@ The force is noted $\vect{F}$.
 
 \subsection{Fixed Topology Eulerian}
 \label{analytical:fixe_eulerian}
-The incompressible Navier-Stokes equation are given by:
+The incompressible Navier-Stokes equations are given by:
 \begin{subequations}
 \begin{align}
 \label{analytical:navierStokesA}
@@ -78,13 +78,13 @@ The incompressible Navier-Stokes equation are given by:
 \end{align}
 \end{subequations}
 
-Equation \ref{analytical:navierStokesA}, tell us that the speed is a divergence free field.
-Equation \ref{analytical:navierStokesB} is an equation of evolution. The presence of $p$ allow to maintain the speed always divergence free.
+Equation \ref{analytical:navierStokesA}, tells us that the speed is a divergence free field.
+Equation \ref{analytical:navierStokesB} is an equation of evolution. The presence of $p$ allows to maintain the speed always divergence free.
 Taking the rotational of \ref{analytical:navierStokesB} make disappear the pressure term (because the rotational of a gradient is 0).
 
 The pressure term can be seen as a correction of the divergence without changing the rotational.
 
-We can rewrite Navier-Stokes equation as:
+We can rewrite Navier-Stokes equations as:
 \begin{subequations}
 \begin{align}
 \label{analytical:navierStokesRewA}
@@ -105,7 +105,7 @@ But using the notation of \ref{introduction:projectiondef}:
 	-\vect{\nabla}p=P(f(\vect{v}))
 \end{equation}
 
-The equation of Navier-Stokes is then equivalent to solve:
+The equations of Navier-Stokes are then equivalent to solve:
 \begin{equation}
   \partial_t \vect{v}(\vect{x} ,t)=f(\vect{v}(\vect{x},t))+P(f(\vect{v}(\vect{x},t))=(\eye+P)f(\vect{v}(\vect{x},t))
 \end{equation}
@@ -113,12 +113,12 @@ $(\eye+P)$ is a projector on a divergence free space without changing the rotati
 
 \subsection{Mobile Topology Eulerian}
 When topology is variable, we need to add another equation to tell where is the domain of computation.
-A natural boundary condition is the free surface, witch move with the speed at given point.
+A natural boundary condition is the free surface, wich moves with the speed at given point.
 
 We define $\lambda$ a system of representative. And $\vect{\xi}_{\lambda}$ the position of point given by $\lambda$.
 The domain is given by the union of $\vect{\xi}$ for all $\lambda$.
 
-The Navier-Stokes equation are now:
+The Navier-Stokes equations are now:
 \begin{subequations}
 \begin{align}
 \label{analytical:navierStokesMobA}
@@ -139,7 +139,7 @@ We can as in section \ref{analytical:fixe_eulerian} eliminate the constrain on t
 \subsection{Lagrangian form of Navier-Stokes equation}
 \label{analytical:convectif}
 We will in this section rewrite \ref{analytical:navierStokesB} in another form.
-We begin to define a new position system(witch is similar to the particle position used in previous section) $\vect{\xi}_{\lambda}(t)$:
+We begin to define a new position system (which is similar to the particle position used in previous section) $\vect{\xi}_{\lambda}(t)$:
 \begin{subequations}
 \begin{align}
  \partial_t \vect{\xi}_{\lambda}(t)&=v(\vect{\xi}_{\lambda}(t),t)\\
@@ -147,7 +147,7 @@ We begin to define a new position system(witch is similar to the particle positi
 \end{align}
 \end{subequations}
 $\lambda$ is a system of representative that is initialized by initial condition.
-For a given $\lambda$, $\vect{\xi}_{\lambda}(t)$ follow the speed at the given point.
+For a given $\lambda$, $\vect{\xi}_{\lambda}(t)$ follows the speed at the given point.
 This position system is called particle coordinate or Lagrangian.
 $\vect{\xi}_\lambda(t)$ is called the characteristic.
 
@@ -157,7 +157,7 @@ We then can define the Lagrangian speed.
 \end{equation}
 The Lagrangian speed is the speed following a characteristic.
 
-Taking the total derivative(the derivative of everything that depend on time) of the Lagrangian speed with respect of time, we have:
+Taking the total derivative (the derivative of everything that depend on time) of the Lagrangian speed with respect of time, we have:
 \begin{equation}
 \frac{d \vect{u}_{\lambda}(t)}{d t}=\frac{d \vect{v}(\xi_{\lambda},t)}{d t}=\partial_t \vect{v}+\left(\frac{\partial \vect{\xi}_{\lambda}(t)}{\partial t}\cdot\vect{\nabla}\right)\vect{v}
 \end{equation}
@@ -167,7 +167,7 @@ This can be rewritten:
 \end{equation}
 This is exactly the lhs of equation \ref{analytical:navierStokesB}.
 
-We then can rewrite Navier-Stokes equation as:
+We then can rewrite Navier-Stokes equations as:
 \begin{subequations}
 \begin{align}
 \label{analytical:navierStokesLagA}
@@ -180,13 +180,13 @@ We then can rewrite Navier-Stokes equation as:
 \begin{remark}
 We remark that with this notation some expression like spatial derivative of $\vect{u}$ is not defined.
 In an analytical procedure, we can transform $\vect{u}$ to $\vect{v}$ with the help of the expression of $\vect{\xi}$, then the derivative is well defined.
-But in a numerical procedure, the point where the value are know are particle. This demand to define derivative on unstructured grid
+But in a numerical procedure, the point where the values are know are particles. This demand to define derivative on unstructured grid
 or to interpolate at grid point.
 \end{remark}
 
 \section{Boundary Condition}
 
-We will be interested in two kind of boundary condition.
+We will be interested in two kinds of boundary conditions.
 \begin{description}
  \item[\emph{Inflow} Boundary:]
  An inflow boundary is a source of water.
@@ -196,7 +196,7 @@ We will be interested in two kind of boundary condition.
 
 \subsection{Inflow}
 
-Inflow boundary condition have constant prescribed speed.
+Inflow boundary condition has a constant prescribed speed.
 This give the following constraint on pressure:
 \begin{equation}
 \nabla p(\vect{x},t)=f(\vect{v}(\vect{x},t))
@@ -204,17 +204,17 @@ This give the following constraint on pressure:
 
 \subsection{Free Surface Boundary Condition}
 \label{ana:free:surface}
-To define the free surface boundary condition, we need to define the stress tensor:
+To define the free surface boundary conditions, we need to define the stress tensor:
 \begin{equation}
 	\sigma_{ij}=-p \delta_{ij}+\nu\left(\frac{\partial v_{i}}{\partial x_{j}}+\frac{\partial v_{j}}{\partial x_{i}}\right)
 \end{equation}
-The boundary condition are then given by(for 3d):
+The boundary conditions are then given by(for 3d):
 \begin{align}
 	\sum_{i,j}\sigma_{ij}n_{i}n_{j}&=0\\
 	\sum_{i,j}\sigma_{ij}t^{1}_{i}n_{j}&=0\\
 	\sum_{i,j}\sigma_{ij}t^{2}_{i}n_{j}&=0\\
 \end{align}
-Where $\vect{n}$ are the normal vector and $\vect{t}^1$ and $\vect{t}^2$ are two none-colinear tangent vector.
+Where $\vect{n}$ are the normal vector and $\vect{t}^1$ and $\vect{t}^2$ are two non-colinear tangent vectors.
 For 2d only one tangent vector is needed.
 
 The first equation can be used to find boundary condition for $p$.
