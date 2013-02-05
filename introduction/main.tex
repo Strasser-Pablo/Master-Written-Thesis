@@ -10,7 +10,7 @@ We indicate a given component of a vector with indices. $\vect{v}_1$ indice the 
 
 \section{Differential operator}
 
-We denote derivative  $\partial_i$ where $i$ is the spatial component with wich we derivate.
+We denote derivative  $\partial_i$ where $i$ is the spatial component with which we derivate.
 \begin{equation}
  \partial_i v(\vect{x})=\frac{\partial v(\vect{x})}{\partial \vect{x}_{i}}
 \end{equation}
@@ -90,7 +90,7 @@ The rotational is divergence free.
 
 \section{Projection}
 \label{introduction:projection}
-\begin{property}[Projection of a Divergence Free space]
+\begin{property}[Projection of a divergence free space]
  Every vector can be projected to a divergence free space without changing its rotational with the following change:
 \begin{align}
  \vect{v_{new}}&=v-\vect{\nabla}p \label{introduction:ProjectionA}\\
@@ -113,7 +113,7 @@ The rotational is divergence free.
  \end{remark}
 
 
-\begin{definition}[Linear Projection Operator]
+\begin{definition}[Linear projection operator]
 \label{introduction:projectiondef}
 We define the projection operator $P(\vect{v})$
   \begin{equation}
@@ -128,18 +128,18 @@ We define the projection operator $P(\vect{v})$
   In case where we use boundary conditions that are not 0 Dirichlet or Neumann boundary condition.
   The projection operator is no more linear, but affine.
 
-  \begin{definition}[Affine Projection Operator]
+  \begin{definition}[Affine projection operator]
   We denote affine projection by $P(v,T)=Av+T$.
   
   The Poisson's equation is given by:
   \begin{equation}
    \Delta p=\nabla \cdot v
   \end{equation}
-This can be rewritten for Dirchlet or Neumann boundary condition:
+This can be rewritten for Dirchlet or Neumann boundary conditions:
 \begin{equation}
  B p=\nabla \cdot v-c
 \end{equation}
-Where $B$ is a matrix form of $\Delta$ witch depend only on quantity of the domain.
+Where $B$ is a matrix form of $\Delta$ which depend only on quantity of the domain.
 Where $c$ is given by the boundary conditions.
 $p$ is then given by:
 \begin{equation}
@@ -149,7 +149,7 @@ And the projection is:
 \begin{equation}
  P(v,T)=-\nabla p=-\nabla B^{-1}\nabla \cdot v+\nabla B^{-1}c
 \end{equation}
-Wich can be rewritten:
+Which can be rewritten:
 \begin{align}
 P(v,T)&=Av+T\\
 A&=\nabla B^{-1}\nabla \cdot\\

@@ -24,7 +24,7 @@ We use the work of section \ref{analytical:fixe_eulerian} that Navier-Stokes equ
   \partial_t \vect{v}(\vect{x} ,t)=(\eye+P)f(\vect{v}(\vect{x},t))
 \end{equation}
 
-$\eye+P$ projects a none divergence free vector to a divergence free vector.
+$\eye+P$ projects a non divergence free vector to a divergence free vector.
 The solution $\vect{v}$ is a divergence free vector as long that initial conditions are divergence free. Because the integral of a divergence free vector is again a divergence free vector.
 
 But a priori the numerical solution is not necessary divergence free.
@@ -61,7 +61,8 @@ The solution at time $n+1$ is given from the solution at time $n$ with $\Delta t
 \subsection{Runge-Kutta based linear projection}
 \label{fixed:sect:runge-kutta}
 We now integrate equations given by methods \ref{fixed:analytical} and \ref{fixed:proj} with a Runge-Kutta method.
-The numerical scheme is:
+
+The numerical scheme for exact divergence free speed is:
 \begin{subequations}
 \begin{align}
 \vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}\right)\\
@@ -137,7 +138,7 @@ We have for every $j$.
   \vect{k}_{i}^{j}=\vect{\tilde{k}}_{i}^{j}+P(\vect{\tilde{k}}_{i}^{j})
 \end{equation}
 This doesn't say that we have existence and unicity of the solution only that if we have a set of solution for $\vect{k}$ we have a bijection
-to solution of $\vect{\tilde{k}}$
+to solutions of $\vect{\tilde{k}}$
 \end{lemma}
 \begin{proof}
 Because the sum goes to $s$ and not $i-1$ we cannot use recurrence.
@@ -207,6 +208,7 @@ $\hat{A}$ and $\hat{P}$ are commutative, because of the mixed-product property.
 	A\kron P
 \end{align}
 
+The two expressions can now be written:
 \begin{align}
 k&=(1+\hat{P})\Delta t\hat{f}(\hat{v}_{n}+\hat{A}k)\\
 \tilde{k}&=\Delta t \hat{f}((1+\hat{P})(\hat{v}_{n}+\hat{A}k))
@@ -357,7 +359,7 @@ We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ us
 &=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{k}}_{i},\vect{\hat{T}}_{i}^{0}\right)\right)\\
 \vect{\tilde{T}}_{0}&=\sum_{i=1}^{s}b_{i}\vect{\hat{T}}_{i}^{0}\\
 \vect{\tilde{T}}_{0}&=\sum_{i=1}^{s}b_{i}\Delta t \vect{T}_{i}\\
-\intertext{Using that $\vect{v}_{n}=\tilde{\vect{v}_{n}}$}
+\intertext{Using that $\vect{v}_{n}=\tilde{\vect{v}}_{n}$}
 \vect{v}_{n+1}&=\vect{\tilde{v}}_{n+1}
 \end{align*}
 
@@ -528,7 +530,7 @@ We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ us
 \vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}+L\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}\right)+\vect{\tilde{T}}_0\\
 &=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\eye+L\right)\vect{\tilde{k}}_{i}+\vect{\tilde{T}}_0\\
 \vect{\tilde{T}}_0&=\Delta t\sum_{i=1}^{s}b_{i}\vect{T}_{i}\\
-\intertext{Using that $\vect{v}_{n}=\tilde{\vect{v}_{n}}$}
+\intertext{Using that $\vect{v}_{n}=\tilde{\vect{v}}_{n}$}
 \vect{v}_{n+1}&=\vect{\tilde{v}}_{n+1}
 \end{align*}
 
@@ -538,13 +540,13 @@ We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ us
 
 \subsection{Non-staggered grid}
 
-On a Non-Staggered grid we put the variable like figure \ref{fixed:unstaggered}.
+On a non-staggered grid we put the variable like figure \ref{fixed:unstaggered}.
 \begin{figure}
 \directlua{dofile('fixed/unstaggered.lua')}
 \caption{Position of variable for Non-Staggered grid}
 \label{fixed:unstaggered}
 \end{figure}
-The problem with Non-Staggered  grid, is that obvious center difference discretization lead to wrong divergence free vector.
+The problem with non-staggered  grid, is that obvious center difference discretization lead to wrong divergence free vector.
 
 We define the derivative of a scalar by:
 \begin{equation}
@@ -674,22 +676,22 @@ We prove it for the one dimensional case:
 \paragraph{Vector laplacian}
 \label{fixed:vect:laplacian}
 For vector Laplacian we use the same scheme as in section \ref{fixed:Laplacian} but for every component of speed.
-Staggered grid doesn't pose problem because we don't have mixed terms with derivative and none derivative.
+Staggered grid doesn't pose problem because we don't have mixed terms with derivative and non derivative.
 
 \paragraph{Convection}
 
-Convection term is the more difficult term to treat, because it's none linear and uses mixed terms.
+Convection term is the more difficult term to treat, because it's non linear and uses mixed terms.
 We need to consider two type of terms. Let $i\neq j$ and $\vect{k}$ be an integer vector of the position on the grid
 and $\vect{e}_i$ the $i$-th unit vector.
 We first consider as $i$-th component:
 \begin{equation}
-\left(v_{i}\partial_{i}v_{i}\right)^{i}_{\vect{k}}
+\left(v^{i}\partial_{i}v^{i}\right)^{i}_{\vect{k}}
 \end{equation}
 We can discretize this in two manners:
 
 \subparagraph{Central difference}
 \begin{equation}
-{v_{i}}_{\vect{k}}\frac{{v_{i}}_{\vect{k}+\vect{e}_i}-{v_{i}}_{\vect{k}-\vect{e}_i}}{2\Delta x_{i}}
+{v^{i}}_{\vect{k}}\frac{{v^{i}}_{\vect{k}+\vect{e}_i}-{v^{i}}_{\vect{k}-\vect{e}_i}}{2\Delta x_{i}}
 \end{equation}
 
 \subparagraph{Upwind difference}
@@ -697,24 +699,24 @@ We can discretize this in two manners:
 
 We use the same method, but instead to use center difference, we use upwind:
 \begin{align}
-\intertext{if ${v_{i}}_{\vect{k}}<0$}
-\left(v_{i}\partial_{i}v_{i}\right)_{\vect{k}}&={v_{i}}_{\vect{k}}\frac{{v_{i}}_{\vect{k}+\vect{e}_i}-{v_{i}}_{\vect{k}}}{\Delta x_{i}}\\
-\intertext{if ${v_{i}}_{\vect{k}}>0$}
-\left(v_{i}\partial_{i}v_{i}\right)_{\vect{k}}&={v_{i}}_{\vect{k}}\frac{{v_{i}}_{\vect{k}}-{v_{i}}_{\vect{k}-\vect{e}_i}}{\Delta x_{i}}\\
-\intertext{if ${v_{i}}_{\vect{k}}=0$}
-\left(v_{i}\partial_{i}v_{i}\right)_{\vect{k}}&=0
+\intertext{if ${v^{i}}_{\vect{k}}<0$}
+\left(v^{i}\partial_{i}v^{i}\right)_{\vect{k}}&={v^{i}}_{\vect{k}}\frac{{v^{i}}_{\vect{k}+\vect{e}_i}-{v^{i}}_{\vect{k}}}{\Delta x_{i}}\\
+\intertext{if ${v^{i}}_{\vect{k}}>0$}
+\left(v^{i}\partial_{i}v^{i}\right)_{\vect{k}}&={v^{i}}_{\vect{k}}\frac{{v^{i}}_{\vect{k}}-{v^{i}}_{\vect{k}-\vect{e}_i}}{\Delta x_{i}}\\
+\intertext{if ${v^{i}}_{\vect{k}}=0$}
+\left(v^{i}\partial_{i}v^{i}\right)_{\vect{k}}&=0
 \end{align}
 Upwind is considered more stable (can be proof easily in one dimension for burger's equation) but more diffusive.
 
 We now consider:
 \begin{equation}
-\left(v_{j}\partial_{j}v_{i}\right)^{i}_{\vect{k}}
+\left(v^{j}\partial_{j}v^{i}\right)^{i}_{\vect{k}}
 \end{equation}
 
 \begin{remark}
-  Contrary to the other case, we need to have the speed at a position not known for $v_{j}$. This comes because of the staggered grid scheme.
+  Contrary to the other case, we need to have the speed at a position not known for $v^{j}$. This comes because of the staggered grid scheme.
   For this, we can interpolate the known speed of neighbor cell taking for example the average of the 4 neighbor (cf. figure \ref{fixed:staggered_convection_upwind}).
-  We will use as notation $v_{j}^{i}$ for the speed component $j$ at position for the component $i$.
+  We will use as notation $v^{ji}$ for the speed component $j$ at position for the component $i$.
   
   \begin{figure}
     \directlua{dofile('fixed/staggered_convection_upwind.lua')}
@@ -726,19 +728,19 @@ We can discretize this in two manners:
 
 \subparagraph{Central difference}
 \begin{equation}
-\left(v_{j}\partial_{j}v_{i}\right)^{i}_{\vect{k}}={v_{j}^{i}}_{\vect{k}}\frac{{v_{i}}_{\vect{k}+\vect{e}_j}-{v_{i}}_{\vect{k}-\vect{e}_j}}{2\Delta x_{j}}
+\left(v^{j}\partial_{j}v^{i}\right)^{i}_{\vect{k}}={v^{ji}}_{\vect{k}}\frac{{v^{i}}_{\vect{k}+\vect{e}_j}-{v^{i}}_{\vect{k}-\vect{e}_j}}{2\Delta x_{j}}
 \end{equation}
 
 \subparagraph{Upwind difference}
 
 We use the same method, but instead to use center difference, we use upwind:
 \begin{align}
-\intertext{if ${v_{j}^{i}}_{\vect{k}}<0$}
-\left(v_{j}\partial_{j}v_{i}\right)^{i}_{\vect{k}}&={v_{j}^{i}}_{\vect{k}}\frac{{v_{i}}_{\vect{k}+\vect{e}_j}-{v_{i}}_{\vect{k}}}{\Delta x_{j}}\\
-\intertext{if ${v_{j}^{i}}_{\vect{k}}>0$}
-\left(v_{j}\partial_{j}v_{i}\right)^{i}_{\vect{k}}&={v_{j}^{i}}_{\vect{k}}\frac{{v_{i}}_{\vect{k}}-{v_{i}}_{\vect{k}-\vect{e}_j}}{\Delta x_{j}}\\
-\intertext{if ${v_{j}^{i}}_{\vect{k}}=0$}
-\left(v_{j}\partial_{j}v_{i}\right)^{i}_{\vect{k}}&=0
+\intertext{if ${v^{ji}}_{\vect{k}}<0$}
+\left(v^{j}\partial_{j}v^{i}\right)^{i}_{\vect{k}}&={v^{ji}}_{\vect{k}}\frac{{v^{i}}_{\vect{k}+\vect{e}_j}-{v^{i}}_{\vect{k}}}{\Delta x_{j}}\\
+\intertext{if ${v^{ji}}_{\vect{k}}>0$}
+\left(v^{j}\partial_{j}v^{i}\right)^{i}_{\vect{k}}&={v^{ji}}_{\vect{k}}\frac{{v^{i}}_{\vect{k}}-{v^{i}}_{\vect{k}-\vect{e}_j}}{\Delta x_{j}}\\
+\intertext{if ${v^{ji}}_{\vect{k}}=0$}
+\left(v^{j}\partial_{j}v^{i}\right)^{i}_{\vect{k}}&=0
 \end{align}
 Upwind is considered more stable (can be proven easily in one dimension for burger's equation) but more diffusive.
 
@@ -1016,7 +1018,7 @@ The projection of acceleration is done in following the following step:
  \end{equation}
  \item Change the acceleration to:
  \begin{equation}
-  a_{new}=a+\nabla p
+  a_{new}=a-\nabla p
  \end{equation}
 \end{enumerate}
 If we have boundary conditions, the $b$ vector need to be translated.
@@ -1660,7 +1662,7 @@ The convectif term is 0.
 
 The pressure solution can be found inserting the equations \ref{fixed:vortex} in Navier-Stokes equations and find $\nabla p$.
 
-We now need to choose a domain and boundary condition.
+We now need to choose a domain and boundary conditions.
 As domain, we take a circle centered in $0$. Because of symetry, the boundary condition for $\nabla p$ are constant on the circle.
 If they weren't we would not have a radial symetry on speed.
 Constant Dirichlet boundary condtions are then a good boundary condition.
@@ -1678,9 +1680,9 @@ We use an initial time of $t=0.01$ because at $t=0$ the initial conditions have 
 comparison of diffirent grid spacing.
 $N$ is the radius in cell of the problem.
 $\alpha$ is the condition so that a particle with the maximun speed of the fluid cannot traverse
-more of $alpha$ fraction of a cell.
+more of $\alpha$ fraction of a cell.
 
-For speed we use the analytical solution (cf. equations \ref{fixed:vortex}) outside the domaine
+For speed we use the analytical solution (cf. equations \ref{fixed:vortex}) outside the domain
 
 Because the analytical solution is radial, it's better to compare in radial coordinate.
 For this, we do the following, from the numerical solution on staggered grid,
@@ -1690,6 +1692,7 @@ average like for the numerical solution. We then transform the numerical and ana
 The result are plotted in figures \ref{fix:normtheta} and \ref{fix:normr}.
 
 The first interesting result is that we have no better error when we don't diverge with respect a better time step and better integration method.
+This is a sign that the error is dominated by the spatial discretization.
 Only changing the grid spacing change the precision.
 But a better method and time step gives a better stability.
 

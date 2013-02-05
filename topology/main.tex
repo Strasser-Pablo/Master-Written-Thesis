@@ -166,12 +166,12 @@ Which can be rewritten as:
 Where we have used that $E$ is the identity in the domain.
 This equation can be integrated with a Runge-Kutta method.
 For having a maximal precision, the boundary speed is taken from the extrapolation at every complete Runge-Kutta step.
-In the argument of $f$ we have used an extrapolation of speed witch doesn't depends of the input in boundary speed (because the $E$ matrix has zero columns where needed).
+In the argument of $f$ we have used an extrapolation of speed which doesn't depends of the input in boundary speed (because the $E$ matrix has zero columns where needed).
 The integrated boundary speed is only used in the case where a cell become in the domain in a time step.
 
 The neglected Dirac delta will only have an effect on a boundary speed component in the case where in a Runge-Kutta step the following happens:
 \begin{enumerate}
-	\item A neighbor cell (cell witch $E$ matrix has component with) fills.
+	\item A neighbor cell (cell which $E$ matrix has component with) fills.
 	This will change the value of boundary speed with a jump (this jump will be neglected).
 	\item The given speed is used because a particle fills the domain.
 	This is needed because in the contrary the speed calculated will not be used.
@@ -514,7 +514,7 @@ But a good discretisation will need to use speed outside of the cell. Which will
 
 A first approximation is to ignore equation \ref{topo:extrap:3d:plane_45:second} and consider $v^{3}_{i,j,k+\frac{1}{2}}$ and $v^{3}_{i,j,k-\frac{1}{2}}$ as known.
 
-% But for this equation we need $v^{3}_{i,j,k+\frac{1}{2}}$ and $v^{3}_{i,j,k-\frac{1}{2}}$ witch are on the boundary.
+% But for this equation we need $v^{3}_{i,j,k+\frac{1}{2}}$ and $v^{3}_{i,j,k-\frac{1}{2}}$ which are on the boundary.
 % They can be determined in discretizing the second equation at point $i,j,k-\frac{1}{2}$ and $i,j,k-\frac{1}{2}$,
 % where we use mean of two point to estimate at mid point.
 % 
@@ -859,7 +859,7 @@ The only mean to remove an interior cell is to ``Remove'' the fluid cell around 
 
 \subsection{Initialisation}
 
-\subsection{Overview}
+\subsubsection{Overview}
 In this part we need to do the following:
 \begin{itemize}
  \item From the position of the particle determine which cell is fluid.
@@ -945,7 +945,7 @@ This can be seen in algorithm \ref{code:Algorithm:LayerInitialWithParticleDepth}
 This algorithm creates particle if needed and force that interior cells are filled.
 New particles are needed if:
 \begin{enumerate}
-\item It's a inbound cell which has no particle in it (has layer $-1$) witch represent a source of fluid of the physical problem.
+\item It's a inbound cell which has no particle in it (has layer $-1$) which represent a source of fluid of the physical problem.
 \item It's a interior cell which has depth smaller than the limit to remove particle.
 \end{enumerate}
 
@@ -1214,7 +1214,7 @@ The two algorithms are shown in algorithms \ref{code:initialization} and \ref{co
 
 We will now consider extrapolation method.
 
-\subsection{Boundary condition extrapolation}
+\subsection{Boundary conditions extrapolation}
 \subsubsection{Overview}
 
 The following steps are needed to determine boundary conditions in 2d:
@@ -2065,7 +2065,7 @@ $i$ is the recursif parameter it's first value should be 1.}
 
 For the non splitted case the acceleration is given by \ref{topo:equ:onediff}.
 We use to avoid to rewrite a extrapolation fonction a method $\FuncCall{SetSpeedToAcceleration}(bool)$
-witch toggle that the method to set the speed and get the speed act on acceleration instead.
+which toggle that the method to set the speed and get the speed act on acceleration instead.
 This is shown in algorithm \ref{code:CalculateAcceleration2}
 
 We now integrate with the Runge-Kutta method, the difference with respect to the case in section \ref{fixed:sec:rungekutta}
@@ -2207,12 +2207,12 @@ If we add viscosity the same is true.
 
 \subsubsection{Result}
 
-We see in figure \ref{topo:singl_part:fig1} that the none splitted method coincide with the analytical solution for as
+We see in figure \ref{topo:singl_part:fig1} that the non splitted method coincide with the analytical solution for as
 integration method Runge-Kutta of order 4. The reason is that the analytical solution is a polynomial of order 2.
 
 At the contrary because of the splitting a splitting method will incorrectly approximate the result, because it's of order 1 at general.
 
-When we have big time step like $\alpha=2$ none splitted method behave better. But it's important to recall the result on fixed grid,
+When we have big time step like $\alpha=2$ non splitted method behave better. But it's important to recall the result on fixed grid,
 that having a too big time step make diverge.
 
 \begin{figure}
@@ -2249,7 +2249,7 @@ For the two methods, we have used $\Delta x=0.01$. The time step limiter was a m
 We consider a continuous source of speed in the $x$ direction. With gravity at the $y$ direction.
 The analytical solution can be found without consideration of the boundary condition.
 
-A single particle with initial $x$ speed $v_{0}$ which go from position $y$ $y_0$ and with initial time $t_0$.
+A single particle with initial $x$ speed $v_{0}$ which go from $y$ position $y_0$ and with initial time $t_0$.
 
 The speed is:
 \begin{align}
@@ -2285,58 +2285,61 @@ will rest in the boundary and not enter in the fluid.
 This approximation is called Boundary Layer.
 
 
+\subsubsection{Result}
+
+
+For the numerical method, we have added a small perturbation in the initial $x$ speed.
+
 We see in figure \ref{topo:extrap:lateral:8_1}, \ref{topo:extrap:lateral:9_1} and \ref{topo:extrap:lateral:10_1} that lateral
 speed are smirred by the viscosity and is quasi constant which is the analytical solution.
 
 The boundary of the analytical solution is near to the numerical solution.
 Only the end of the fluid don't follow the analytical solution.
 This indicate that boundary layer is a correct approximation.
-
-\subsubsection{Result}
 \begin{figure}
 	\includegraphics{topology/lateral_jet/plot_8__1_186.pdf}
-	\caption{None splitted result with Runge-Kutta rk4 with $\nu=1.307e-6$ $\alpha=0.5$.
+	\caption{Non splitted result with Runge-Kutta rk4 with $\nu=1.307e-6$, $\alpha=0.5$.
 	This is the $x$ speed.
 	The green line is the analytical solution boundary for the result without boundary condition.
 	The blue line is the calculate boundary.
 	We see that except at the end, the two coincide.
-	At interior the speed take the analytical value witch is constant and has a little jump in the boundary.
+	At interior the speed take the analytical value which is constant and has a little jump in the boundary.
 	The perturbation at initial condition are smirred by the viscosity.}
 	\label{topo:extrap:lateral:8_1}
 \end{figure}
 
 \begin{figure}
 	\includegraphics{topology/lateral_jet/plot_8__2_186.pdf}
-	\caption{None splitted result with Runge-Kutta rk4 with $\nu=1.307e-6$ $\alpha=0.5$.
+	\caption{Non splitted result with Runge-Kutta rk4 with $\nu=1.307e-6$, $\alpha=0.5$.
 	This is the $y$ speed.
 	The green line is the analytical solution boundary for the result without boundary condition.
 	The blue line is the calculate boundary.
 	We see that except at the end, the two coincide.
-	The $y$ speed is proportional to the $x^2$ position, witch coincide with the analytical result.
+	The $y$ speed is proportional to the $x^2$ position, which coincide with the analytical result.
 	The perturbation at initial condition are smirred by the viscosity.}
 	\label{topo:extrap:lateral:8_2}
 \end{figure}
 
 \begin{figure}
 	\includegraphics{topology/lateral_jet/plot_9__1_182.pdf}
-		\caption{Splitted result with Runge-Kutta rk4 with $\nu=1.307e-6$ $\alpha=0.5$.
+		\caption{Splitted result with Runge-Kutta rk4 with $\nu=1.307e-6$, $\alpha=0.5$.
 	This is the $x$ speed.
 	The green line is the analytical solution boundary for the result without boundary condition.
 	The blue line is the calculate boundary.
 	We see that except at the end, the two coincide.
-	At interior the speed take the analytical value witch is constant and has a little jump in the boundary.
+	At interior the speed take the analytical value which is constant and has a little jump in the boundary.
 	The perturbation at initial condition are smirred by the viscosity.}
 	\label{topo:extrap:lateral:9_1}
 \end{figure}
 
 \begin{figure}
 	\includegraphics{topology/lateral_jet/plot_9__2_182.pdf}
-		\caption{Splitted result with Runge-Kutta rk4 with $\nu=1.307e-6$ $\alpha=0.5$.
+		\caption{Splitted result with Runge-Kutta rk4 with $\nu=1.307e-6$, $\alpha=0.5$.
 	This is the $y$ speed.
 	The green line is the analytical solution boundary for the result without boundary condition.
 	The blue line is the calculate boundary.
 	We see that except at the end, the two coincide.
-	The $y$ speed is proportional to the $x^2$ position, witch coincide with the analytical result.
+	The $y$ speed is proportional to the $x^2$ position, which coincide with the analytical result.
 	The perturbation at initial condition are smirred by the viscosity.}
 	\label{topo:extrap:lateral:9_2}
 \end{figure}
@@ -2344,24 +2347,24 @@ This indicate that boundary layer is a correct approximation.
 
 \begin{figure}
 	\includegraphics{topology/lateral_jet/plot_10__1_293.pdf}
-			\caption{Splitted result with Euler with $\nu=1.307e-6$ $\alpha=0.5$.
+			\caption{Splitted result with Euler with $\nu=1.307e-6$, $\alpha=0.5$.
 	This is the $x$ speed.
 	The green line is the analytical solution boundary for the result without boundary condition.
 	The blue line is the calculate boundary.
 	We see that except at the end, the two coincide.
-	At interior the speed take the analytical value witch is constant and has a little jump in the boundary.
+	At interior the speed take the analytical value which is constant and has a little jump in the boundary.
 	The perturbation at initial condition are smirred by the viscosity.}
 	\label{topo:extrap:lateral:10_1}
 \end{figure}
 
 \begin{figure}
 	\includegraphics{topology/lateral_jet/plot_10__2_293.pdf}
-			\caption{Splitted result with Euler with $\nu=1.307e-6$ $\alpha=0.5$.
+			\caption{Splitted result with Euler with $\nu=1.307e-6$, $\alpha=0.5$.
 	This is the $y$ speed.
 	The green line is the analytical solution boundary for the result without boundary condition.
 	The blue line is the calculate boundary.
 	We see that except at the end, the two coincide.
-	The $y$ speed is proportional to the $x^2$ position, witch coincide with the analytical result.
+	The $y$ speed is proportional to the $x^2$ position, which coincide with the analytical result.
 	The perturbation at initial condition are smirred by the viscosity.}
 	\label{topo:extrap:lateral:10_2}
 \end{figure}
@@ -2376,7 +2379,8 @@ Pressure is needed to push the fluid up.
 We have done two final numerical run of this problem.
 All numerical run were done with 50 cells at basis. With a spacing of $\unit{0.0002}{\meter}$.
 The viscosity is $\nu=\unit{1.307\cdot 10^{-6}}{\pascal\second}$ which is the viscosity of water.
-Particle which go below the 0 altitude are supressed.
+We use $\alpha=0.5$. We use non splitted rk4 integration method.
+Particles which go below the 0 altitude are supressed.
 
 The two run took a day to complete. 3 dimmensional run was not possible for reason of time and
 computing power.
@@ -2395,7 +2399,7 @@ We see three phase in the computed result:
  \item We touch the supression particles limit and have now a stationary state.
 \end{enumerate}
 
-We think that the reason why the jet lateral distance is so big, is because we are in a 2D problem where
+We think that the reason why the jet lateral distance is so big, is because we are in a 2d problem where
 we have less spatial liberty. The pression exerced by the gravity can in 2d escape only in one dimension
 and not two.
 

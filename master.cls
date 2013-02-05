@@ -25,6 +25,7 @@
 \usepackage{amsmath,amssymb}
 \usepackage{psfrag}
 \usepackage{graphicx}
+\usepackage[nottoc]{tocbibind}
 
 %Package used by Pablo
 

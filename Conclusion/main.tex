@@ -2,9 +2,9 @@
 
 In conclusion we were able to have a ``simple'' scheme to solve free surface incompressible 
 Navier-Stokes equations.
-For this we have used the following element:
+For this we have used the following elements:
 \begin{itemize}
- \item A spatial discretization on a staggered grid. And definition of differential operator on it.
+ \item A spatial discretization on a staggered grid and definition of differential operator on it.
  \item The reduction of the original problem to an ODE with a projected function.
  This need to solve a linear system at every time step.
  \item A topological marker particle and interpolation method on the marker.
@@ -13,6 +13,7 @@ For this we have used the following element:
 
 We were not able to launch 3d run and are aware of the high numerical cost of direct Navier-Stokes
 methods for small viscosity problem, but juged that it was the better method to begin with.
+
 \section{Possible improvement}
 
 The following theoretical improvement are possible:
@@ -28,7 +29,7 @@ The following code improvement are possible:
 \begin{itemize}
  \item Have a linear solver which can use the fact that topology doesn't change much between iteration
  to be faster in average.
- \item Make the code run on parallel cpu and gpu.
+ \item Make the code run on parallel on cpu and gpu.
 \end{itemize}
 
 \section{Software used}
@@ -47,6 +48,7 @@ Previous version used:
  \item VianaCl for multigrid.
  \item Lusol in fortran for sparse Lu updating.
  \item Spooles as linear solver.
+ \item \ldots
 \end{itemize}
 
 For postprocessing and generate this document the following software were used:
@@ -68,5 +70,6 @@ I am very thankfull to:
  \item[Dr. Félix Kwok:] for the supervising of the work and contact in pratical numerical analysis.
  \item[Prof. Peter Wittwer:] for the Mathematics and Physics courses in my Physics studies.
  \item[My family: Reto, Norma, Roland, Tamara:] for supporting me and all the fun together.
+ And for proof reading.
 \end{description}
 
