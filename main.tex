@@ -3,7 +3,7 @@
 
 
 %Information as title and author
-\title{Simulation of Jet D'Eau:\\ Numerical algorithm to solve Navier-Stokes equations\\
+\title{Simulation of Jet D'Eau from A to Y:\\ Numerical algorithm to solve incompressible Navier-Stokes equations
 with \textcolor{blue}{m}arker \textcolor{blue}{a}nd \textcolor{blue}{c}ell based method}
 \author{Pablo Strasser}
 \Supervisor{Prof. Martin Gander and Dr. Felix Kwok}
@@ -32,14 +32,41 @@ with \textcolor{blue}{m}arker \textcolor{blue}{a}nd \textcolor{blue}{c}ell based
 \mtcaddchapter[Abstract]
 
 We will in this work present how to solve Navier-Stokes equations with a marker and cell method.
-We emphasy the mathematical modularity witch allow to work separatly on every piece of this work.
+We use direct Navier-Stokes approach without other model than the Navier-Stokes equations.
+We emphasy the mathematical modularity which allow to work separatly on every piece of this work.
 Our method work for every Runge-Kutta method (explicit or implicit), if we note $k$ the order of the choosen Runge-Kutta method,
-our method is of order $k$ if we ignore boundaries conditions, of order $k$ at the better case and of order $1$ for specific complicated case.
+our method is of order $k$ if we ignore boundary conditions, of order $k$ at the better case and of order $1$ for specific complicated case.
 Our method is exactly divergence free (at numerical precision).
+
+We will specially be interested in free surface boundary condition. The final goal is to solve a Jet d'Eau.
+This goal was only partialy attained, but the needed basics are there. 
+
+
 \tableofcontents
+
+\chapter*{Introduction}
+
+\mtcaddchapter[Introduction]
+
+This work consists of the following chapters:
+\begin{enumerate}
+ \item A notation and basic math property chapter.
+ \item A chapter that describe the problem analyticaly. In this chapter no discretization is done, but equation are written in the good form to motivate discretization.
+ \item A chapter that is interested on the solution of Navier-Stokes equation if the domain of computation is fixed.
+ \item A chapter that indicate the change needed to allow domain change.
+ \item To end, a conclusion chapter which will contain pist to upgrade the scheme used.
+\end{enumerate}
+
+The two numerical chapters contain pseudo code that implement the described algorithm.
+
+
+
 \include{introduction/main}
 \include{analytical/main}
 \include{fixed/main}
 \include{topology/main}
-\include{appendix/main}
+\include{Conclusion/main}
+\bibliographystyle{plain}
+\nocite{*}
+\bibliography{main}
 \end{document}

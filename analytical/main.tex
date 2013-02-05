@@ -1,11 +1,11 @@
-\chapter{Analytical Problem And Analytical Result}
+\chapter{Analytical problem and analytical result}
 
 \minitoc
 \section*{Introduction}
 In this chapter, we will discuss the analytical problem that we want to solve.
 The other numerical chapter will consist of numericals schemes to solve the problem given in this chapter.
 
-\section{Variable and Parameter}
+\section{Variables and parameters}
 
 The problem will consist to find a function of space and time in a certain domain respecting some condition and equation.
 
@@ -64,9 +64,9 @@ It can possibly depends on the solution for previous time.
 The force is noted $\vect{F}$.
 \end{description}
 
-\section{Navier-Stokes equation}
+\section{Navier-Stokes equations}
 
-\subsection{Fixed Topology Eulerian}
+\subsection{Fixed eulerian topology}
 \label{analytical:fixe_eulerian}
 The incompressible Navier-Stokes equations are given by:
 \begin{subequations}
@@ -111,7 +111,7 @@ The equations of Navier-Stokes are then equivalent to solve:
 \end{equation}
 $(\eye+P)$ is a projector on a divergence free space without changing the rotational.
 
-\subsection{Mobile Topology Eulerian}
+\subsection{Mobile eulerian topology }
 When topology is variable, we need to add another equation to tell where is the domain of computation.
 A natural boundary condition is the free surface, wich moves with the speed at given point.
 
@@ -136,7 +136,7 @@ We can as in section \ref{analytical:fixe_eulerian} eliminate the constrain on t
 \end{align}
 \end{subequations}
 
-\subsection{Lagrangian form of Navier-Stokes equation}
+\subsection{Lagrangian form of Navier-Stokes equations}
 \label{analytical:convectif}
 We will in this section rewrite \ref{analytical:navierStokesB} in another form.
 We begin to define a new position system (which is similar to the particle position used in previous section) $\vect{\xi}_{\lambda}(t)$:
@@ -184,7 +184,7 @@ But in a numerical procedure, the point where the values are know are particles.
 or to interpolate at grid point.
 \end{remark}
 
-\section{Boundary Condition}
+\section{Boundary conditions}
 
 We will be interested in two kinds of boundary conditions.
 \begin{description}
@@ -196,13 +196,17 @@ We will be interested in two kinds of boundary conditions.
 
 \subsection{Inflow}
 
-Inflow boundary condition has a constant prescribed speed.
+Inflow boundary conditions have a constant prescribed speed.
 This give the following constraint on pressure:
 \begin{equation}
 \nabla p(\vect{x},t)=f(\vect{v}(\vect{x},t))
 \end{equation}
 
-\subsection{Free Surface Boundary Condition}
+The following alternative boundary conditions have been used.
+Set the speed on the surface artificially to constant and use 0 Neumann boundary conditions.
+
+
+\subsection{Free surface}
 \label{ana:free:surface}
 To define the free surface boundary conditions, we need to define the stress tensor:
 \begin{equation}

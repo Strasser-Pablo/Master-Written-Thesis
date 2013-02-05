@@ -1,4 +1,4 @@
-\chapter{Numerical Treatement of The Fixed Domain Case}
+\chapter{Numerical treatment of the fixed domain case}
 \minitoc
 
 \section{Introduction}
@@ -14,7 +14,7 @@ We will in this chapter present two way to solves Navier-Stokes equations.
 We will show that this two methods are equivalent if a Runge-Kutta method is used to solve.
 And that we are exactly divergence free.
 
-In next subsection we will present an overwiew of the two methods.
+In next subsection we will present an overview of the two methods.
 
 \subsection{Analytical expression for pressure}
 \label{fixed:analytical}
@@ -41,9 +41,9 @@ We can project every speed in a divergence free space:
 \end{subequations}
 We have the certitude to be always divergence free by construction.
 
-\section{Time Discretization and Integration}
+\section{Time discretization and integration}
 \label{fixed:timesec}
-\subsection{Runge-Kutta Method}
+\subsection{Runge-Kutta method}
 
 A Runge-Kutta method is a method to solve the ODE (We drop the $\vect{x}$ dependence, but it's understood that this equation is for a vector formed in concatenating every speed):
 \begin{equation}
@@ -58,7 +58,7 @@ The solution at time $n+1$ is given from the solution at time $n$ with $\Delta t
 \end{align}
 \end{subequations}
 
-\subsection{Runge-Kutta Based Scheme Linear Projection}
+\subsection{Runge-Kutta based linear projection}
 \label{fixed:sect:runge-kutta}
 We now integrate equations given by methods \ref{fixed:analytical} and \ref{fixed:proj} with a Runge-Kutta method.
 The numerical scheme is:
@@ -282,7 +282,7 @@ Solving Navier-Stokes equation with the analytical good choice of pressure is ex
 \end{proof}
 
 
-\subsection{Runge-Kutta based scheme Affine Projection}
+\subsection{Runge-Kutta based affine projection}
 \label{fixed:sect:runge-kutta:affine}
 We will repeat the work in section \ref{fixed:sect:runge-kutta} but where the projection is an affine operator.
 We use the notation of \ref{introduction:projectiondef}.
@@ -534,9 +534,9 @@ We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ us
 
 \end{proof}
 
-\section{Spatial Discretization}
+\section{Spatial discretization}
 
-\subsection{Non-Staggered Grid}
+\subsection{Non-staggered grid}
 
 On a Non-Staggered grid we put the variable like figure \ref{fixed:unstaggered}.
 \begin{figure}
@@ -671,7 +671,7 @@ We prove it for the one dimensional case:
   f''(x)&=\frac{f(x+\Delta x)-2f(x)+f(x-\Delta x)}{(\Delta x)^2}+O((\Delta x)^2)
 \end{align*}
 
-\paragraph{Vector Laplacian}
+\paragraph{Vector laplacian}
 \label{fixed:vect:laplacian}
 For vector Laplacian we use the same scheme as in section \ref{fixed:Laplacian} but for every component of speed.
 Staggered grid doesn't pose problem because we don't have mixed terms with derivative and none derivative.
@@ -743,7 +743,7 @@ We use the same method, but instead to use center difference, we use upwind:
 Upwind is considered more stable (can be proven easily in one dimension for burger's equation) but more diffusive.
 
 \FloatBarrier
-\section{Pseudo Code}
+\section{Pseudo code}
 
 The pseudo code is not very complicate in principle.
 We need to put all mathematical discretizations and pieces together.
@@ -812,7 +812,7 @@ The following container will be used:
  A new set is created with the function call $\FuncCall{newset}()$.
 \end{description}
 
-\subsubsection{Data Type}
+\subsubsection{Data type}
 
 The first data type is the $cell$. The $cell$ are element of the grid container.
 
@@ -1002,7 +1002,7 @@ The convection speed derivative with upwind is done in algorithm \ref{code:GetCo
 \end{algorithm}
 
 
-\subsection{Projection of Acceleration.}
+\subsection{Projection of acceleration.}
 
 The projection of acceleration is done in following the following step:
 \begin{enumerate}
@@ -1085,7 +1085,7 @@ In this case we assume a case with 0 Dirichlet boundary conditions.}
 			 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Runge-Kutta Integration}
+\subsection{Runge-Kutta integration}
 \label{fixed:sec:rungekutta}
 
 To implement the Runge-Kutta method, some new elements are needed.
@@ -1206,11 +1206,11 @@ As linear solver Umfpack direct solver was used. Other iteratif libraries were t
 The storage methods are constructed around \textbf{C++11} standard library \textbf{Unordered Map} container which consist of a hash table.
 
 \FloatBarrier
-\section{Numerical Experiment}
+\section{Numerical experiment}
 
 We will now do some numerical experiment in fixed boundary conditions to show how it works.
 
-\subsection{Heat Equation}
+\subsection{Heat equation}
 
 The more complicated term in the Navier-Stokes equation in grid representation is the convection term, because it's non linear.
 \begin{equation}
@@ -1324,6 +1324,311 @@ The analytical solution shows that the effect of viscosity is to smooth the spee
 which is a very long time with respect of the distance traveled in this time ($\unit{500}{\meter}$).
 But this doesn't say that viscosity is not important, because it's effect is inversely proportional squared of $L$.
 
+\pgfplotstableread{fixed/solheat/sol_0.txt}\HeatSolaa
+%\pgfplotstabletypeset[columns={x,u}]\HeatSolaa
+
+\pgfplotstableread{fixed/solheat/sol_1.txt}\HeatSola
+%\pgfplotstabletypeset[columns={x,u}]\HeatSola
+
+\pgfplotstableread{fixed/solheat/sol_10.txt}\HeatSolb
+%\pgfplotstabletypeset[columns={x,u}]\HeatSolb
+
+\pgfplotstableread{fixed/solheat/sol_100.txt}\HeatSolc
+%\pgfplotstabletypeset[columns={x,u}]\HeatSolc
+
+\pgfplotstableread{fixed/solheat/sol_200.txt}\HeatSold
+%\pgfplotstabletypeset[columns={x,u}]\HeatSold
+
+\pgfplotstableread{fixed/solheat/sol_300.txt}\HeatSole
+%\pgfplotstabletypeset[columns={x,u}]\HeatSole
+
+\pgfplotstableread{fixed/solheat/sol_400.txt}\HeatSolf
+%\pgfplotstabletypeset[columns={x,u}]\HeatSolf
+
+\pgfplotstableread{fixed/solheat/sol_500.txt}\HeatSolg
+%\pgfplotstabletypeset[columns={x,u}]\HeatSolg
+
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[x=x,y=u]{\HeatSolaa};
+		\label{fix:heatSol0}
+		\addlegendentry{$t=0s$}
+		\addplot table[x=x,y=u]{\HeatSola};
+		\label{fix:heatSol1}
+		\addlegendentry{$t=1s$}
+		\addplot table[x=x,y=u]{\HeatSolb};
+		\label{fix:heatSol10}
+		\addlegendentry{$t=10s$}
+		\addplot table[x=x,y=u]{\HeatSolc};
+		\label{fix:heatSol100}
+		\addlegendentry{$t=100s$}
+		\addplot table[x=x,y=u]{\HeatSold};
+		\label{fix:heatSol200}
+		\addlegendentry{$t=200s$}
+		\addplot table[x=x,y=u]{\HeatSole};
+		\label{fix:heatSol300}
+		\addlegendentry{$t=300s$}
+		\addplot table[x=x,y=u]{\HeatSolf};
+		\label{fix:heatSol400}
+		\addlegendentry{$t=400s$}
+		\addplot table[x=x,y=u]{\HeatSolg};
+		\label{fix:heatSol500}
+		\addlegendentry{$t=500s$}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+Plot for the analytical solution truncated to $n_{max}=1'000'000$ with $2L=\unit{0.1}{\meter}$ and $\nu=\unit{1.307\cdot 10^{-6}}{\pascal\second}$.
+With the following time.
+\begin{align*}
+\ref{fix:heatSol0} t&=\unit{0}{\second}& \ref{fix:heatSol100} t&=\unit{100}{\second}&\ref{fix:heatSol400} t&=\unit{400}{\second}&\\
+\ref{fix:heatSol1} t&=\unit{1}{\second}&\ref{fix:heatSol200} t&=\unit{200}{\second}&\ref{fix:heatSol500} t&=\unit{500}{\second}&\\
+\ref{fix:heatSol10} t&=\unit{10}{\second}&\ref{fix:heatSol300} t&=\unit{300}{\second}&\\
+\end{align*}
+}
+\label{fixed:solheat:fig:sol}
+\end{figure}
+
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data0_1.csv};
+		\label{fix:heatdata0_1}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data2_1.csv};
+		\label{fix:heatdata2_1}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data4_1.csv};
+		\label{fix:heatdata4_1}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data5_1.csv};
+		\label{fix:heatdata5_1}
+		\addplot table[x=x,y=u]{\HeatSola};
+		\label{fix:heatsol_1}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+Numerical solution for $t=\unit{1}{s}$.
+For the following method:
+\begin{align*}
+&\text{Euler}&&\text{Runge-Kutta}&\\
+\ref{fix:heatdata2_1} dt&=\unit{0.1}{\second}& \ref{fix:heatdata5_1} dt&=\unit{0.1}{\second}&\\
+\ref{fix:heatdata0_1} dt&=\unit{1}{\second}&\ref{fix:heatdata4_1} dt&=\unit{1}{\second}&
+\end{align*}
+\begin{center}
+\ref{fix:heatsol_1} Analytical
+\end{center}
+}
+\label{fix:solheat:fig:num1}
+\end{figure}
+
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data2_100.csv};
+		\label{fix:heatdata2_100}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data0_100.csv};
+		\label{fix:heatdata0_100}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data5_100.csv};
+		\label{fix:heatdata5_100}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data4_100.csv};
+		\label{fix:heatdata4_100}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data6_100.csv};
+		\label{fix:heatdata6_100}
+		\addplot table[x=x,y=u]{\HeatSolc};
+		\label{fix:heatsol_100}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+Numerical solution for $t=\unit{100}{\second}$.
+For the following method:
+\begin{align*}
+&\text{Euler}&&\text{Runge-Kutta}&\\
+\ref{fix:heatdata2_100} dt&=\unit{0.1}{\second}& \ref{fix:heatdata5_100} dt&=\unit{0.1}{\second}&\\
+\ref{fix:heatdata0_100} dt&=\unit{1}{\second}&\ref{fix:heatdata4_100} dt&=\unit{1}{\second}&\\
+\end{align*}
+\begin{center}
+\ref{fix:heatsol_100} Analytical
+\end{center}
+}
+\label{fix:solheat:fig:num100}
+\end{figure}
+
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data2_300.csv};
+		\label{fix:heatdata2_300}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data0_300.csv};
+		\label{fix:heatdata0_300}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data5_300.csv};
+		\label{fix:heatdata5_300}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data4_300.csv};
+		\label{fix:heatdata4_300}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data6_300.csv};
+		\label{fix:heatdata6_300}
+		\addplot table[x=x,y=u]{\HeatSole};
+		\label{fix:heatsol_300}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+Numerical solution for $t=\unit{300}{\second}$.
+For the following method:
+\begin{align*}
+&\text{Euler}&&\text{Runge-Kutta}&\\
+\ref{fix:heatdata2_300} dt&=\unit{0.1}{\second}& \ref{fix:heatdata5_300} dt&=\unit{0.1}{\second}&\\
+\ref{fix:heatdata0_300} dt&=\unit{1}{\second}&\ref{fix:heatdata4_300} dt&=\unit{1}{\second}&\\
+&&\ref{fix:heatdata6_300} dt&=2\second&
+\end{align*}
+\begin{center}
+\ref{fix:heatsol_300} Analytical
+\end{center}
+}
+\label{fix:solheat:fig:num300}
+\end{figure}
+
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data2_500.csv};
+		\label{fix:heatdata2_500}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data0_500.csv};
+		\label{fix:heatdata0_500}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data5_500.csv};
+		\label{fix:heatdata5_500}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data4_500.csv};
+		\label{fix:heatdata4_500}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data6_500.csv};
+		\label{fix:heatdata6_500}
+		\addplot table[x=x,y=u]{\HeatSolg};
+		\label{fix:heatsol_500}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+Numerical solution for $t=\unit{500}{\second}$.
+For the following method:
+\begin{align*}
+&\text{Euler}&&\text{Runge-Kutta}&\\
+\ref{fix:heatdata2_500} dt&=\unit{0.1}{\second}& \ref{fix:heatdata5_500} dt&=\unit{0.1}{\second}&\\
+\ref{fix:heatdata0_500} dt&=\unit{1}{\second}&\ref{fix:heatdata4_500} dt&=\unit{1}{\second}&\\
+&&\ref{fix:heatdata6_500} dt&=\unit{2}{\second}&
+\end{align*}
+\begin{center}
+\ref{fix:heatsol_500} Analytical
+\end{center}
+}
+\label{fix:solheat:fig:num500}
+\end{figure}
+
+
+
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.01,y=u]{fixed/solheat/data8_1.csv};
+		\label{fix:heatdata8_1}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.01,y=u]{fixed/solheat/data9_1.csv};
+		\label{fix:heatdata9_1}
+		\addplot table[x=x,y=u]{\HeatSola};
+		\label{fix:heatsolb_1}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+Numerical solution for $t=\unit{1}{s}$.
+For the following method:
+\begin{align*}
+&\text{Euler}&&\text{Runge-Kutta}&\\
+\ref{fix:heatdata8_1} dt&=\unit{1}{\second}& \ref{fix:heatdata9_1} dt&=\unit{1}{\second}&
+\end{align*}
+\begin{center}
+\ref{fix:heatsolb_1} Analytical
+\end{center}
+}
+\label{fix:solheat:fig:num1b}
+\end{figure}
+
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.01,y=u]{fixed/solheat/data8_100.csv};
+		\label{fix:heatdata8_100}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.01,y=u]{fixed/solheat/data9_100.csv};
+		\label{fix:heatdata9_100}
+		\addplot table[x=x,y=u]{\HeatSolc};
+		\label{fix:heatsolb_100}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+Numerical solution for $t=\unit{100}{\second}$.
+For the following method:
+\begin{align*}
+&\text{Euler}&&\text{Runge-Kutta}&\\
+\ref{fix:heatdata8_100} dt&=\unit{1}{\second}& \ref{fix:heatdata9_100} dt&=\unit{1}{\second}&\\
+\end{align*}
+\begin{center}
+\ref{fix:heatsolb_100} Analytical
+\end{center}
+}
+\label{fix:solheat:fig:num100b}
+\end{figure}
+
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.01,y=u]{fixed/solheat/data8_300.csv};
+		\label{fix:heatdata8_300}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.01,y=u]{fixed/solheat/data9_300.csv};
+		\label{fix:heatdata9_300}
+		\addplot table[x=x,y=u]{\HeatSole};
+		\label{fix:heatsolb_300}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+Numerical solution for $t=\unit{300}{\second}$.
+For the following method:
+\begin{align*}
+&\text{Euler}&&\text{Runge-Kutta}&\\
+\ref{fix:heatdata8_300} dt&=\unit{1}{\second}& \ref{fix:heatdata9_300} dt&=\unit{1}{\second}&
+\end{align*}
+\begin{center}
+\ref{fix:heatsolb_300} Analytical
+\end{center}
+}
+\label{fix:solheat:fig:num300b}
+\end{figure}
+
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[width=\textwidth,only marks,use units,x unit=\meter,y unit=\meter\per\second,xlabel=$x$ Position,ylabel=$y$ Speed,scaled x ticks=real: 0.01
+	,xtick scale label code/.code={$\cdot 10^{-2}$}]
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.01,y=u]{fixed/solheat/data8_500.csv};
+		\label{fix:heatdata8_500}
+		\addplot table[col sep=comma,x expr=\thisrow{x}+0.01,y=u]{fixed/solheat/data9_500.csv};
+		\label{fix:heatdata9_500}
+		\addplot table[x=x,y=u]{\HeatSolg};
+		\label{fix:heatsolb_500}
+	\end{axis}
+\end{tikzpicture}
+\caption[.]{
+Numerical solution for $t=\unit{500}{\second}$.
+For the following method:
+\begin{align*}
+&\text{Euler}&&\text{Runge-Kutta}&\\
+\ref{fix:heatdata8_500} dt&=\unit{0.1}{\second}& \ref{fix:heatdata9_500} dt&=\unit{0.1}{\second}&
+\end{align*}
+\begin{center}
+\ref{fix:heatsolb_500} Analytical
+\end{center}
+}
+\label{fix:solheat:fig:num500b}
+\end{figure}
+
+
 
 \subsubsection{Numerical solution}
 
@@ -1339,167 +1644,76 @@ We are in excellent agreement with this low resolution. The reason can be becaus
 
 
 \FloatBarrier
-\subsection{Irrotational}
+\subsection{Oseen vortex decay}
 
-\subsubsection{Analytical Solution}
+\subsubsection{Analytical solution}
 
-We will be interested to a solution without gravity and viscosity.
-
-
-We can obtain a divergence free solution witch is Irrotational from the gradient of a function.
-With:
-\begin{align}
-	\phi&=(x^2-y^2)t\\
-	\Delta \phi &=2t(1-1)=0\\
-	\vect{v}&=\nabla \phi=2t\begin{pmatrix}
-	               	x\\
-	               	-y
-	               \end{pmatrix}
+An analytical solution for Navier-Stokes equation without gravity is given in radial coordinate by:
+\begin{align}\label{fixed:vortex}
+ v_{\theta}&=\frac{\Gamma}{2\pi r}\left(1-e^{-\frac{x^2}{4\nu t}}\right)\\
+ v_{r}&=0
 \end{align}
 
-The convection term is:
-\begin{align}
-	\partial_{x}\vect{v}&=2t\begin{pmatrix}
-	                        	1\\
-	                        	0
-	                        \end{pmatrix}\\
-	\partial_{y}\vect{v}&=\partial_{y}\vect{v}&=2t\begin{pmatrix}
-	                        	0\\
-	                        	-1
-	                        \end{pmatrix}\\
- \left(\vect{v}\cdot\right) \nabla \vect{v}&=4t^2\begin{pmatrix}
-                                                 	x\\
-                                                 	y
-                                                 \end{pmatrix}
-\end{align}
+This can be proven in radial coordinate in the vorticity version of Navier-Stokes equation (not used in this work).
+In the vorticity version of the equation it consist only of a time derivative and a diffusive term.
+The convectif term is 0.
 
-This is a gradient of a function. So it's irrotational. $\dot{\vect{v}}$ is irrotational too.
-So the difference of the two is irrotational too and lead to the pressure gradient.
+The pressure solution can be found inserting the equations \ref{fixed:vortex} in Navier-Stokes equations and find $\nabla p$.
 
-This gave the following result:
-\begin{align}
-\dot{\vect{v}}+ \left(\vect{v}\cdot\right) \nabla \vect{v}&=-\nabla p\\
-\dot{\vect{v}}&=2\begin{pmatrix}
-	               	x\\
-	               	-y
-	               \end{pmatrix}\\
-\left(\vect{v}\cdot\right) \nabla \vect{v}&=4t^2\begin{pmatrix}
-                                                 	x\\
-                                                 	y
-                                                 \end{pmatrix}\\
--\nabla p=\begin{pmatrix}
-           -2x-4t^2x\\
-           2y-4t^2y
-           \end{pmatrix}\\
-\end{align}
+We now need to choose a domain and boundary condition.
+As domain, we take a circle centered in $0$. Because of symetry, the boundary condition for $\nabla p$ are constant on the circle.
+If they weren't we would not have a radial symetry on speed.
+Constant Dirichlet boundary condtions are then a good boundary condition.
+The choice of the constant will not change the gradiant.
 
-This solution is analytical.
+\subsubsection{Numerical result}
 
-For the numerical problem the following was done.
-For not having to implement none 0 Neumann boundary condition in the projection of speed as shown in the section on projection.
-I have implemented the problem like this:
-\begin{align}
-	\dot{\vect{v}}+ \left(\vect{v}\cdot\right) \nabla \vect{v}&=-\nabla p+\nabla F\\
-\end{align}
+This problem is interesting for numerical result because we have an simple analytical solution but in radial coordinate and
+which is found in vortex formulation, this solution is very far away of the cartesian speed pressure formulation used to
+derive the Navier-Stokes solver.
 
-Where $\nabla F$ is taken to be the analytical solution for $-\nabla p$.
-$\nabla p$ is then calculated with Neumann boundary condition and should be 0 to match analytical solution.
+We use as domain a circle of radius $\unit{1}{\meter}$. We use a viscosity of $\unit{1}{\pascal\second}$.
+We use as boundary conditions for pressure $0$ Dirichlet boundary condtions.
+We use an initial time of $t=0.01$ because at $t=0$ the initial conditions have a singularity which will not be fair for the 
+comparison of diffirent grid spacing.
+$N$ is the radius in cell of the problem.
+$\alpha$ is the condition so that a particle with the maximun speed of the fluid cannot traverse
+more of $alpha$ fraction of a cell.
 
-The value at the boundary for the speed are found from the analytical solution.
+For speed we use the analytical solution (cf. equations \ref{fixed:vortex}) outside the domaine
 
-This is a little an artificial numerical problem but is interesting because,
-it mainly test that the numerical sheme for convection doesn't add too much rotational component
-where an analytical irrotational one is expected. If the value of the gradient component is wrong, is not a problem
-because it will be changed by the projection.
+Because the analytical solution is radial, it's better to compare in radial coordinate.
+For this, we do the following, from the numerical solution on staggered grid,
+we average the speed per cell. Then in the postprocessing stage, we calculate the cartesian analytical on staggered grid and
+average like for the numerical solution. We then transform the numerical and analytical solution to radial coordinate and compare them.
 
-The time step was chosen by the CFL condition given by:
-\begin{equation}
-  dt=\alpha \frac{h}{v_{max}}
-\end{equation}
+The result are plotted in figures \ref{fix:normtheta} and \ref{fix:normr}.
 
-Where $h$ is the spatial spacing and $v_{max}$ the maximal norm of speed in the domain.
-$\alpha$ is a parameter witch normally need to be smaller or equal to 1.
+The first interesting result is that we have no better error when we don't diverge with respect a better time step and better integration method.
+Only changing the grid spacing change the precision.
+But a better method and time step gives a better stability.
 
-The condition consist of what portion of a cell you are allowed to traverse in a given time step.
+We see, that the numerical result are not too good and need finner grid to become better.
+The difficulty in this numerical problem is that the choosen grid is not appropriated to the problem 
+(cartesian grid for a radial problem).
 
-We will test 3 parameter:
-\begin{itemize}
-	\item The CFL factor, with two value, 1 and 10.
-	\item The resolution with $N=10$ and $n=50$.
-	\item The integration method with Euler and Runge-Kutta.
-\end{itemize}
- 
-The first thing to note is that a CFL factor of 10 will lead to a numerical blow up.
-The blow up doesn't happen immediately because we use a time step limiter to avoid that very small speed lead to very big time step.
 
-We note that the region where the difference come first are high speed region because they break the condition first.
-This can be seen in figure \ref{fix:comp_10_11_1}.
+\begin{figure}
+\begin{center}
+\includegraphics{fixed/normtheta.pdf}
+\end{center}
+\caption{Error norm for angular component.
+}
+\label{fix:normtheta}
+\end{figure}
 
-The space spacing doesn't change the problem, it will happen at another time because of the time step limiter.
-But it will happen.
-
-Runge-Kutta method break before Euler method.
-
-When the CFL condition is respected we have an error of the order of $10^{-7}$ witch seem to be of the same amount than the global numerical error.
-
-We have a none 0 in the comparison in the boundary because of the numerical error coming from output to file of the result,
-read of the file and comparison done in python (another language than where the main code was written (c++) ).
-
-Here is the tabular of all figure for $alpha=10$. The first column for a given time step are $x$ and $y$ figure.
-The second are comparison with respect to the analytical solution.
-
-\begin{tabular}{|l|l|l|}
-	\hline
-Integration method& $N=50$ & $N=10$\\
-\hline
-Euler &\begin{tabular}{lcc}
-	$\unit{1.048}{\second}$&\ref{fix:plot_10_11_1} \ref{fix:plot_10_11_2}&\ref{fix:comp_10_11_1} \ref{fix:comp_10_11_2}\\
-	$\unit{1.36}{\second}$&\ref{fix:plot_10_16_1} \ref{fix:plot_10_16_2}&\ref{fix:comp_10_16_1} \ref{fix:comp_10_16_2}\\
-	$\unit{1.40}{\second}$&\ref{fix:plot_10_20_1} \ref{fix:plot_10_20_2}&\ref{fix:comp_10_20_1} \ref{fix:comp_10_20_2}\\
-	\end{tabular}&\begin{tabular}{lcc}
-	$\unit{1.00}{\second}$&\ref{fix:plot_11_10_1} \ref{fix:plot_11_10_2}&\ref{fix:comp_11_10_1} \ref{fix:comp_11_10_2}\\
-	$\unit{2.00}{\second}$&\ref{fix:plot_11_20_1} \ref{fix:plot_11_20_2}&\ref{fix:comp_11_20_1} \ref{fix:comp_11_20_2}\\
-	$\unit{2.70}{\second}$&\ref{fix:plot_11_27_1} \ref{fix:plot_11_27_2}&\ref{fix:comp_11_27_1} \ref{fix:comp_11_27_2}\\
-	$\unit{2.85}{\second}$&\ref{fix:plot_11_32_1} \ref{fix:plot_11_32_2}&\ref{fix:comp_11_32_1} \ref{fix:comp_11_32_2}\\
-	\end{tabular} \\
-	\hline
-Runge-Kutta &\begin{tabular}{lcc}
-	$\unit{0.70}{\second}$&\ref{fix:plot_12_7_1} \ref{fix:plot_12_7_2}&\ref{fix:comp_12_7_1} \ref{fix:comp_12_7_2}\\
-	$\unit{0.77}{\second}$&\ref{fix:plot_12_8_1} \ref{fix:plot_12_8_2}&\ref{fix:comp_12_8_1} \ref{fix:comp_12_8_2}\\
-	\end{tabular} &\begin{tabular}{lcc}
-	$\unit{1.00}{\second}$&\ref{fix:plot_13_10_1} \ref{fix:plot_13_10_2}&\ref{fix:comp_13_10_1} \ref{fix:comp_13_10_2}\\
-	$\unit{2.00}{\second}$&\ref{fix:plot_13_20_1} \ref{fix:plot_13_20_2}&\ref{fix:comp_13_20_1} \ref{fix:comp_13_20_2}\\
-	$\unit{2.10}{\second}$&\ref{fix:plot_13_21_1} \ref{fix:plot_13_21_2}&\ref{fix:comp_13_21_1} \ref{fix:comp_13_21_2}\\
-	\end{tabular}\\
-	\hline
-\end{tabular}
-
-For $\alpha=1$.
-
-\begin{tabular}{|l|l|l|}
-	\hline
-Integration method& $N=50$ & $N=10$\\
-\hline
-Euler &\begin{tabular}{lcc}
-	$\unit{1.00}{\second}$&\ref{fix:plot_14_68_1} \ref{fix:plot_14_68_2}&\ref{fix:comp_14_68_1} \ref{fix:comp_14_68_2}\\
-	$\unit{2.00}{\second}$&\ref{fix:plot_14_274_1} \ref{fix:plot_14_274_2}&\ref{fix:comp_14_274_1} \ref{fix:comp_14_274_2}\\
-	$\unit{5.00}{\second}$&\ref{fix:plot_14_1713_1} \ref{fix:plot_14_1713_2}&\ref{fix:comp_14_1713_1} \ref{fix:comp_14_1713_2}\\
-	\end{tabular}&\begin{tabular}{lcc}
-	$\unit{1.01}{\second}$&\ref{fix:plot_15_14_1} \ref{fix:plot_15_14_2}&\ref{fix:comp_15_14_1} \ref{fix:comp_15_14_2}\\
-	$\unit{2.01}{\second}$&\ref{fix:plot_15_50_1} \ref{fix:plot_15_50_2}&\ref{fix:comp_15_50_1} \ref{fix:comp_15_50_2}\\
-	$\unit{5.01}{\second}$&\ref{fix:plot_15_302_1} \ref{fix:plot_15_302_2}&\ref{fix:comp_15_302_1} \ref{fix:comp_15_302_2}\\
-	\end{tabular} \\
-	\hline
-Runge-Kutta &\begin{tabular}{lcc}
-	$\unit{1.00}{\second}$&\ref{fix:plot_16_68_1} \ref{fix:plot_16_68_2}&\ref{fix:comp_16_68_1} \ref{fix:comp_16_68_2}\\
-	$\unit{2.00}{\second}$&\ref{fix:plot_16_274_1} \ref{fix:plot_16_274_2}&\ref{fix:comp_16_274_1} \ref{fix:comp_16_274_2}\\
-	$\unit{5.00}{\second}$&\ref{fix:plot_16_1713_1} \ref{fix:plot_16_1713_2}&\ref{fix:comp_16_1713_1} \ref{fix:comp_16_1713_2}\\
-	\end{tabular} &\begin{tabular}{lcc}
-	$\unit{1.02}{\second}$&\ref{fix:plot_17_14_1} \ref{fix:plot_17_14_2}&\ref{fix:comp_17_14_1} \ref{fix:comp_17_14_2}\\
-	$\unit{2.00}{\second}$&\ref{fix:plot_17_50_1} \ref{fix:plot_17_50_2}&\ref{fix:comp_17_50_1} \ref{fix:comp_17_50_2}\\
-	$\unit{5.01}{\second}$&\ref{fix:plot_17_302_1} \ref{fix:plot_17_302_2}&\ref{fix:comp_17_302_1} \ref{fix:comp_17_302_2}\\
-	\end{tabular}\\
-	\hline
-\end{tabular}
+\begin{figure}
+\begin{center}
+\includegraphics{fixed/normr.pdf}
+\end{center}
+\caption{Error norm for radial component.
+}
+\label{fix:normr}
+\end{figure}
 
 

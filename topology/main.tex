@@ -1,4 +1,4 @@
-\chapter{Numerical Treatement of the None Fixed Case }
+\chapter{Numerical treatment of the non fixed case }
 \minitoc
 \section{Introduction}
 In the previous chapter all numericals schemes were done on the same domain.
@@ -26,7 +26,7 @@ When a particle moves to a new cell, we need to know the initial speed at this p
 We analytically have boundary condition for speed at boundary.
 We need to extrapolate this boundary condition one cell away.
 
-\section{Method to obtain ODE}
+\section{Method to obtain an ODE}
 
 We can write a non discretized particles method equation as:
 
@@ -114,7 +114,7 @@ This error doesn't depend on the precision of integration for the speed or posit
 It comes from the splitting.
 \end{example}
 
-\subsection{One Differential Equation}
+\subsection{One ODE method}
 \label{differentialequation}
 We will now show how we can rewrite this differential equation in only one differential equation.
 For this, we need an expression for the derivative of the boundary condition.
@@ -340,7 +340,7 @@ The green dots are cells where the divergence free rule is enforced. Red vector 
 \label{topology:extrap:plane}
 \end{figure}
 
-\subsubsection{\unit{45}{\degree} Plane}
+\subsubsection{\unit{45}{\degree} plane}
 
 If we have a cell in domain with two adjacent cells which are not in the domain.
 We take as normal a \unit{45}{\degree} plane.
@@ -461,7 +461,7 @@ We can only do what we have done only if we have a depth of minimal two cells.
 If we have only one cell, we have no $y$ speed in the domain in calculation.
 For this case, consider the speed $y$ at boundary as in the domain.
 
-\subsubsection{\unit{45}{\degree} Plane}
+\subsubsection{\unit{45}{\degree} plane}
 
 If we have a cell in domain with two adjacent cells which are not in the domain.
 We take as normal a \unit{45}{\degree} plane.
@@ -532,7 +532,7 @@ For this to work, we need to have the left and below boundary speed to be known.
 The boundary needs to be like that because in the contrary we will have no data in the $x$ or $y$ directions.
 
 
-\subsubsection{Diagonal Slopped Plane}
+\subsubsection{Diagonal slopped plane}
 
 We now look a really 3d case, where the plane is diagonal on the 3 axis.
 The normal and tangent vectors are:
@@ -741,7 +741,7 @@ The matrix $A$ is then:
    \end{pmatrix}
 \end{equation}
 
-\subsection{Other Case}
+\subsection{Other case}
 With the different cases seen above, we cannot treat all cases. Two things can happen.
 \begin{enumerate}
 	\item We are too thin (only one cell), in this case we consider the boundary speed as in the domain,
@@ -757,7 +757,7 @@ We will then need to extrapolate it further away with a technique shown in the n
 If a speed that is not directly at boundary is defined it will be protected from erasure for the next stage (an implementation technique for this
 is to put a nan value in unknown).
 
-\subsection{Pressure Boundary Conditions}
+\subsection{Pressure boundary conditions}
 
 The pressure boundary conditions are applied in cell outside of the domain.
 The condition comes from the study from a plane of only one cell.
@@ -781,7 +781,7 @@ Which in using the boundary speed found from the extrapolation and boundary cond
 In general we can be neighbor of more than one of these cases.
 In this case we sum the given pressure.
 
-\subsection{Extrapolate Further Away}
+\subsection{Extrapolate further away}
 
 We now need to extrapolate further away to be able to use bigger time steps.
 And for some pathological case motion where the boundary conditions need speed that  where not in the boundary condition at step before.
@@ -807,7 +807,7 @@ For interpolation, we don't have constraint on the scheme. A simple one can for 
 The only thing to take care is that we are in a staggered grid so that known speeds are not at the same place
 for all components.
 
-\subsection{$n$-Linear}
+\subsection{$n$-linear}
 
 A $n$ linear interpolation is a non linear interpolation but a product of linear interpolation so that in every direction the interpolation is linear.
 
@@ -828,7 +828,7 @@ For 3d it's calculated similarly.
 
 We will now give pseudo code to augment the program seen in the previous chapter.
 
-\subsection{Data Type}
+\subsection{Data type}
 
 In addition to data type that we have seen in the previous chapter. We add the following data type.
 
@@ -891,7 +891,7 @@ where the number of particle increase with $h^3$ if we put particle everywhere.
 We can do this mathematically because an oppening in the fluid can only happen when we have a discontinuity in speed.
 This discontinuity can be detected in the speed on the grid.
 
-\subsubsection{Initialize Layer And Depth}
+\subsubsection{Initialize layer and depth}
 
 This algorithm initialize the layer of every cell to -1 so that we can set the layer to 0 of cells which have particle in it.
 For depth we only consider celld which are in the exterior fluid cells and don't touch interior cell so that they have the maximal depth
@@ -913,7 +913,7 @@ This is shown in algorithm \ref{code:Algorithm:InitializeLayerAndDepth}
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Initialize Layer With Particle And Depth}
+\subsubsection{Initialize layer with particle and depth}
 
 This algorithm will use the position of the particles to set the layer where the particles are to $0$.
 It will also delete particles that are at interior more than a given depth because particle are not needed there.
@@ -940,7 +940,7 @@ This can be seen in algorithm \ref{code:Algorithm:LayerInitialWithParticleDepth}
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Create Fluid Particle Depth}
+\subsubsection{Create fluid particle depth}
 
 This algorithm creates particle if needed and force that interior cells are filled.
 New particles are needed if:
@@ -1006,7 +1006,7 @@ to create new particles because vectors will no more have the same length which 
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Update CellType Layer Depth}
+\subsubsection{Update cellType layer depth}
 
 We now need to create the layer variable and depth variable and create air cell around the fluid.
 We do this recursively beginning from the fluid and avancing neighbour by neighbour.
@@ -1124,7 +1124,7 @@ At the contrary algorithm \ref{code:CreateInteriorDepth3} create the depth movin
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Delete MacCell}
+\subsubsection{Delete macCell}
 
 We delete cells that have layer of $-1$ because they are cells that are not fluid and not in the air layer around fluid.
 Retain cell with layer of $-1$ will not change the mathematics. They will only be dead weight.
@@ -1143,7 +1143,7 @@ This is shown in algorithm \ref{code:DeleteMacCell}.
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Calculate Time Step}
+\subsubsection{Calculate time step}
 
 We calculate the optimun time step.
 The optimun time step is given so that a particle move a maximun of a given fraction of a cell.
@@ -1171,7 +1171,7 @@ max=0;
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Conclusion}
+\subsubsection{conclusion}
 
 We now have all the algorithms to initialize the topology.
 We note that all these steps only involve integer calculation, this allows the compiler to do extensive optimization
@@ -1214,8 +1214,8 @@ The two algorithms are shown in algorithms \ref{code:initialization} and \ref{co
 
 We will now consider extrapolation method.
 
-\subsection{Boundary Condition Extrapolation}
-\subsubsection{overview}
+\subsection{Boundary condition extrapolation}
+\subsubsection{Overview}
 
 The following steps are needed to determine boundary conditions in 2d:
 \begin{enumerate}
@@ -1227,7 +1227,7 @@ The following steps are needed to determine boundary conditions in 2d:
 \end{enumerate}
 Extreme care need to be taken to only use known speed. Topology is very important for this part.
 
-\subsubsection{Speed in Domain}
+\subsubsection{Speed in domain}
 
 A speed component is in the domain if its two neighbor cells are in the domain or we are too thin.
 The function take 2 arguments, a cell and a direction and return a boolean.
@@ -1259,7 +1259,7 @@ In the real code the existence of the cell muss be checked.
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{ Boundary between fluid and Air}
+\subsubsection{ Boundary between fluid and air}
 
 We now need to know when a fluid cell is a boundary between fluid and air, and extract information of which direction is the boundary.
 As input, we take the cell which we are interested in.
@@ -1299,7 +1299,7 @@ $n$ is the number of interface and the number of element filled in the array.  }
 \end{algorithm}
 
 
-\subsubsection{Choose Boundary Case}
+\subsubsection{Choose boundary case}
 We are now able to detect boundary cell. We now need to recognize the different cases.
 For this we use the information on the number of neighbor and which neighbor:
 \begin{itemize}
@@ -1370,7 +1370,7 @@ $dir$, $sign$ and $n$ are the same as $\FuncCall{IsBoundary}(cell,dir,sign,n)$}
 	\end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Apply 2D Plane}
+\subsubsection{Apply 2D plane}
 
 
 To Apply the 2d plane rule we do the following thing:
@@ -1429,7 +1429,7 @@ $dir$ and $sign$ indicate the direction of Air.}
 	\end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Apply 2d \unit{45}{\degree} Plane}
+\subsubsection{Apply 2d \unit{45}{\degree} plane}
 
 In the \unit{45}{\degree} we simply copy the speed from the opposite known speed component.
 This is shown in algorithm \ref{code:Apply2dPlane45}.
@@ -1457,7 +1457,7 @@ This is shown in algorithm \ref{code:Apply2dPlane45}.
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Apply Set Nan}
+\subsubsection{Apply set nan}
 
 We need to set to $\Nan$ all speed component that are not boundary with a fluid cell.
 This are speed component between two air cells.
@@ -1491,7 +1491,7 @@ This is shown in algorithm \ref{code:ApplySetNan}.
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Nan Extrapolation}
+\subsubsection{Nan extrapolation}
 
 We have cells with $\Nan$ at booundary, and need to extrapolate a speed in the $\Nan$ in respecting the divergence free condition.
 For this, we to do the following for every cell.
@@ -2244,12 +2244,12 @@ For the two methods, we have used $\Delta x=0.01$. The time step limiter was a m
 \label{topo:singl_part:fig1}
 \end{figure}
 
-\subsection{Lateral Jet}
+\subsection{Lateral jet}
 
 We consider a continuous source of speed in the $x$ direction. With gravity at the $y$ direction.
 The analytical solution can be found without consideration of the boundary condition.
 
-A single particle with initial $x$ speed $v_{0}$ witch go from position $y$ $y_0$ and with initial time $t_0$.
+A single particle with initial $x$ speed $v_{0}$ which go from position $y$ $y_0$ and with initial time $t_0$.
 
 The speed is:
 \begin{align}
@@ -2274,21 +2274,19 @@ The speed is then given by:
 	v_{x}&=v_{0}\\
 	v_{y}&=-\frac{g}{2}\frac{x^2}{v_{0}}
 \end{align}
-
 This is divergence free.
 So we are a solution of the Navier-Stokes equation.
 
 But we doesn't respect the boundary condition.
 
-We cannot know apriori if the numerical solution with correct boundary solution will respect this solution.
+We cannot know apriori if the numerical solution with correct boundary condition will respect this solution.
 But we can expect that a perturbation at boundary that will respect the boundary condition,
 will rest in the boundary and not enter in the fluid.
-
 This approximation is called Boundary Layer.
 
 
 We see in figure \ref{topo:extrap:lateral:8_1}, \ref{topo:extrap:lateral:9_1} and \ref{topo:extrap:lateral:10_1} that lateral
-speed are smirred by the viscosity and is quasi constant witch is the analytical solution.
+speed are smirred by the viscosity and is quasi constant which is the analytical solution.
 
 The boundary of the analytical solution is near to the numerical solution.
 Only the end of the fluid don't follow the analytical solution.
@@ -2369,3 +2367,226 @@ This indicate that boundary layer is a correct approximation.
 \end{figure}
 
 
+\subsection{Jet}
+
+We now try to simulate the same problem than the lateral jet but in the same direction of gravity.
+We have no analytical solution in this case because the trivial particle solution is no more divergence free.
+Pressure is needed to push the fluid up.
+
+We have done two final numerical run of this problem.
+All numerical run were done with 50 cells at basis. With a spacing of $\unit{0.0002}{\meter}$.
+The viscosity is $\nu=\unit{1.307\cdot 10^{-6}}{\pascal\second}$ which is the viscosity of water.
+Particle which go below the 0 altitude are supressed.
+
+The two run took a day to complete. 3 dimmensional run was not possible for reason of time and
+computing power.
+
+This is shown in figure \ref{top:jet:G}, \ref{top:jet:Gx}, \ref{top:jet:Gy}, \ref{top:jet:P}, \ref{top:jet:Px} and
+\ref{top:jet:Py}.
+
+The most expensive operation is to calculate the projection operator for every iteration.
+
+We see three phase in the computed result:
+\begin{enumerate}
+ \item Vertical motion without deformation. Gravity had not the time to act a lot on the speed.
+ \item The top particle want to push the below particles because of gravity.
+ But because of incompressibility the below region become larger. This generate
+ a lateral speed.
+ \item We touch the supression particles limit and have now a stationary state.
+\end{enumerate}
+
+We think that the reason why the jet lateral distance is so big, is because we are in a 2D problem where
+we have less spatial liberty. The pression exerced by the gravity can in 2d escape only in one dimension
+and not two.
+
+\begin{figure}
+\begin{center}
+\subcaptionbox{\label{top:jet:G:1}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetGrand/topo0001.jpg}
+}
+\subcaptionbox{\label{top:jet:G:2}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetGrand/topo0002.jpg}
+}
+\subcaptionbox{\label{top:jet:G:3}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetGrand/topo0003.jpg}
+}
+\subcaptionbox{\label{top:jet:G:4}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetGrand/topo0004.jpg}
+}
+\subcaptionbox{\label{top:jet:G:5}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetGrand/topo0005.jpg}
+}
+\subcaptionbox{\label{top:jet:G:6}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetGrand/topo0006.jpg}
+}
+\end{center}
+\caption{Jet simulation with an initial speed $\unit{2}{\meter \per \second}$.
+The red region is the region with fluid. The black surface are in fact the particles.}
+\label{top:jet:G}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\subcaptionbox{\label{top:jet:Gx:1}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetGrand/speedx0001.jpg}
+}
+\subcaptionbox{\label{top:jet:Gx:2}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetGrand/speedx0002.jpg}
+}
+\subcaptionbox{\label{top:jet:Gx:3}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetGrand/speedx0003.jpg}
+}
+\subcaptionbox{\label{top:jet:Gx:4}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetGrand/speedx0004.jpg}
+}
+\subcaptionbox{\label{top:jet:Gx:5}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetGrand/speedx0005.jpg}
+}
+\subcaptionbox{\label{top:jet:Gx:6}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetGrand/speedx0006.jpg}
+}
+\end{center}
+\caption{Jet simulation with an initial speed $\unit{2}{\meter \per \second}$.
+This is the representation of speed in the $x$ direction.}
+\label{top:jet:Gx}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\subcaptionbox{\label{top:jet:Gy:1}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetGrand/speedy0001.jpg}
+}
+\subcaptionbox{\label{top:jet:Gy:2}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetGrand/speedy0002.jpg}
+}
+\subcaptionbox{\label{top:jet:Gy:3}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetGrand/speedy0003.jpg}
+}
+\subcaptionbox{\label{top:jet:Gy:4}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetGrand/speedy0004.jpg}
+}
+\subcaptionbox{\label{top:jet:Gy:5}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetGrand/speedy0005.jpg}
+}
+\subcaptionbox{\label{top:jet:Gy:6}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetGrand/speedy0006.jpg}
+}
+\end{center}
+\caption{Jet simulation with an initial speed $\unit{2}{\meter \per \second}$.
+This is the representation of speed in the $y$ direction.}
+\label{top:jet:Gy}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\subcaptionbox{\label{top:jet:P:1}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetPetit/topo0000.jpg}
+}
+\subcaptionbox{\label{top:jet:P:2}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetPetit/topo0001.jpg}
+}
+\subcaptionbox{\label{top:jet:P:3}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetPetit/topo0002.jpg}
+}
+\subcaptionbox{\label{top:jet:P:4}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetPetit/topo0003.jpg}
+}
+\subcaptionbox{\label{top:jet:P:5}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetPetit/topo0004.jpg}
+}
+\subcaptionbox{\label{top:jet:P:6}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetPetit/topo0005.jpg}
+}
+\end{center}
+\caption{Jet simulation with an initial speed $\unit{1}{\meter \per \second}$.
+The black surface are in fact the particles.}
+\label{top:jet:P}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\subcaptionbox{\label{top:jet:Px:1}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetPetit/speedx0000.jpg}
+}
+\subcaptionbox{\label{top:jet:Px:2}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetPetit/speedx0001.jpg}
+}
+\subcaptionbox{\label{top:jet:Px:3}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetPetit/speedx0002.jpg}
+}
+\subcaptionbox{\label{top:jet:Px:4}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetPetit/speedx0003.jpg}
+}
+\subcaptionbox{\label{top:jet:Px:5}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetPetit/speedx0004.jpg}
+}
+\subcaptionbox{\label{top:jet:Px:6}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetPetit/speedx0005.jpg}
+}
+\end{center}
+\caption{Jet simulation with an initial speed $\unit{1}{\meter \per \second}$.
+This is the representation of speed in the $x$ direction.}
+\label{top:jet:Px}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\subcaptionbox{\label{top:jet:Py:1}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetPetit/speedy0000.jpg}
+}
+\subcaptionbox{\label{top:jet:Py:2}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetPetit/speedy0001.jpg}
+}
+\subcaptionbox{\label{top:jet:Py:3}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetPetit/speedy0002.jpg}
+}
+\subcaptionbox{\label{top:jet:Py:4}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetPetit/speedy0003.jpg}
+}
+\subcaptionbox{\label{top:jet:Py:5}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetPetit/speedy0004.jpg}
+}
+\subcaptionbox{\label{top:jet:Py:6}}
+{
+\includegraphics[width=0.4\textwidth]{topology/JetPetit/speedy0005.jpg}
+}
+\end{center}
+\caption{Jet simulation with an initial speed $\unit{1}{\meter \per \second}$.
+This is the representation of speed in the $y$ direction.}
+\label{top:jet:Py}
+\end{figure}
