@@ -1,0 +1,9 @@
+Here will be placed the figure.
+To create the figure use
+
+cd ..
+make -f main.makefile
+
+and launch latex again
+
+To regenerate figure add the -B option to the makefile.
