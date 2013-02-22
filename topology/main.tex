@@ -193,14 +193,12 @@ The order of the method is then $k$.
 \end{example}
 
 \tikzsetnextfilename{multiple_part_error_1}
- \tikzset{external/remake next=true}
  \tikzifexternalizing{\directlua{dofile('topology/multiple_part_error_1.lua')}}{
  \IfFileExists{figures/multiple_part_error_1.pdf}{}{
 \begin{tikzpicture}
 \end{tikzpicture}}
 }
  \tikzsetnextfilename{multiple_part_error_2}
- \tikzset{external/remake next=true}
  \tikzifexternalizing{
 \directlua{dofile('topology/multiple_part_error_2.lua')}
 }{
@@ -210,7 +208,6 @@ The order of the method is then $k$.
 }
 }
   \tikzsetnextfilename{multiple_part_error_3}
- \tikzset{external/remake next=true}
  \tikzifexternalizing{
 \directlua{dofile('topology/multiple_part_error_3.lua')}
 }{
