@@ -1,9 +1,10 @@
-/figures
 /main.auxlock
 /main.figlist
 /main.makefile
 /luadebug.lua
 /introduction/main.tex.backup
+*.dep
+*.dpth
 *.aux
 *.bbl
 *.blg
