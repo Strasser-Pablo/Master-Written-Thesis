@@ -161,46 +161,46 @@ k&=\begin{pmatrix}
     \vect{\tilde{k}}_{s}\\
   \end{pmatrix}
 \end{align}
-
-We form $\hat{P}$ and $\hat{f}$ from a Kronecker product:
+We form $\hat{P}$ and $\hat{f}$ from a Kronecker product
 \begin{align}
 \hat{P}&=\eye_{s}\kron P=\begin{pmatrix}P	&\ldots	&0\\
 			\vdots &\ddots 	&\vdots\\
 			0	&\ldots		&P\\
-	\end{pmatrix}\\
+	\end{pmatrix},\\
 \hat{f}&=\eye_{s}\kron f=\begin{pmatrix}f	&\ldots	&0\\
 			\vdots &\ddots 	&\vdots\\
 			0	&\ldots	&f\\
-	\end{pmatrix}
+	\end{pmatrix},
 \end{align}
-Where for $\hat{f}$ we have used a notation where:
+where for $\hat{f}$ we have used the notation
 \begin{equation}
  \hat{f}\left(k\right)=\begin{pmatrix}f(\vect{k}_1)\\
 			\vdots\\
 			f(\vect{k}_n)\\
-	\end{pmatrix}
+	\end{pmatrix}.
 \end{equation}
-
-
-We now define $\hat{v}_n$:
+We now define $\hat{v}_n$
 \begin{equation}
 \hat{v}_{n}=\begin{pmatrix}
 	      \vect{v}_{n}\\
 	      \vdots\\
 	      \vect{v}_{n}
-	      \end{pmatrix}
+	      \end{pmatrix}.
 \end{equation}
-
-We now define $\hat{A}$ with the following Kronecker product:
+We now define $\hat{A}$ with the following Kronecker product
 \begin{equation}
 \hat{A}=\begin{pmatrix}
     a_{11}	&\ldots	&a_{1s}\\
     \vdots	&\ddots	&\vdots\\
     a_{s1}	&\ldots	&a_{ss}\\
-  \end{pmatrix} \kron \eye=A \kron \eye
+  \end{pmatrix} \kron \eye=A \kron \eye=\begin{pmatrix}
+    a_{11}\eye	&\ldots	&a_{1s}\eye\\
+    \vdots	&\ddots	&\vdots\\
+    a_{s1}\eye	&\ldots	&a_{ss}\eye\\
+  \end{pmatrix} .
 \end{equation}
 
-$\hat{A}$ and $\hat{P}$ are commutative, because of the mixed-product property.
+$\hat{A}$ and $\hat{P}$ commute, because of the mixed-product property.
 \begin{align}
 \hat{A}\hat{P}&=\left(A\kron \eye \right)
   \left(\eye_{s}\kron P\right)=
@@ -214,28 +214,28 @@ $\hat{A}$ and $\hat{P}$ are commutative, because of the mixed-product property.
 
 The two expressions can now be written:
 \begin{align}
-k&=(1+\hat{P})\Delta t\hat{f}(\hat{v}_{n}+\hat{A}k)\\
-\tilde{k}&=\Delta t \hat{f}((1+\hat{P})(\hat{v}_{n}+\hat{A}k))
+k&=(1-\hat{P})\Delta t\hat{f}(\hat{v}_{n}+\hat{A}k)\\
+\tilde{k}&=\Delta t \hat{f}((1-\hat{P})(\hat{v}_{n}+\hat{A}k))
 \end{align}
 
 We begin to define 2 functions:
 \begin{align}
 k&=g(k)\\
 \tilde{k}&=\tilde{g}(\tilde{k})\\
-g(x)&=(1+\hat{P})\Delta t \hat{f}(\hat{v}_{n}+\hat{A}x)\\
-\tilde{g}(x)&=\Delta t \hat{f}((1+\hat{P})(\hat{v}_{n}+\hat{A}x))
+g(x)&=(1-\hat{P})\Delta t \hat{f}(\hat{v}_{n}+\hat{A}x)\\
+\tilde{g}(x)&=\Delta t \hat{f}((1-\hat{P})(\hat{v}_{n}+\hat{A}x))
 \end{align}
 
 $k$ and $\tilde{k}$ are fixed points of functions $g$ and $\tilde{g}$.
 
 We now calculate:
 \begin{align}
-(1+\hat{P})\tilde{g}(x)&=(1+\hat{P})\Delta t \hat{f}((1+\hat{P})(\hat{v}_{n}+\hat{A}x))\\
+(1-\hat{P})\tilde{g}(x)&=(1-\hat{P})\Delta t \hat{f}((1-\hat{P})(\hat{v}_{n}+\hat{A}x))\\
 \intertext{Using:}
 \hat{P}\hat{v}_{n}=0
 \intertext{Using that $\hat{A}$ and $\hat{P}$ commute}
-(1+\hat{P})\tilde{g}(x)&=(1+\hat{P})\Delta t \hat{f}(\hat{v}_{n}+\hat{A} (1+\hat{P})x)\\
-&=g((1+\hat{P})x)
+(1-\hat{P})\tilde{g}(x)&=(1-\hat{P})\Delta t \hat{f}(\hat{v}_{n}+\hat{A} (1-\hat{P})x)\\
+&=g((1-\hat{P})x)
 \end{align}
 
 We now substitute $x$ with $\tilde{k}$
