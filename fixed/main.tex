@@ -97,7 +97,7 @@ We begin by proving the following lemma.
 \end{equation}
 \end{lemma}
 \begin{proof}
-By recurrence on $i$.
+By induction on $i$.
 We begin with $i=1$:
 \begin{align}
   \vect{k}_{1}&=\Delta tf\left(\vect{v}_n\right)-\Delta tP\left(f\left(\vect{v}_n\right)\right)\\
@@ -325,32 +325,32 @@ With the relation for the translation:
 We begin to prove the following lemma.
 \begin{lemma}
 \begin{equation}
-  \vect{k}_{i}=\vect{\tilde{k}}_{i}+P(\vect{\tilde{k}}_{i},\Delta t \vect{T}_{i})
+  \vect{k}_{i}=\vect{\tilde{k}}_{i}-P(\vect{\tilde{k}}_{i},\Delta t \vect{T}_{i})
 \end{equation}
 \end{lemma}
 \begin{proof}
-By recurrence on $i$.
+By induction on $i$.
 We begin with $i=1$:
 \begin{align}
-  \vect{k}_{1}&=\Delta tf\left(\vect{v}_n\right)+\Delta tP\left(f\left(\vect{v}_n\right),\vect{T}_{1}\right)\\
+  \vect{k}_{1}&=\Delta tf\left(\vect{v}_n\right)-\Delta tP\left(f\left(\vect{v}_n\right),\vect{T}_{1}\right)\\
 \vect{\tilde{k}}_{1}&=\Delta tf\left(\vect{\vect{v}}_n\right)\\
-  \vect{k}_{1}&=\Delta t f\left(\vect{v}_n\right)+\Delta tP\left(f\left(\vect{v}_n\right),\vect{T}_{1}\right)=\vect{\tilde{k}}_1+P\left(\vect{\tilde{k}}_1,\Delta t \vect{T}_{1}\right)
+  \vect{k}_{1}&=\Delta t f\left(\vect{v}_n\right)-\Delta tP\left(f\left(\vect{v}_n\right),\vect{T}_{1}\right)=\vect{\tilde{k}}_1-P\left(\vect{\tilde{k}}_1,\Delta t \vect{T}_{1}\right)
 \end{align}
 
-Assuming true for smaller $i$:
+By induction hypothesis we are true for smaller $i$:
 \begin{align*}
-  \vect{k}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{n}a_{ij}\vect{k}_{j}\right)+\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right),\vect{T}_{i}\right)\\
-  &=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{k}}_{j},\Delta t \vect{T}_{j}\right)\right)\right)+\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{k}}_{j},\Delta t \vect{T}_{j}\right)\right)\right),\vect{T}_{i}\right)\\
-  \vect{\tilde{k}}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}+P\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j},\vect{\vect{\tilde{T}}}_{i}\right)\right)\\
+  \vect{k}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{n}a_{ij}\vect{k}_{j}\right)-\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right),\vect{T}_{i}\right)\\
+  &=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}-P\left(\vect{\tilde{k}}_{j},\Delta t \vect{T}_{j}\right)\right)\right)-\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}-P\left(\vect{\tilde{k}}_{j},\Delta t \vect{T}_{j}\right)\right)\right),\vect{T}_{i}\right)\\
+  \vect{\tilde{k}}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}-P\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j},\vect{\vect{\tilde{T}}}_{i}\right)\right)\\
   \intertext{Using the linearity of $P$ and $P\vect{v}_n=0$ and defining $\vect{\hat{T}}_{j}^i$}
-  &=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{k}}_{j},\vect{\hat{T}}_{j}^{i}\right)\right)\right)\\
+  &=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}-P\left(\vect{\tilde{k}}_{j},\vect{\hat{T}}_{j}^{i}\right)\right)\right)\\
   \vect{\tilde{T}}_i&=\sum_{j}^{i-1}a_{ij}\vect{\hat{T}}_{j}^{i}\\
   \vect{\hat{T}}^{i}_{j}&=\Delta t \vect{T}_{j}\\
-  \vect{k}_{i}&=\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{k}}_{i},\Delta t\vect{T}_j\right)
+  \vect{k}_{i}&=\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{k}}_{i},\Delta t\vect{T}_j\right)
 \end{align*}
-This prove the relation and give the relation between the two.
+This proves the relation and gives the relation
 \begin{equation}
-  \vect{\tilde{T}}_i=\sum_{j}^{i-1}a_{ij}\Delta t \vect{T}_{j}
+  \vect{\tilde{T}}_i=\sum_{j}^{i-1}a_{ij}\Delta t \vect{T}_{j}.
 \end{equation}
 \end{proof}
 
