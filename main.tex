@@ -51,25 +51,25 @@ This goal was only partially achieved, but the needed basics are there.
 This work consists of the following chapters:
 \begin{enumerate}
  \item A notation and basic math property chapter.
- \item A chapter that describe the problem analytically. In this chapter no discretization is done, but equations are written in the good form to motivate discretization.
- \item A chapter that is interested on the solution of Navier-Stokes equations if the domain of computation is fixed.
- \item A chapter that indicate the change needed to allow domain change.
- \item To end, a conclusion chapter which will contain pist to upgrade the scheme used.
+ \item A chapter that describes the problem analytically. In this chapter no discretization is done, but equations are written in the good form to motivate discretization.
+ \item A chapter that focuses on the solution of Navier-Stokes equations if the domain of computation is fixed.
+ \item A chapter that indicates the change needed to allow domain change.
+ \item To end, a conclusion chapter which will contain hint and discussion to how to upgrade the scheme used.
 \end{enumerate}
 
 The two numerical chapters contain pseudo code that implement the described algorithm.
 
-The original \textbf{C++11} code can be found on \url{https://github.com/Strasser-Pablo/Mac}
+The original \textbf{C++11} (c++ code respecting the 2011 norm ISO/IEC 14882:2011) code can be found on \url{https://github.com/Strasser-Pablo/Mac}
 but is not needed to understand this work, the pseudo code is sufficient.
 
 All the chapters are self contained,
 but further information and inspiration come from:
 \begin{itemize}
- \item Algorithmic idea like the layer variable and the first scheme come from \cite{fluidforrestofus}.
+ \item Algorithmics idea like the layer variable and the first scheme come from \cite{fluidforrestofus}.
  \item Analytical comprehension and better formulation come from \cite{citeulike:11163809}.
  \item Extrapolation for boundary conditions come from \cite{FLD:FLD148}.
- \item Analytical solution are taken from \cite{Batchelor} and \cite{Kampanis:2006:SGH:1148052.1148065}.
- \item A review of marker and cell based method can be found in \cite{citeulike:3055787}.
+ \item Analytical solutions are taken from \cite{Batchelor} and \cite{Kampanis:2006:SGH:1148052.1148065}.
+ \item A review of marker and cell based methods can be found in \cite{citeulike:3055787}.
 \end{itemize}
 
 
