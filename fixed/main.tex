@@ -530,7 +530,7 @@ We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ us
 \begin{align*}
 \vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
 &=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\left(\eye+L\right)\vect{\tilde{k}}_i+\Delta t \vect{T}_{i}\right)\\
-\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}+L\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}\right)+\vect{\tilde{T}}_0\\
+\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}-L\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}\right)+\vect{\tilde{T}}_0\\
 &=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\eye-L\right)\vect{\tilde{k}}_{i}+\vect{\tilde{T}}_0\\
 \vect{\tilde{T}}_0&=\Delta t\sum_{i=1}^{s}b_{i}\vect{T}_{i}\\
 \intertext{Using that $\vect{v}_{n}=\tilde{\vect{v}}_{n}$}
@@ -543,24 +543,24 @@ We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ us
 
 \subsection{Non-staggered grid}
 
-On a non-staggered grid we put the variable like figure \ref{fixed:unstaggered}.
+On a non-staggered grid we put the variables like in figure \ref{fixed:unstaggered}.
 \begin{figure}
 \directlua{dofile('fixed/unstaggered.lua')}
 \caption{Position of variable for Non-Staggered grid}
 \label{fixed:unstaggered}
 \end{figure}
-The problem with non-staggered  grid, is that obvious center difference discretization lead to wrong divergence free vector.
+The problem with a non-staggered  grid is that obvious centered difference discretization lead to wrong divergence free vector.
 
 We define the derivative of a scalar by:
 \begin{equation}
-  \partial_x a_i=\frac{a_{i+1}-a{i-1}}{\Delta x}
+  \partial_x a_i=\frac{a_{i+1}-a_{i-1}}{\Delta x}
 \end{equation}
 The divergence discretization is then given by (notation for 2d, but for 3d it's the same):
 \begin{equation}
   \vect{\nabla} \cdot \vect{v}_{i,j}=\frac{{v_{x}}_{i+1,j}-{v_{x}}_{i-1,j}}{\Delta x}+\frac{{v_{y}}_{i+1,j}-{v_{y}}_{i-1,j}}{\Delta y}
 \end{equation}
-The problem can be seen in figure \ref{fixed:unstaggered_div} is that the divergence at red point only use value at blue point and not the point at center (red point).
-This allows to have non-physical solutions that are divergence free.
+The problem can be seen in figure \ref{fixed:unstaggered_div} is that the divergence at the red point only uses values at blue points and not the point at the center (red point).
+This leads to  non-physical solutions that are divergence free.
 
 \begin{figure}
 \directlua{dofile('fixed/unstaggered_div.lua')}
@@ -569,7 +569,7 @@ This allows to have non-physical solutions that are divergence free.
 \end{figure}
 
 In figure \ref{fixed:unstaggered_div2} we have a solution that is numerically divergence free.
-But this solution is not continuous and we expect that is not divergence free.
+But this solution has high frequency oscillations and we expect that it is not divergence free.
 
 \begin{figure}
 \directlua{dofile('fixed/unstaggered_div2.lua')}
