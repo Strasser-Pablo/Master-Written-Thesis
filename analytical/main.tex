@@ -77,62 +77,61 @@ The incompressible Navier-Stokes equations are given by
 \partial_t \vect{v}(\vect{x} ,t)+(\vect{v}(\vect{x},t)\cdot\vect{\nabla} ) \vect{v}(\vect{x} ,t)&=-\vect{\nabla} p(\vect{x},t)+\frac{\vect{F}(\vect{x},t)}{\rho(\vect{x},t)}+\nu \Delta \vect{v}(\vect{x},t).
 \end{align}
 \end{subequations}
+Equation (\ref{analytical:navierStokesA}), tells us that the speed is a divergence free field.
+Equation (\ref{analytical:navierStokesB}) is an equation of evolution. The presence of $p$ allows to maintain the speed always divergence free.
+Taking the curl of (\ref{analytical:navierStokesB}) makes disappear the pressure term (because the curl of a gradient is 0).
 
-Equation \ref{analytical:navierStokesA}, tells us that the speed is a divergence free field.
-Equation \ref{analytical:navierStokesB} is an equation of evolution. The presence of $p$ allows to maintain the speed always divergence free.
-Taking the rotational of \ref{analytical:navierStokesB} make disappear the pressure term (because the rotational of a gradient is 0).
+The pressure term can be seen as a correction of the divergence without changing the curl.
 
-The pressure term can be seen as a correction of the divergence without changing the rotational.
-
-We can rewrite Navier-Stokes equations as:
+We can rewrite the Navier-Stokes equations as
 \begin{subequations}
 \begin{align}
 \label{analytical:navierStokesRewA}
-\vect{\nabla} \cdot \vect{v}(\vect{x} ,t)&=0\\
+\vect{\nabla} \cdot \vect{v}(\vect{x} ,t)&=0,\\
 \label{analytical:navierStokesRewB}
-\partial_t \vect{v}(\vect{x} ,t)&=f(\vect{v}(\vect{x},t))-\vect{\nabla}p
-\intertext{Where}
-f(\vect{v}(\vect{x},t))&=-(\vect{v}(\vect{x},t)\cdot\vect{\nabla} ) \vect{v}(\vect{x} ,t)+\frac{\vect{F}(\vect{x},t)}{\rho(\vect{x},t)}+\nu \Delta \vect{u}(\vect{x},t)
+\partial_t \vect{v}(\vect{x} ,t)&=f(\vect{v}(\vect{x},t))-\vect{\nabla}p,
+\intertext{where}
+f(\vect{v}(\vect{x},t))&=-(\vect{v}(\vect{x},t)\cdot\vect{\nabla} ) \vect{v}(\vect{x} ,t)+\frac{\vect{F}(\vect{x},t)}{\rho(\vect{x},t)}+\nu \Delta \vect{v}(\vect{x},t).
 \end{align}
 \end{subequations}
 
-Taking the divergence of equation \ref{analytical:navierStokesRewB} we found:
+Taking the divergence of equation (\ref{analytical:navierStokesRewB}) we find
 \begin{equation}
-  \Delta p=\vect{\nabla}\cdot f(\vect{v})
+  \Delta p=\vect{\nabla}\cdot f(\vect{v}).
 \end{equation}
-But using the notation of \ref{introduction:projectiondef}:
+But using the notation of (\ref{introduction:projectiondef}):
 \begin{equation}
-	-\vect{\nabla}p=P(f(\vect{v}))
+	\vect{\nabla}p=P(f(\vect{v}))
 \end{equation}
 
-The equations of Navier-Stokes are then equivalent to solve:
+The equations of Navier-Stokes are then equivalent to solving
 \begin{equation}
-  \partial_t \vect{v}(\vect{x} ,t)=f(\vect{v}(\vect{x},t))+P(f(\vect{v}(\vect{x},t))=(\eye+P)f(\vect{v}(\vect{x},t))
+  \partial_t \vect{v}(\vect{x} ,t)=f(\vect{v}(\vect{x},t))-P(f(\vect{v}(\vect{x},t))=(\eye-P)f(\vect{v}(\vect{x},t)).
 \end{equation}
-$(\eye+P)$ is a projector on a divergence free space without changing the rotational.
+$(\eye-P)$ is a projector onto a divergence free space without changing the rotational.
 
 \subsection{Mobile eulerian topology }
-When topology is variable, we need to add another equation to tell where is the domain of computation.
-A natural boundary condition is the free surface, wich moves with the speed at given point.
+When topology is variable, we need to add another equation to tell us where the domain of computation lies.
+A natural boundary condition is the free surface, which moves with the speed at a given point on the boundary.
 
-We define $\lambda$ a system of representative. And $\vect{\xi}_{\lambda}$ the position of point given by $\lambda$.
+We define $\lambda$ a system of representatives, and $\vect{\xi}_{\lambda}$ the position of points given by $\lambda$.
 The domain is given by the union of $\vect{\xi}$ for all $\lambda$.
 
-The Navier-Stokes equations are now:
+The Navier-Stokes equations are now
 \begin{subequations}
 \begin{align}
 \label{analytical:navierStokesMobA}
-\vect{\nabla} \cdot \vect{v}(\vect{x} ,t)&=0\\
+\vect{\nabla} \cdot \vect{v}(\vect{x} ,t)&=0,\\
 \label{analytical:navierStokesMobB}
-\partial_t \vect{v}(\vect{x} ,t)+(\vect{v}(\vect{x},t)\cdot\vect{\nabla} ) \vect{v}(\vect{x} ,t)&=-\vect{\nabla} p(\vect{x},t)+\frac{\vect{F}(\vect{x},t)}{\rho(\vect{x},t)}+\nu \vect{\Delta} \vect{u}(\vect{x},t)\\
-\partial_t \vect{\xi}_{\lambda}(t)&=\vect{v}(\vect{\xi}_{\lambda},t)
+\partial_t \vect{v}(\vect{x} ,t)+(\vect{v}(\vect{x},t)\cdot\vect{\nabla} ) \vect{v}(\vect{x} ,t)&=-\vect{\nabla} p(\vect{x},t)+\frac{\vect{F}(\vect{x},t)}{\rho(\vect{x},t)}+\nu \vect{\Delta} \vect{v}(\vect{x},t),\\
+\partial_t \vect{\xi}_{\lambda}(t)&=\vect{v}(\vect{\xi}_{\lambda},t).
 \end{align}
 \end{subequations}
-We can as in section \ref{analytical:fixe_eulerian} eliminate the constrain on the divergence with the same notation:
+We can as in section \ref{analytical:fixe_eulerian} eliminate the constraint on the divergence with the same notation
 \begin{subequations}
 \begin{align}
-\partial_t \vect{v}(\vect{x} ,t)&=f(\vect{v}(\vect{x},t))+P(f(\vect{v}(\vect{x},t))=(\eye+P)f(\vect{v}(\vect{x},t))\\
-\partial_t \vect{\xi}_{\lambda}(t)&=\vect{v}(\vect{\xi}_{\lambda},t)\label{ana:move:equ}
+\partial_t \vect{v}(\vect{x} ,t)&=f(\vect{v}(\vect{x},t))+P(f(\vect{v}(\vect{x},t))=(\eye+P)f(\vect{v}(\vect{x},t)),\\
+\partial_t \vect{\xi}_{\lambda}(t)&=\vect{v}(\vect{\xi}_{\lambda},t)\label{ana:move:equ}.
 \end{align}
 \end{subequations}
 
