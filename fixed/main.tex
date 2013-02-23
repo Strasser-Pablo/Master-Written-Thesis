@@ -273,17 +273,17 @@ Solving Navier-Stokes equation with the analytical good choice of pressure is ex
 \end{corollary}
 \begin{proof}
   The expression of $\vect{v}$ is the solution of the Navier-Stokes equation with the good choice of pressure.
-  $\vect{\tilde{v}}$ is the solution of Runge-Kutta equation without pressure which is projected at every speed estimation.
+  $\vect{\tilde{v}}$ is the solution of the Runge-Kutta equation without pressure which is projected at every speed estimation.
   $\vect{v}$ and $\vect{\tilde{v}}$ are the same by the theorem.
 \end{proof}
 
 \begin{corollary}
-  Using the expression for $\vect{v}$ or $\vect{\tilde{v}}$ we are $k$ order precise in time. Where $k$ is the order of the Runge-Kutta method.
+  Using the expression for $\vect{v}$ or $\vect{\tilde{v}}$ we are $k$ order precise in time, where $k$ is the order of the Runge-Kutta method.
 \end{corollary}
 \begin{proof}
   $\vect{v}$ and $\vect{\tilde{v}}$ are the same.
   $\vect{v}$ consists only of a Runge-Kutta method with a good chosen function.
-  So the order in time of $\vect{v}$ and $\vect{\tilde{v}}$ is the same that the method order.
+  So the order in time of $\vect{v}$ and $\vect{\tilde{v}}$ is the same as the method order.
 \end{proof}
 
 
@@ -292,11 +292,11 @@ Solving Navier-Stokes equation with the analytical good choice of pressure is ex
 We will repeat the work in section \ref{fixed:sect:runge-kutta} but where the projection is an affine operator.
 We use the notation of \ref{introduction:projectiondef}.
 
-Scheme for projection at every evaluation of speed:
+The scheme for the projection at every evaluation of the speed is
 \begin{subequations}
 \begin{align}
-\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i},\vect{\tilde{T}}_0\right)\\
-\vect{\tilde{k}}_{i}&=\Delta t f\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j},\vect{\tilde{T}}_i\right)\right)
+\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i},\vect{\tilde{T}}_0\right)\\
+\vect{\tilde{k}}_{i}&=\Delta t f\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}-P\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j},\vect{\tilde{T}}_i\right)\right)
 \end{align}
 \end{subequations}
 We project at every estimation of speed. Making by construction every speed divergence free.
@@ -305,7 +305,7 @@ Scheme for analytical expression for pressure:
 \begin{subequations}
 \begin{align}
 	\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
-	\vect{k}_{i}&=\Delta t f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right)+\Delta t P\left(f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right),\vect{T}_{i}\right)
+	\vect{k}_{i}&=\Delta t f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right)-\Delta t P\left(f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right),\vect{T}_{i}\right)
 \end{align}
 \end{subequations}
 
