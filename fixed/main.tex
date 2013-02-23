@@ -686,13 +686,13 @@ The staggered grid does not pose a problem because we do not have mixed terms wi
 The convection term is the more difficult term to treat, because it is non-linear and uses mixed terms.
 We need to consider two types of terms. Let $i\neq j$ and $\vect{k}$ be an integer vector of the position on the grid
 and $\vect{e}_i$ the $i$-th unit vector.
-We first consider as $i$-th component:
+We first consider as $i$-th component
 \begin{equation}
-\left(v^{i}\partial_{i}v^{i}\right)^{i}_{\vect{k}}
+\left(v^{i}\partial_{i}v^{i}\right)^{i}_{\vect{k}}.
 \end{equation}
-We can discretize this in two manners:
+We can discretize this in two ways.
 
-\subparagraph{Central difference}
+\subparagraph{Centered difference}
 \begin{equation}
 {v^{i}}_{\vect{k}}\frac{{v^{i}}_{\vect{k}+\vect{e}_i}-{v^{i}}_{\vect{k}-\vect{e}_i}}{2\Delta x_{i}}
 \end{equation}
@@ -700,16 +700,16 @@ We can discretize this in two manners:
 \subparagraph{Upwind difference}
 \label{fixed:upwind}
 
-We use the same method, but instead to use center difference, we use upwind:
+We use the same method, but instead of using a centered difference, we use an upwind difference:
 \begin{align}
 \intertext{if ${v^{i}}_{\vect{k}}<0$}
-\left(v^{i}\partial_{i}v^{i}\right)_{\vect{k}}&={v^{i}}_{\vect{k}}\frac{{v^{i}}_{\vect{k}+\vect{e}_i}-{v^{i}}_{\vect{k}}}{\Delta x_{i}}\\
+\left(v^{i}\partial_{i}v^{i}\right)_{\vect{k}}&={v^{i}}_{\vect{k}}\frac{{v^{i}}_{\vect{k}+\vect{e}_i}-{v^{i}}_{\vect{k}}}{\Delta x_{i}},\\
 \intertext{if ${v^{i}}_{\vect{k}}>0$}
-\left(v^{i}\partial_{i}v^{i}\right)_{\vect{k}}&={v^{i}}_{\vect{k}}\frac{{v^{i}}_{\vect{k}}-{v^{i}}_{\vect{k}-\vect{e}_i}}{\Delta x_{i}}\\
+\left(v^{i}\partial_{i}v^{i}\right)_{\vect{k}}&={v^{i}}_{\vect{k}}\frac{{v^{i}}_{\vect{k}}-{v^{i}}_{\vect{k}-\vect{e}_i}}{\Delta x_{i}},\\
 \intertext{if ${v^{i}}_{\vect{k}}=0$}
-\left(v^{i}\partial_{i}v^{i}\right)_{\vect{k}}&=0
+\left(v^{i}\partial_{i}v^{i}\right)_{\vect{k}}&=0.
 \end{align}
-Upwind is considered more stable (can be proof easily in one dimension for burger's equation) but more diffusive.
+Upwind is considered more stable (can be proved easily in one dimension for Burger's equation \cite{citeulike:11163809}) but more diffusive.
 
 We now consider:
 \begin{equation}
@@ -717,8 +717,8 @@ We now consider:
 \end{equation}
 
 \begin{remark}
-  Contrary to the other case, we need to have the speed at a position not known for $v^{j}$. This comes because of the staggered grid scheme.
-  For this, we can interpolate the known speed of neighbor cell taking for example the average of the 4 neighbor (cf. figure \ref{fixed:staggered_convection_upwind}).
+  Contrary to the other case, we need to have the speed at a position not known for $v^{j}$. This arises because of the staggered grid.
+  For this, we can interpolate the known speed of neighboring cells taking for example the average of the 4 neighbors (cf. figure \ref{fixed:staggered_convection_upwind}).
   We will use as notation $v^{ji}$ for the speed component $j$ at position for the component $i$.
   
   \begin{figure}
@@ -727,19 +727,19 @@ We now consider:
     \label{fixed:staggered_convection_upwind}
     \end{figure}
 \end{remark}
-We can discretize this in two manners:
+We can discretize this again in two ways:
 
-\subparagraph{Central difference}
+\subparagraph{Centred difference}
 \begin{equation}
 \left(v^{j}\partial_{j}v^{i}\right)^{i}_{\vect{k}}={v^{ji}}_{\vect{k}}\frac{{v^{i}}_{\vect{k}+\vect{e}_j}-{v^{i}}_{\vect{k}-\vect{e}_j}}{2\Delta x_{j}}
 \end{equation}
 
 \subparagraph{Upwind difference}
 
-We use the same method, but instead to use center difference, we use upwind:
+We use the same method, but instead to use the centered difference, we use an upwind difference:
 \begin{align}
 \intertext{if ${v^{ji}}_{\vect{k}}<0$}
-\left(v^{j}\partial_{j}v^{i}\right)^{i}_{\vect{k}}&={v^{ji}}_{\vect{k}}\frac{{v^{i}}_{\vect{k}+\vect{e}_j}-{v^{i}}_{\vect{k}}}{\Delta x_{j}}\\
+\left(v^{j}\partial_{j}v^{i}\right)^{i}_{\vect{k}}&={v^{ji}}_{\vect{k}}\frac{{v^{i}}_{\vect{k}+\vect{e}_j}-{v^{i}}_{\vect{k}}}{\Delta x_{j}},\\
 \intertext{if ${v^{ji}}_{\vect{k}}>0$}
 \left(v^{j}\partial_{j}v^{i}\right)^{i}_{\vect{k}}&={v^{ji}}_{\vect{k}}\frac{{v^{i}}_{\vect{k}}-{v^{i}}_{\vect{k}-\vect{e}_j}}{\Delta x_{j}}\\
 \intertext{if ${v^{ji}}_{\vect{k}}=0$}
