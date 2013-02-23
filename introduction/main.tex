@@ -4,35 +4,35 @@
 
 \section{Vector}
 
-We denote vector with the dimension of physical space (2d or 3d) $\vect{v}$.
-We only use Cartesian coordinate system.
-We indicate a given component of a vector with indices. $\vect{v}_1$ indice the first component.
+We denote a vector with the dimension of physical space (2d or 3d) by $\vect{v}$.
+We only use Cartesian coordinate systems.
+We indicate a given component of a vector with indices, e.g. $\vect{v}_1$ for the first component.
 
 \section{Differential operator}
 
-We denote derivative  $\partial_i$ where $i$ is the spatial component with which we derivate.
+We denote derivatives by  $\partial_i$, where $i$ is the spatial component with respect to which we take the derivative,
 \begin{equation}
- \partial_i v(\vect{x})=\frac{\partial v(\vect{x})}{\partial \vect{x}_{i}}
+ \partial_i v(\vect{x})=\frac{\partial v(\vect{x})}{\partial \vect{x}_{i}}.
 \end{equation}
 
 \begin{definition}[Nabla]
- In Cartesian coordinate, the $\vect{\nabla}$ is a vector that cannot commute.
+ In Cartesian coordinates, the $\vect{\nabla}$ is a vector that cannot commute (e.g $\nabla \cdot \vect{v}\neq \vect{v}\cdot \nabla$).
  Its expression is given by:
  \begin{equation}
- \vect{\nabla}_{i}=\partial_{i}
+ \vect{\nabla}_{i}=\partial_{i}.
  \end{equation}
 \end{definition}
 
 With the $\vect{\nabla}$ we can form the following expression.
 With $n$ the dimension of the vector:
 \begin{equation}
- \vect{\nabla}p=\begin{pmatrix}\partial_1 p\\ \vdots \\ \partial_n p\end{pmatrix}
+ \vect{\nabla}p=\begin{pmatrix}\partial_1 p\\ \vdots \\ \partial_n p,\end{pmatrix}
 \end{equation}
 \begin{equation}
- \vect{\nabla}\cdot \vect{v}=\sum_{i=1}^{n}\partial_i \vect{v}_i
+ \vect{\nabla}\cdot \vect{v}=\sum_{i=1}^{n}\partial_i \vect{v}_i,
 \end{equation}
 \begin{equation}
- \left((\vect{v}\cdot\vect{\nabla})\vect{v}\right)_{i}=\sum_{j=1}^{n}v_{j}\partial_{j} v_{i}
+ \left((\vect{v}\cdot\vect{\nabla})\vect{v}\right)_{i}=\sum_{j=1}^{n}v_{j}\partial_{j} v_{i}.
 \end{equation}
 
 
