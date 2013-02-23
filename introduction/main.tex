@@ -127,50 +127,48 @@ The curl is divergence free.
 \label{introduction:projectiondef}
 We define the projection operator $P(\vect{v})$
   \begin{equation}
-    P(\vect{v})=-\vect{\nabla}\Delta^{-1}\vect{\nabla}\cdot \vect{v}
+    P(\vect{v})=\vect{\nabla}\Delta^{-1}\vect{\nabla}\cdot \vect{v}.
   \end{equation}
-  The projection of section \ref{introduction:projection} is then written:
+  The projection of section \ref{introduction:projection} is then:
   \begin{equation}
-    \vect{v}_{new}=\vect{v}+P(\vect{v})
+    \vect{v}_{new}=\vect{v}-P(\vect{v}).
   \end{equation}
 \end{definition}
-
-  In case where we use boundary conditions that are not 0 Dirichlet or Neumann boundary condition.
-  The projection operator is no more linear, but affine.
+  In case we use boundary conditions that are not homogeneous Dirichlet or Neumann boundary condition,
+  the projection operator is no longer linear, but affine.
 
   \begin{definition}[Affine projection operator]
-  We denote affine projection by $P(v,T)=Av+T$.
+  We denote the affine projection by $P(v,T)=Av+T$, where $A$ is a matrice and $T$ a vector.
   
-  The Poisson's equation is given by:
+  The Poisson equation is given by
   \begin{equation}
-   \Delta p=\nabla \cdot v
+   \Delta p=\nabla \cdot \vect{v}.
   \end{equation}
-This can be rewritten for Dirchlet or Neumann boundary conditions:
+This can be rewritten for Dirchlet or Neumann boundary conditions
 \begin{equation}
- B p=\nabla \cdot v-c
+ B p=\nabla \cdot v-c,
 \end{equation}
-Where $B$ is a matrix form of $\Delta$ which depend only on quantity of the domain.
-Where $c$ is given by the boundary conditions.
-$p$ is then given by:
+where $B$ is a matrix form of $\Delta$ and $c$ is given by the boundary conditions.
+$p$ is then given by
 \begin{equation}
- p=B^{-1} \nabla \cdot v-B^{-1}c
+ p=B^{-1} \nabla \cdot v-B^{-1}c,
 \end{equation}
-And the projection is:
+and the projection is
 \begin{equation}
- P(v,T)=-\nabla p=-\nabla B^{-1}\nabla \cdot v+\nabla B^{-1}c
+ P(v,T)=-\nabla p=-\nabla B^{-1}\nabla \cdot v+\nabla B^{-1}c.
 \end{equation}
-Which can be rewritten:
+This can be rewritten as
 \begin{align}
 P(v,T)&=Av+T\\
 A&=\nabla B^{-1}\nabla \cdot\\
-T&=\nabla B^{-1}c
+T&=\nabla B^{-1}c.
 \end{align}
   
   \end{definition}
   
-  The important change is that the projection of a divergence free vector field is no more 0.
+  The important change is that the projection of a divergence free vector field is no more 0,
   \begin{equation}
-  P(v,T)=Av+T=0+T=T
+  P(v,T)=Av+T=0+T=T.
   \end{equation}
 
 
