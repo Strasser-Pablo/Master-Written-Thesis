@@ -131,23 +131,22 @@ We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ us
 \end{proof}
 
 \begin{theorem}
-For the implicit Runge-Kutta case, where the sum to $i-1$ goes now to $s$.
-If $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ is divergence free then $\vect{v}_{n+1}=\vect{\tilde{v}}_{n+1}$ 
+For the implicit Runge-Kutta case, where the sum to $i-1$ goes now to $s$, if $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ is divergence free then $\vect{v}_{n+1}=\vect{\tilde{v}}_{n+1}$ 
 \end{theorem}
 \begin{proof}
-We begin to prove the following lemma.
+We begin by proving the following lemma.
 \begin{lemma}
 After relabeling noting $\vect{k}_{i}^{j}$ the $j$-th solution of $\vect{k}_{i}$.
-We have for every $j$.
+We have for every $j$,
 \begin{equation}
-  \vect{k}_{i}^{j}=\vect{\tilde{k}}_{i}^{j}+P(\vect{\tilde{k}}_{i}^{j})
+  \vect{k}_{i}^{j}=\vect{\tilde{k}}_{i}^{j}+P(\vect{\tilde{k}}_{i}^{j}).
 \end{equation}
-This doesn't say that we have existence and unicity of the solution only that if we have a set of solution for $\vect{k}$ we have a bijection
-to solutions of $\vect{\tilde{k}}$
+This does not say that we have existence and uniqueness of the solution only that if we have a set of solution for $\vect{k}$ we have a bijection
+to solutions of $\vect{\tilde{k}}$.
 \end{lemma}
 \begin{proof}
 Because the sum goes to $s$ and not $i-1$ we cannot use recurrence.
-We now will use vector notation for $k$.
+We now will use vector notation for $\vect{k}$.
 
 We construct $k$ and $\tilde{k}$ vector with the vector $\vect{k}_{i}$ and $\vect{\tilde{k}}_{i}$
 \begin{align}
