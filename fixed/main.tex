@@ -231,38 +231,37 @@ $k$ and $\tilde{k}$ are fixed points of functions $g$ and $\tilde{g}$.
 We now calculate:
 \begin{align}
 (1-\hat{P})\tilde{g}(x)&=(1-\hat{P})\Delta t \hat{f}((1-\hat{P})(\hat{v}_{n}+\hat{A}x))\\
-\intertext{Using:}
-\hat{P}\hat{v}_{n}=0
+\intertext{Using}
+\hat{P}\hat{v}_{n}=0.
 \intertext{Using that $\hat{A}$ and $\hat{P}$ commute}
-(1-\hat{P})\tilde{g}(x)&=(1-\hat{P})\Delta t \hat{f}(\hat{v}_{n}+\hat{A} (1-\hat{P})x)\\
+(1-\hat{P})\tilde{g}(x)&=(1-\hat{P})\Delta t \hat{f}(\hat{v}_{n}+\hat{A} (1-\hat{P})x).\\
 &=g((1-\hat{P})x)
 \end{align}
-
 We now substitute $x$ with $\tilde{k}$
 \begin{align}
-(1+\hat{P})\tilde{g}(\tilde{k})&=g((1+\hat{P})\tilde{k})
+(1-\hat{P})\tilde{g}(\tilde{k})&=g((1-\hat{P})\tilde{k})
 \intertext{by definition $\tilde{k}$ is a fixed point of $\tilde{g}$}
-(1+\hat{P})\tilde{k}&=g((1+\hat{P})\tilde{k})
+(1-\hat{P})\tilde{k}&=g((1-\hat{P})\tilde{k}),
 \end{align}
-$(1+\hat{P})\tilde{k}$ is a fixed point of $g$.
+$(1-\hat{P})\tilde{k}$ is a fixed point of $g$.
 But fixed point of $g$ is $k$.
 
 With relabeling of solution if needed, this directly gives the result with $\vect{k}^{j}$ the $j$-th solution:
 \begin{equation}
-\vect{k}^{j}=(1+\hat{P})\vect{\tilde{k}}^{j}
+\vect{k}^{j}=(1-\hat{P})\vect{\tilde{k}}^{j}
 \end{equation}
 This is exactly the vector version of what we wanted to prove.
 \end{proof}
 
-The rest is exactly the same than in the first case.
+The rest is exactly the same as in the first case.
 To not overload the proof with notation, we drop the $j$ label to indicate which solution we take.
 
 We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ using the lemma.
 \begin{align*}
 \vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
-&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{k}}_{i}\right)\right)\\
-\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}\right)\\
-&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{k}}_{i}\right)\right)\\
+&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{k}}_{i}\right)\right)\\
+\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}\right)\\
+&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{k}}_{i}\right)\right)\\
 \intertext{Using that $\vect{v}_{n}=\tilde{\vect{v}_{n}}$}
 \vect{v}_{n+1}&=\vect{\tilde{v}}_{n+1}
 \end{align*}
