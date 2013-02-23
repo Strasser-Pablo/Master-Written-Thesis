@@ -573,14 +573,15 @@ But this solution has high frequency oscillations and we expect that it is not d
 
 \begin{figure}
 \directlua{dofile('fixed/unstaggered_div2.lua')}
-\caption{Speed that are numerically divergence free but shouldn't}
+\caption{Speeds that are numerically divergence free but shouldn't}
 \label{fixed:unstaggered_div2}
 \end{figure}
 
-The problem with this kind of solution, is that it's very stable.
-The projection operator $P$ will be 0, and doesn't correct this kind of speed. We cannot correct it in general for every choice of $f$.
-Note that all the work done in section \ref{fixed:timesec} is true. In particular the theorem will be true and will correctly projects
-in a divergence free space. It's only that our divergence free space contains solutions that are not wanted.
+The problem with this kind of solution is that it is very stable.
+The projection operator $P$ will be 0, and does not correct this kind of speed. We cannot correct it in general for every choice of $f$.
+Note that all the work done in section \ref{fixed:timesec} is true. In particular the theorem will be true and will correctly project
+in a divergence free space. It is only that our divergence free space contains solutions that are not wanted.
+This solution is in the kernel of the discrete projetion operator.
 
 We can recall one of the formulations of the so called Murphy's law, ``If anything can go wrong, it will.''
 
@@ -590,33 +591,33 @@ Another solution is to use another grid.
 \FloatBarrier
 \subsection{Staggered grid}
 
-On a staggered grid we put the variable in the position shown if figure \ref{fixed:staggered}.
+On a staggered grid we put the variables in the positions shown in figure \ref{fixed:staggered}.
 \begin{figure}
 \directlua{dofile('fixed/staggered.lua')}
 \caption{Position of variable on a staggered grid}
 \label{fixed:staggered}
 \end{figure}
 
-This can seem to be strange to have different component of speed at different places. But it make discretization more easy.
-To label variable, we label by cell and then took the lower left component (cf. figure \ref{fixed:staggered_label}).
+This can seem to be strange to have different components of speed at different places. But it makes discretization more easy.
+To label variables, we label by cell and then take the lower left component (cf. figure \ref{fixed:staggered_label}).
 \begin{figure}
 \directlua{dofile('fixed/staggered_label.lua')}
 \caption{Labeling on staggered grid}
 \label{fixed:staggered_label}
 \end{figure}
 
-We now define the divergence and the gradient:
+We now define the divergence and the gradient
 \begin{align}
   \vect{\nabla}p_{ij}&=\begin{pmatrix}
-    \frac{p_{i,j}-p_{i-1,j}}{\Delta x}\\
-    \frac{p_{i,j}-p_{i,j-1}}{\Delta y}\\
+    \frac{p_{i,j}-p_{i-1,j}}{\Delta x},\\
+    \frac{p_{i,j}-p_{i,j-1}}{\Delta y}.\\
                       \end{pmatrix}\\
   \vect{\nabla}\cdot \vect{v}_{i,j}&=\frac{{v_{x}}_{i+1,j}-{v_{x}}_{i,j}}{\Delta x}+\frac{{v_{y}}_{i,j+1}-{v_{y}}_{i,j}}{\Delta y}
 \end{align}
-This two expressions are geometrically very clear.
+These two expressions are geometrically very clear.
 
-In figure \ref{fixed:staggered_gradient}, the gradient at red speed component uses components at blue point.
-Contrary at case with center difference we cannot create a none constant vector with 0 gradient.
+In figure \ref{fixed:staggered_gradient}, the gradient at red speed components uses components at blue points.
+In contrast to the at case with non staggered grid we cannot create a none constant vector with 0 gradient.
 \begin{figure}
 \directlua{dofile('fixed/staggered_gradient.lua')}
 \caption{Points used to calculate the red gradient component are in blue}
