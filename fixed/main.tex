@@ -480,45 +480,45 @@ $\hat{A}$ and $\hat{L}$ are commutative, because of the mixed-product property.
 \end{align}
 
 \begin{align}
-k&=(1+\hat{L})\Delta t\hat{f}(\hat{v}_{n}+\hat{A}k)+\Delta t\tau\\
-\tilde{k}&=\Delta t \hat{f}((1+\hat{L})(\hat{v}_{n}+\hat{A}k)+\tilde{\tau})
+k&=(1-\hat{L})\Delta t\hat{f}(\hat{v}_{n}+\hat{A}k)+\Delta t\tau\\
+\tilde{k}&=\Delta t \hat{f}((1-\hat{L})(\hat{v}_{n}+\hat{A}k)+\tilde{\tau})
 \end{align}
 
 We begin to define 2 functions:
 \begin{align}
 k&=g(k)\\
 \tilde{k}&=\tilde{g}(\tilde{k})\\
-g(x)&=(1+\hat{L})\Delta t \hat{f}(\hat{v}_{n}+\hat{A}x)+\Delta t\tau\\
-\tilde{g}(x)&=\Delta t \hat{f}((1+\hat{L})(\hat{v}_{n}+\hat{A}x)+\tilde{\tau})
+g(x)&=(1-\hat{L})\Delta t \hat{f}(\hat{v}_{n}+\hat{A}x)+\Delta t\tau\\
+\tilde{g}(x)&=\Delta t \hat{f}((1-\hat{L})(\hat{v}_{n}+\hat{A}x)+\tilde{\tau})
 \end{align}
 
 $k$ and $\tilde{k}$ are fixed points of function $g$ and $\tilde{g}$.
 
 We now calculate using that $L$ is linear and $L\hat{v}=0$:
 \begin{align}
-(1+\hat{L})\tilde{g}(x)&=(1+\hat{L})\Delta t \hat{f}((1+\hat{L})(\hat{v}_{n}+\hat{A}x)+\tilde{\tau})=(1+\hat{L})\Delta t \hat{f}(\hat{v}_{n}+\hat{A} (1+\hat{L})x+\tilde{\tau})\\
-&=(1+\hat{L})\Delta t \hat{f}(\hat{v}_{n}+\hat{A} ((1+\hat{L})x+\hat{A}^{-1}\tilde{\tau}))\\
+(1-\hat{L})\tilde{g}(x)&=(1-\hat{L})\Delta t \hat{f}((1-\hat{L})(\hat{v}_{n}+\hat{A}x)+\tilde{\tau})=(1-\hat{L})\Delta t \hat{f}(\hat{v}_{n}+\hat{A} (1-\hat{L})x+\tilde{\tau})\\
+&=(1-\hat{L})\Delta t \hat{f}(\hat{v}_{n}+\hat{A} ((1-\hat{L})x+\hat{A}^{-1}\tilde{\tau}))\\
 \intertext{By definition of $g$ we have:}
-&=g((1+\hat{L})x+\hat{A}^{-1}\tilde{\tau})-\Delta t \tau
+&=g((1-\hat{L})x+\hat{A}^{-1}\tilde{\tau})-\Delta t \tau
 \end{align}
 
 We now substitute $\tilde{k}$ in $x$
 \begin{align}
-(1+\hat{L})\tilde{g}(\tilde{k})&=g((1+\hat{L})\tilde{k}+\hat{A}^{-1}\tilde{\tau})-\Delta t \tau\\
+(1-\hat{L})\tilde{g}(\tilde{k})&=g((1-\hat{L})\tilde{k}+\hat{A}^{-1}\tilde{\tau})-\Delta t \tau\\
 \intertext{$\tilde{k}$ is a fixed point of $\tilde{g}$}
-(1+\hat{L})\tilde{k}&=g((1+\hat{L})\tilde{k}+\hat{A}^{-1}\tilde{\tau})-\Delta t \tau\\
-(1+\hat{L})\tilde{k}+\Delta t \tau&=g((1+\hat{L})\tilde{k}+\hat{A}^{-1}\tilde{\tau})\\
+(1-\hat{L})\tilde{k}&=g((1-\hat{L})\tilde{k}+\hat{A}^{-1}\tilde{\tau})-\Delta t \tau\\
+(1-\hat{L})\tilde{k}+\Delta t \tau&=g((1-\hat{L})\tilde{k}+\hat{A}^{-1}\tilde{\tau})\\
 \intertext{If}
 \tilde{\tau}=\Delta t \hat{A}\tau
 \intertext{Then}
-(1+\hat{L})\tilde{k}+\Delta t \tau&=g((1+\hat{L})\tilde{k}+\Delta t \tau)
+(1-\hat{L})\tilde{k}+\Delta t \tau&=g((1-\hat{L})\tilde{k}+\Delta t \tau)
 \end{align}
-$(1+\hat{L})\tilde{k}+\Delta t \tau$ is a fixed point of $g$.
+$(1-\hat{L})\tilde{k}+\Delta t \tau$ is a fixed point of $g$.
 But fixed point of $g$ is $k$.
 
 After relabeling of solution, this directly gives the result with $k^{j}$ the $j$-th solution:
 \begin{equation}
-k^{j}=(1+\hat{L})\tilde{k}^{j}+\Delta t \tau
+k^{j}=(1-\hat{L})\tilde{k}^{j}+\Delta t \tau
 \end{equation}
 This is exactly the vector version of what we wanted to prove.
 \end{proof}
@@ -531,7 +531,7 @@ We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ us
 \vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
 &=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\left(\eye+L\right)\vect{\tilde{k}}_i+\Delta t \vect{T}_{i}\right)\\
 \vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}+L\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}\right)+\vect{\tilde{T}}_0\\
-&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\eye+L\right)\vect{\tilde{k}}_{i}+\vect{\tilde{T}}_0\\
+&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\eye-L\right)\vect{\tilde{k}}_{i}+\vect{\tilde{T}}_0\\
 \vect{\tilde{T}}_0&=\Delta t\sum_{i=1}^{s}b_{i}\vect{T}_{i}\\
 \intertext{Using that $\vect{v}_{n}=\tilde{\vect{v}}_{n}$}
 \vect{v}_{n+1}&=\vect{\tilde{v}}_{n+1}
