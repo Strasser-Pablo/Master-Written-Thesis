@@ -3,22 +3,22 @@
 \minitoc
 \section*{Introduction}
 In this chapter, we will discuss the analytical problem that we want to solve.
-The other numerical chapters will consist of numericals schemes to solve the problem given in this chapter.
+The other numerical chapters will consist of numerical schemes to solve the problem given in this chapter.
 
 \section{Variables and parameters}
 
-The problem will consist to find a function of space and time in a certain domain respecting some conditions and equations.
+The problem is to find a function of space and time in a certain domain respecting some conditions and equations.
 
 We begin to define space, time and domain:
 \begin{description}
-\item[The \emph{space}] consists of a vector in fixed Cartesian coordinate with dimension typically 2 or 3 (Navier-Stokes on 1d is trivial).
-Space is noted $\vect{x}$.
-\item[The \emph{time}] consists of a indice indicating the evolution of the function in time.
-Time is noted $t$.
+\item[The \emph{space}] consists of a vector in fixed Cartesian coordinates with dimension typically 2 or 3.
+Space is denoted by $\vect{x}$.
+\item[The \emph{time}] consists of a parameter indicating the evolution of the function in time.
+Time is denoted by $t$.
 \item[The \emph{domain}] is the spatial region where a field is defined. This consists physically in the spatial region where water lies.
 Boundary conditions need to be provided.
-The domain can vary with respect of time and can vary with respect of the solution at previous time.
-The domain doesn't need to be connected. But can be decomposed in union of connected subdomain.
+The domain can vary with respect to time and can vary with respect to the solution at previous times.
+The domain does not need to be connected, but can be decomposed to a union of connected subdomains.
 
 \begin{example}
  If we take a drop of water falling in a glass of water. The domain consist of the region where the water lies.
