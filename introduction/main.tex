@@ -39,77 +39,87 @@ With $n$ the dimension of the vector:
 \begin{definition}[Laplacian]
 The Laplacian $\Delta$ consists of a scalar operator:
 \begin{equation}
-\Delta p=\vect{\nabla}\cdot \vect{\nabla}p=\sum_{i=1}^{n} \partial_{i}\partial_{i}p
+\Delta p=\vect{\nabla}\cdot \vect{\nabla}p=\sum_{i=1}^{n} \partial_{i}\partial_{i}p.
 \end{equation}
 \end{definition}
 
 \begin{definition}[Vector Laplacian]
-A vector version of the Laplacian consists to apply the Laplacian to all component of the vector.
+A vector version of the Laplacian consists of applying the Laplacian to all components of the vector.
 \begin{equation}
  \Delta \vect{v}=\begin{pmatrix} \Delta v_{1}\\
                   \vdots\\ \Delta v_{n}
-                 \end{pmatrix}
+                 \end{pmatrix}.
 \end{equation}
 \end{definition}
 \section{Divergence free and rotational free space}
 
 \begin{definition}[Divergence]
- The divergence of a vector consists of:
+ The divergence of a vector consists of
  \begin{equation}
-  \vect{\nabla} \cdot \vect{v}
+  \vect{\nabla} \cdot \vect{v}.
   \end{equation}
 \end{definition}
 
-\begin{definition}[Rotational]
- The rotational of a vector consists of:
+\begin{definition}[Curl]
+ The curl of a curl consists of
  \begin{equation}
-  \vect{\nabla} \times \vect{v}
+  \vect{\nabla} \times \vect{v}.
  \end{equation}
 \end{definition}
 
 \begin{definition}[Gradient]
- The gradient of a scalar consists of:
+ The gradient of a scalar consists of
  \begin{equation}
-  \vect{\nabla} p
+  \vect{\nabla} p.
  \end{equation}
 \end{definition}
 
 \begin{property}
- The gradient is rotational free.
+ The gradient is curl free.
  \begin{equation}
-  \vect{\nabla}\times \vect{\nabla} p=\vect{0}
+  \vect{\nabla}\times \vect{\nabla} p=\vect{0}.
  \end{equation}
 \end{property}
 
 \begin{property}
-The rotational is divergence free.
+The curl is divergence free.
  \begin{equation}
-  \vect{\nabla}\cdot \vect{\nabla} \times \vect{v}=0
+  \vect{\nabla}\cdot \vect{\nabla} \times \vect{v}=0.
  \end{equation}
 \end{property}
 
 \section{Projection}
 \label{introduction:projection}
 \begin{property}[Projection of a divergence free space]
- Every vector can be projected to a divergence free space without changing its rotational with the following change:
+ Every vector field can be projected on a divergence free space without changing its curl with the following change:
 \begin{align}
- \vect{v_{new}}&=v-\vect{\nabla}p \label{introduction:ProjectionA}\\
- \Delta p&=\vect{\nabla} \cdot \vect{v} \label{introduction:ProjectionB}
+ \vect{\nabla}\vect{v_{new}}&=v-\vect{\nabla}p \label{introduction:ProjectionA},\\
+ \Delta p&=\vect{\nabla} \cdot \vect{v} \label{introduction:ProjectionB}.
 \end{align}
 \end{property}
 \begin{proof}
-  Taking the divergence of equation \ref{introduction:ProjectionA} and using \ref{introduction:ProjectionB}
+  Taking the divergence of equation (\ref{introduction:ProjectionA}) and using (\ref{introduction:ProjectionB})
   \begin{equation}
-   \vect{v_{new}}=\vect{\nabla}\cdot\vect{v}-\Delta p=\vect{\nabla}\cdot\vect{v}-\vect{\nabla}\cdot\vect{v}=0
+   \vect{\nabla}\cdot\vect{v_{new}}=\vect{\nabla}\cdot\vect{v}-\Delta p=\vect{\nabla}\cdot\vect{v}-\vect{\nabla}\cdot\vect{v}=0.
+  \end{equation}
+  Taking the curl of equation (\ref{introduction:ProjectionA}) and using (\ref{introduction:ProjectionB})
+  \begin{equation}
+   \vect{\nabla}\times\vect{v_{new}}=\vect{\nabla}\times\vect{v}-\vect{\nabla}\times\vect{\nabla} p=\vect{\nabla}\times\vect{v}.
   \end{equation}
   \end{proof}
   
+   \begin{remark}
+    We have a Poisson's equation to solve. With Dirichlet and Neumann boundary condition we have a unique solution (if we are not
+    Neumann everywhere).	
+   \end{remark}
+
+  
   \begin{remark}
- This work as long as:
+ This works as long as:
  \begin{equation}
   \Delta=\vect{\nabla}\cdot \vect{\nabla}\label{introduction:ProjectionDelta}
  \end{equation}
- So this can be used in discretized case and will be exact as long as \ref{introduction:ProjectionDelta} is respected.
+ So this can also be used in the discretized case and will be exact as long as (\ref{introduction:ProjectionDelta}) is respected.
  \end{remark}
 
 
