@@ -628,7 +628,7 @@ The divergence is given by the sum of inflow around a cell.
 In figure \ref{fixed:staggered_divergence}, the divergence at the red point uses the components at the blue point.
 \begin{figure}
 \directlua{dofile('fixed/staggered_divergence.lua')}
-\caption{Points used to calculate red divergence are in blue}
+\caption{Points used to calculate the divergence approximation at the red point are in blue}
 \label{fixed:staggered_divergence}
 \end{figure}
 
@@ -662,30 +662,29 @@ Because of centered differences it is second order accurate.
 \paragraph{Laplacian}
 \label{fixed:Laplacian}
 
-The discretization of the Laplacian is the combination of the application of the gradient and divergence.
+The discretization of the Laplacian is a combination of the application of the gradient and the divergence,
 \begin{equation}
-  \Delta p_{i,j}=\frac{p_{i+1,j}-2p_{i,j}+p_{i-1,j}}{(\Delta x)^2}+\frac{p_{i,j+1}-2p_{i,j}+p_{i,j-1}}{(\Delta y)^2}
+  \Delta p_{i,j}=\frac{p_{i+1,j}-2p_{i,j}+p_{i-1,j}}{(\Delta x)^2}+\frac{p_{i,j+1}-2p_{i,j}+p_{i,j-1}}{(\Delta y)^2}.
 \end{equation}
 This formula is of order 2.
-We prove it for the one dimensional case:
+We prove it for the one dimensional case by s Taylor expansion around $x$,
 \begin{align*}
-  f(x+\Delta x)-2f(x)+f(x-\Delta x)&=\\
-  \intertext{We make a Taylor expansion around $x$}
+  f(x+\Delta x)-2f(x)+f(x-\Delta x)
   &=f(x)+\Delta x f'(x) +(\Delta x)^2 \frac{f''(x)}{2}+(\Delta x)^3 \frac{f'''(x)}{6}+O((\Delta x)^4)-2f(x)\\
   &\qquad+f(x)-\Delta x f'(x) +(\Delta x)^2 \frac{f''(x)}{2}-(\Delta x)^3 \frac{f'''(x)}{6}\\
   &=(\Delta x)^2f''(x) +O((\Delta x)^4)\\
-  f''(x)&=\frac{f(x+\Delta x)-2f(x)+f(x-\Delta x)}{(\Delta x)^2}+O((\Delta x)^2)
+  f''(x)&=\frac{f(x+\Delta x)-2f(x)+f(x-\Delta x)}{(\Delta x)^2}+O((\Delta x)^2).
 \end{align*}
 
-\paragraph{Vector laplacian}
+\paragraph{Vector Laplacian}
 \label{fixed:vect:laplacian}
-For vector Laplacian we use the same scheme as in section \ref{fixed:Laplacian} but for every component of speed.
-Staggered grid doesn't pose problem because we don't have mixed terms with derivative and non derivative.
+For the vector Laplacian, we use the same scheme as in section \ref{fixed:Laplacian} but for every component of the speed.
+The staggered grid does not pose a problem because we do not have mixed terms with and without derivatives.
 
 \paragraph{Convection}
 
-Convection term is the more difficult term to treat, because it's non linear and uses mixed terms.
-We need to consider two type of terms. Let $i\neq j$ and $\vect{k}$ be an integer vector of the position on the grid
+The convection term is the more difficult term to treat, because it is non-linear and uses mixed terms.
+We need to consider two types of terms. Let $i\neq j$ and $\vect{k}$ be an integer vector of the position on the grid
 and $\vect{e}_i$ the $i$-th unit vector.
 We first consider as $i$-th component:
 \begin{equation}
