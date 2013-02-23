@@ -19,57 +19,62 @@ In the next subsection we will present an overview of the two methods.
 \subsection{Analytical expression for pressure}
 \label{fixed:analytical}
 
-We use the work of section \ref{analytical:fixe_eulerian} that Navier-Stokes equations are analytically equivalent to:
+We use the work of section \ref{analytical:fixe_eulerian} that Navier-Stokes equations are analytically equivalent to
 \begin{equation}
-  \partial_t \vect{v}(\vect{x} ,t)=(\eye+P)f(\vect{v}(\vect{x},t))
+  \partial_t \vect{v}(\vect{x} ,t)=(\eye-P)f(\vect{v}(\vect{x},t)).
 \end{equation}
 
-$\eye+P$ projects a non divergence free vector to a divergence free vector.
-The solution $\vect{v}$ is a divergence free vector as long that initial conditions are divergence free. Because the integral of a divergence free vector is again a divergence free vector.
+$\eye-P$ projects a non divergence free vector to obtain a divergence free vector.
+The solution $\vect{v}$ is a divergence free vector as long that initial conditions are divergence free, because the integral of a divergence free vector is again a divergence free vector
+\begin{align*}
+ v(t)&=\int_{t_0}^{t}\partial_{\tilde{t}} \vect{v}(\vect{x} ,\tilde{t})=\int_{t_0}^{t} (\eye-P)f(\vect{v}(\vect{x},\tilde{t})) d\tilde{t}\\
+ \vect{\nabla}\cdot v(t)&= \vect{\nabla}\cdot\int_{t_0}^{t} (\eye-P)f(\vect{v}(\vect{x},\tilde{t})) d\tilde{t}=\int_{t_0}^{t} \vect{\nabla}\cdot(\eye-P)f(\vect{v}(\vect{x},\tilde{t})) d\tilde{t}=\int_{t_0}^{t} 0 d\tilde{t}=0
+\end{align*}
 
-But a priori the numerical solution is not necessary divergence free.
+
+But a priori the numerical solution is not necessarily divergence free.
 
 \subsection{Projection of speed}
 \label{fixed:proj}
 
-We can project every speed in a divergence free space:
+We can project every speed in a divergence free space
 \begin{subequations}
 \begin{align}
-  \partial_t \vect{\tilde{v}}(\vect{x} ,t)&=f(\vect{v}(\vect{x},t))\\
-  \vect{v}(\vect{x},t)&=(\eye+P)\vect{\tilde{v}}
+  \partial_t \vect{\tilde{v}}(\vect{x} ,t)&=f(\vect{v}(\vect{x},t)),\\
+  \vect{v}(\vect{x},t)&=(\eye-P)\vect{\tilde{v}}.
 \end{align}
 \end{subequations}
-We have the certitude to be always divergence free by construction.
+$\vect{v}$ is certain to be always divergence free by construction.
 
 \section{Time discretization and integration}
 \label{fixed:timesec}
 \subsection{Runge-Kutta method}
 
-A Runge-Kutta method is a method to solve the ODE (We drop the $\vect{x}$ dependence, but it's understood that this equation is for a vector formed in concatenating every speed):
+A Runge-Kutta method is a method to solve systems of ODEs (We drop the $\vect{x}$ dependence, but it is understood that this equation is for a vector formed in concatenating every speed)
 \begin{equation}
-\partial_t \vect{v}(t)=f(\vect{v})
+\partial_t \vect{v}(t)=f(\vect{v}).
 \end{equation}
 
-The solution at time $n+1$ is given from the solution at time $n$ with $\Delta t$ the time step and $a$, $b$ parameters of the method.
+The solution at time $n+1$ is given from the solution at time $n$ with $\Delta t$ the time step and $a$, $b$ parameters of the method,
 \begin{subequations}
 \begin{align}
-	\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
-	\vect{k}_{j}&=\Delta t f(\vect{v}_{n}+\sum_{i=1}^{j-1}a_{j,i}\vect{k}_{i})
+	\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i},\\
+	\vect{k}_{i}&=\Delta t f(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}).
 \end{align}
 \end{subequations}
 
 \subsection{Runge-Kutta based linear projection}
 \label{fixed:sect:runge-kutta}
-We now integrate equations given by methods \ref{fixed:analytical} and \ref{fixed:proj} with a Runge-Kutta method.
+We now integrate equations given by methods (\ref{fixed:analytical}) and (\ref{fixed:proj}) with a Runge-Kutta method.
 
-The numerical scheme for exact divergence free speed is:
+The numerical scheme for the exact divergence free speed is
 \begin{subequations}
 \begin{align}
-\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}\right)\\
-\vect{\tilde{k}}_{i}&=\Delta t f\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}\right)\right)
+\vect{\tilde{v}}_{n+1}&=(\eye-P)\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i},\\
+\vect{\tilde{k}}_{i}&=\Delta t f\left((\eye-P)\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}\right)\right).
 \end{align}
 \end{subequations}
-We project at every estimation of speed. Making by construction every speed divergence free.
+We project at every input of the non linear $f$ function and at the final speed. Making by construction every speed divergence free.
 
 Scheme for analytical expression for pressure:
 \begin{subequations}
