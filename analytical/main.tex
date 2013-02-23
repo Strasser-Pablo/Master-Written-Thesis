@@ -21,60 +21,60 @@ The domain can vary with respect to time and can vary with respect to the soluti
 The domain does not need to be connected, but can be decomposed to a union of connected subdomains.
 
 \begin{example}
- If we take a drop of water falling in a glass of water. The domain consist of the region where the water lies.
- At the beginning this will consist of domain consisting of two connected subdomains (the drop and the glass)
- that after a given time will merge in one domain.
+ Take a drop of water falling into a glass of water, the domain consists of the region where the water lies.
+ At the beginning we have a domain consisting of two connected subdomains (the water in the drop and the water in the glass)
+ that after a given time will merge into one domain.
 \end{example}
 
-The domain is generally noted $\Omega$ or $\Omega(t)$ to emphasize that it can be variable with respect of time.
+The domain is generally denoted by $\Omega$ or $\Omega(t)$ to emphasize that it can be variable with respect to time.
 \end{description}
 
-The variable of the equation are named \emph{Field} and consists of functions with respect of space in the spatial domain and time in the temporal domain.
+The variable of the equation is named \emph{Field} and consists of functions with respect to space in the spatial domain and time in the temporal domain,
 \begin{equation}
- F(x,t)\qquad \text{With $x\in\Omega(t)$ and $t_0\leq t \leq t_f$}
+ F(x,t)\qquad \text{with $x\in\Omega(t)$ and $t_0\leq t \leq t_f$.}
 \end{equation}
 
 We have the following fields:
 \begin{description}
 \item[The \emph{speed}:] A vector field consisting of the speed in space and time.
-The speed is noted $\vect{v}$.
+The speed is denoted by $\vect{v}$.
 \item[The \emph{pressure}:] A scalar field consisting of an internal force per unit area in the fluid.
 We will not use the pressure in this work, but the pressure divided by density.
-If we note the pressure $\tilde{p}$ we use:
+If we denote the pressure by $\tilde{p}$ we use
 \begin{equation}
- p=\frac{\tilde{p}}{\rho}
+ p=\frac{\tilde{p}}{\rho}.
 \end{equation}
-Because we use incompressible Navier-Stokes equation, $\rho$ is constant. This can be view as a change of unit.
+Because we use the incompressible Navier-Stokes equation, $\rho$ is constant. This can be viewed as a change of units.
 \end{description}
 
 The following constant parameters are used:
 \begin{description}
 \item[The \emph{viscosity}] represents how much water particles stick together.
-Higher is the viscosity less abrupt speed changes are possible.
-The viscosity is noted $\mu$. We use allot $\nu$ that is the viscosity divided by the density.
+The higher the viscosity the less abrupt speed changes are possible.
+The viscosity is denoted by $\mu$. We use $\nu$ that is the viscosity divided by the density.
 \begin{equation}
- \nu=\frac{\mu}{\rho}
+ \nu=\frac{\mu}{\rho}.
 \end{equation}
 \item[The \emph{density}] is a mass per unit volume.
-Density play the same role as mass in Newton's mechanic.
-In the incompressible Navier-Stokes equation density is a constant because incompressibility tells us that density doesn't change.
-The density is noted $\rho$.
+Density plays the same role as mass in Newtonian mechanics.
+In the incompressible Navier-Stokes equation density is a constant because incompressibility tells us that density does not change.
+The density is denoted by $\rho$.
 \item[The \emph{external force}] is a user defined vector field that represents the external force applied to the water.
-It can possibly depends on the solution for previous time.
-The force is noted $\vect{F}$.
+It can possibly depend on the solution at previous times.
+The force is denoted by $\vect{F}$.
 \end{description}
 
 \section{Navier-Stokes equations}
 
-\subsection{Fixed eulerian topology}
+\subsection{Fixed Eulerian topology}
 \label{analytical:fixe_eulerian}
-The incompressible Navier-Stokes equations are given by:
+The incompressible Navier-Stokes equations are given by
 \begin{subequations}
 \begin{align}
 \label{analytical:navierStokesA}
-\vect{\nabla} \cdot \vect{v}(\vect{x} ,t)&=0\\
+\vect{\nabla} \cdot \vect{v}(\vect{x} ,t)&=0,\\
 \label{analytical:navierStokesB}
-\partial_t \vect{v}(\vect{x} ,t)+(\vect{v}(\vect{x},t)\cdot\vect{\nabla} ) \vect{v}(\vect{x} ,t)&=-\vect{\nabla} p(\vect{x},t)+\frac{\vect{F}(\vect{x},t)}{\rho(\vect{x},t)}+\nu \Delta \vect{u}(\vect{x},t)
+\partial_t \vect{v}(\vect{x} ,t)+(\vect{v}(\vect{x},t)\cdot\vect{\nabla} ) \vect{v}(\vect{x} ,t)&=-\vect{\nabla} p(\vect{x},t)+\frac{\vect{F}(\vect{x},t)}{\rho(\vect{x},t)}+\nu \Delta \vect{v}(\vect{x},t).
 \end{align}
 \end{subequations}
 
