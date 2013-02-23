@@ -137,50 +137,50 @@ We can as in section \ref{analytical:fixe_eulerian} eliminate the constraint on 
 
 \subsection{Lagrangian form of Navier-Stokes equations}
 \label{analytical:convectif}
-We will in this section rewrite \ref{analytical:navierStokesB} in another form.
-We begin to define a new position system (which is similar to the particle position used in previous section) $\vect{\xi}_{\lambda}(t)$:
+We will in this section rewrite (\ref{analytical:navierStokesB}) in another form.
+We begin to define a new position system (which is similar to the particle position used in the previous section) $\vect{\xi}_{\lambda}(t)$:
 \begin{subequations}
 \begin{align}
- \partial_t \vect{\xi}_{\lambda}(t)&=\vect{v}(\vect{\xi}_{\lambda}(t),t)\\
- \vect{\xi}_{\lambda}(t_0)&=\vect{\xi}^{0}_{\lambda}
+ \partial_t \vect{\xi}_{\lambda}(t)&=\vect{v}(\vect{\xi}_{\lambda}(t),t),\\
+ \vect{\xi}_{\lambda}(t_0)&=\vect{\xi}^{0}_{\lambda}.
 \end{align}
 \end{subequations}
-$\lambda$ is a system of representative that is initialized by initial condition.
+Where $\lambda$ is a system of representatives that is initialized by an initial condition.
 For a given $\lambda$, $\vect{\xi}_{\lambda}(t)$ follows the speed at the given point.
 This position system is called particle coordinate or Lagrangian.
 $\vect{\xi}_\lambda(t)$ is called the characteristic.
 
-We then can define the Lagrangian speed.
+We then can define the Lagrangian speed
 \begin{equation}
- \vect{u}_{\lambda}(t)=\vect{v}(\vect{\xi}_{\lambda}(t),t)
+ \vect{u}_{\lambda}(t)=\vect{v}(\vect{\xi}_{\lambda}(t),t).
 \end{equation}
 The Lagrangian speed is the speed following a characteristic.
 
-Taking the total derivative (the derivative of everything that depend on time) of the Lagrangian speed with respect of time, we have:
+Taking the total derivative (the derivative of everything that depend on time) of the Lagrangian speed with respect of time, we have
 \begin{equation}
-\frac{d \vect{u}_{\lambda}(t)}{d t}=\frac{d \vect{v}(\xi_{\lambda},t)}{d t}=\partial_t \vect{v}+\left(\frac{\partial \vect{\xi}_{\lambda}(t)}{\partial t}\cdot\vect{\nabla}\right)\vect{v}
+\frac{d \vect{u}_{\lambda}(t)}{d t}=\frac{d \vect{v}(\xi_{\lambda},t)}{d t}=\partial_t \vect{v}+\left(\frac{\partial \vect{\xi}_{\lambda}(t)}{\partial t}\cdot\vect{\nabla}\right)\vect{v}.
 \end{equation}
-This can be rewritten:
+This can be rewritten as
 \begin{equation}
-\frac{d \vect{u}_{\lambda}(t)}{d t}=\partial_t \vect{v}+\left(\vect{v} \cdot\vect{\nabla}\right)\vect{v}
+\frac{d \vect{u}_{\lambda}(t)}{d t}=\partial_t \vect{v}+\left(\vect{v} \cdot\vect{\nabla}\right)\vect{v}.
 \end{equation}
-This is exactly the lhs of equation \ref{analytical:navierStokesB}.
+This is exactly the lhs of equation (\ref{analytical:navierStokesB}).
 
-We then can rewrite Navier-Stokes equations as:
+We then can rewrite the Navier-Stokes equations as
 \begin{subequations}
 \begin{align}
 \label{analytical:navierStokesLagA}
-\vect{\nabla} \cdot \vect{u}_{\lambda}(t)&=0\\
+\vect{\nabla} \cdot \vect{u}_{\lambda}(t)&=0,\\
 \label{analytical:navierStokesLagB}
-\frac{d \vect{u}_{\lambda}(t)}{d t}&=-\vect{\nabla} p(\vect{\xi}_{\lambda}(t),t)+\frac{\vect{F}(\vect{\xi}_{\lambda}(t),t)}{\rho(\vect{x},t)}+\nu \Delta \vect{u}_{\lambda}(t)
+\frac{d \vect{u}_{\lambda}(t)}{d t}&=-\vect{\nabla} p(\vect{\xi}_{\lambda}(t),t)+\frac{\vect{F}(\vect{\xi}_{\lambda}(t),t)}{\rho(\vect{x},t)}+\nu \Delta \vect{u}_{\lambda}(t).
 \end{align}
 \end{subequations}
 
 \begin{remark}
 We remark that with this notation some expression like spatial derivative of $\vect{u}$ is not defined.
 In an analytical procedure, we can transform $\vect{u}$ to $\vect{v}$ with the help of the expression of $\vect{\xi}$, then the derivative is well defined.
-But in a numerical procedure, the point where the values are know are particles. This demand to define derivative on unstructured grid
-or to interpolate at grid point.
+But in a numerical procedure, the point where the values are known are particles. This requires us to define derivatives on unstructured grids
+or to interpolate at grid points from the particles.
 \end{remark}
 
 \section{Boundary conditions}
@@ -189,38 +189,38 @@ We will be interested in two kinds of boundary conditions.
 \begin{description}
  \item[\emph{Inflow} Boundary:]
  An inflow boundary is a source of water.
- \item[\emph{free surface} Boundary:]
- A free surface boundary is a freely moving boundary where the other fluid is inert.
+ \item[\emph{Free surface} Boundary:]
+ A free surface boundary is a freely moving boundary where the other fluid is inert (no density and no viscosity).
 \end{description}
 
 \subsection{Inflow}
 
 Inflow boundary conditions have a constant prescribed speed.
-This give the following constraint on pressure:
+This gives the following constraint on pressure:
 \begin{equation}
 \nabla p(\vect{x},t)=f(\vect{v}(\vect{x},t))
 \end{equation}
 
 The following alternative boundary conditions have been used.
-Set the speed on the surface artificially to constant and use 0 Neumann boundary conditions.
+Set the speed on the surface artificially to constant and use homogeneous Neumann boundary conditions for pressure.
 
 
 \subsection{Free surface}
 \label{ana:free:surface}
-To define the free surface boundary conditions, we need to define the stress tensor:
+To define the free surface boundary conditions, we need to define the stress tensor
 \begin{equation}
-	\sigma_{ij}=-p \delta_{ij}+\nu\left(\frac{\partial v_{i}}{\partial x_{j}}+\frac{\partial v_{j}}{\partial x_{i}}\right)
+	\sigma_{ij}=-p \delta_{ij}+\nu\left(\frac{\partial v_{i}}{\partial x_{j}}+\frac{\partial v_{j}}{\partial x_{i}}\right).
 \end{equation}
 The boundary conditions are then given by (for 3d):
 \begin{align}
-	\sum_{i,j}\sigma_{ij}n_{i}n_{j}&=0\\
-	\sum_{i,j}\sigma_{ij}t^{1}_{i}n_{j}&=0\\
-	\sum_{i,j}\sigma_{ij}t^{2}_{i}n_{j}&=0\\
+	\sum_{i,j}\sigma_{ij}n_{i}n_{j}&=0,\\
+	\sum_{i,j}\sigma_{ij}t^{1}_{i}n_{j}&=0,\\
+	\sum_{i,j}\sigma_{ij}t^{2}_{i}n_{j}&=0,\\
 \end{align}
-Where $\vect{n}$ is the normal vector and $\vect{t}^1$ and $\vect{t}^2$ are two non-colinear tangent vectors.
+where $\vect{n}$ is the normal vector and $\vect{t}^1$ and $\vect{t}^2$ are two non-colinear tangent vectors.
 For 2d only one tangent vector is needed.
 
 The first equation can be used to find boundary conditions for $p$.
-The other equations only depend of speed, because $\vect{n}$ is orthogonal to $\vect{t}^{1}$ and $\vect{t}^{2}$.
+The other equations only depend on speed, because $\vect{n}$ is orthogonal to $\vect{t}^{1}$ and $\vect{t}^{2}$.
 The value of $\nu$ is not relevant for the condition (a global non zero constant).
 The constraint is linear.
