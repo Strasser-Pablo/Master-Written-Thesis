@@ -74,9 +74,9 @@ The numerical scheme for the exact divergence free speed is
 \vect{\tilde{k}}_{i}&=\Delta t f\left((\eye-P)\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}\right)\right).
 \end{align}
 \end{subequations}
-We project at every input of the non linear $f$ function and at the final speed. Making by construction every speed divergence free.
+We project at every input of the non linear $f$ function and at the final speed, which by construction, makes every speed divergence free.
 
-Scheme for analytical expression for pressure:
+The scheme for the analytical expression for the pressure
 \begin{subequations}
 \begin{align}
 	\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
@@ -90,40 +90,40 @@ The following theorem shows that the two schemes are the same.
 If $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ is divergence free then $\vect{v}_{n+1}=\vect{\tilde{v}}_{n+1}$ 
 \end{theorem}
 \begin{proof}
-We begin to prove the following lemma.
+We begin by proving the following lemma.
 \begin{lemma}
 \begin{equation}
-  \vect{k}_{i}=\vect{\tilde{k}}_{i}+P(\vect{\tilde{k}}_{i})
+  \vect{k}_{i}=\vect{\tilde{k}}_{i}-P(\vect{\tilde{k}}_{i})
 \end{equation}
 \end{lemma}
 \begin{proof}
 By recurrence on $i$.
 We begin with $i=1$:
 \begin{align}
-  \vect{k}_{1}&=\Delta tf\left(\vect{v}_n\right)+\Delta tP\left(f\left(\vect{v}_n\right)\right)\\
+  \vect{k}_{1}&=\Delta tf\left(\vect{v}_n\right)-\Delta tP\left(f\left(\vect{v}_n\right)\right)\\
 \vect{\tilde{k}}_{1}&=\Delta tf\left(\vect{v}_n\right)\\
-  \vect{k}_{1}&=\Delta t f\left(\vect{v}_n\right)+\Delta tP\left(f\left(\vect{v}_n\right)\right)=\vect{\tilde{k}}_1+P\left(\vect{\tilde{k}}_1\right)
+  \vect{k}_{1}&=\Delta t f\left(\vect{v}_n\right)-\Delta tP\left(f\left(\vect{v}_n\right)\right)=\vect{\tilde{k}}_1-P\left(\vect{\tilde{k}}_1\right)
 \end{align}
 
-Assuming true for smaller $i$:
+By induction hypothesis we are true for smaller $i$:
 \begin{align*}
-  \vect{k}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{n}a_{ij}k_{j}\right)+\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right)\right)\\
+  \vect{k}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{n}a_{ij}k_{j}\right)-\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right)\right)\\
   \intertext{Using the recurrence relation we have:}
-  &=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{k}}_{j}\right)\right)\right)+\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{k}}_{j}\right)\right)\right)\right)\\
-  \vect{\tilde{k}}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}+P\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}\right)\right)\\
+  \vect{k}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}-P\left(\vect{\tilde{k}}_{j}\right)\right)\right)+\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{k}}_{j}\right)\right)\right)\right)\\
+  \vect{\tilde{k}}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}-P\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}\right)\right)\\
   \intertext{Using the linearity of $P$ and that $P\vect{v}_{n}=0$:}
-  &=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{k}}_{j}\right)\right)\right)\\
-  \vect{k}_{i}&=\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{k}}_{i}\right)
+  \vect{k}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}-P\left(\vect{\tilde{k}}_{j}\right)\right)\right)\\
+  \vect{k}_{i}&=\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{k}}_{i}\right)
 \end{align*}
 \end{proof}
 
 We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ using the lemma:
 \begin{align*}
 \vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
-&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{k}}_{i}\right)\right)\\
-\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}\right)\\
+&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{k}}_{i}\right)\right)\\
+\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}\right)\\
 \intertext{Using the linearity of $P$ and that $P\vect{\tilde{v}}_{n}=0$}
-&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}+P\left(\vect{\tilde{k}}_{i}\right)\right)\\
+\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{k}}_{i}\right)\right)\\
 \intertext{Using that $\vect{v}_{n}=\tilde{\vect{v}}_{n}$}
 \vect{v}_{n+1}&=\vect{\tilde{v}}_{n+1}
 \end{align*}
