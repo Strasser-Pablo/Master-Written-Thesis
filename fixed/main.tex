@@ -625,39 +625,39 @@ In contrast to the at case with non staggered grid we cannot create a none const
 \end{figure}
 
 The divergence is given by the sum of inflow around a cell.
-In figure \ref{fixed:staggered_divergence}, the divergence at red point uses components at blue point.
+In figure \ref{fixed:staggered_divergence}, the divergence at the red point uses the components at the blue point.
 \begin{figure}
 \directlua{dofile('fixed/staggered_divergence.lua')}
 \caption{Points used to calculate red divergence are in blue}
 \label{fixed:staggered_divergence}
 \end{figure}
 
-We cannot have the same situation than without staggered grid, where a nonphysical vector is divergence free.
+We cannot have the same situation than with non staggered grid, where a nonphysical vector is discretely divergence free.
 
 \subsubsection{Discretization}
 
-We now look at different possible schemes for staggered grid discretization.
+We now look at different possible schemes for the staggered grid discretization.
 
 \paragraph{Gradient}
 \label{fixed:gradient}
 
-The gradient is discretized with center difference.
+The gradient is discretized with centered differences,
 \begin{equation}
   \vect{\nabla}p_{i,j}=\begin{pmatrix}
                        	\frac{p_{i-1,j}-p_{i,j}}{\Delta x}\\
                        	\frac{p_{i,j-1}-p_{i,j}}{\Delta y}\\
-                       \end{pmatrix}
+                       \end{pmatrix}.
 \end{equation}
-Center difference is second order accurate to the contrary of forward or backward difference.
+Centered differences are second order accurate in contrast of forward or backward difference.
 
 \paragraph{Divergence}
 \label{fixed:divergence}
 
-The divergence is discretized with center difference.
+The divergence is also discretized with centered differences,
 \begin{equation}
-	\vect{\nabla}\cdot \vect{v}_{i,j}=\frac{{v_{x}}_{i,j}-{v_{x}}_{i-1,j}}{\Delta x}+\frac{{v_{y}}_{i,j}-{v_{y}}_{i,j-1}}{\Delta y}
+	\vect{\nabla}\cdot \vect{v}_{i,j}=\frac{{v_{x}}_{i,j}-{v_{x}}_{i-1,j}}{\Delta x}+\frac{{v_{y}}_{i,j}-{v_{y}}_{i,j-1}}{\Delta y}.
 \end{equation}
-Because of center difference its second order accurate.
+Because of centered differences it is second order accurate.
 
 \paragraph{Laplacian}
 \label{fixed:Laplacian}
