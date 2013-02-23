@@ -546,7 +546,7 @@ We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ us
 On a non-staggered grid we put the variables like in figure \ref{fixed:unstaggered}.
 \begin{figure}
 \directlua{dofile('fixed/unstaggered.lua')}
-\caption{Position of variable for Non-Staggered grid}
+\caption{Position of variables for a Non-Staggered grid}
 \label{fixed:unstaggered}
 \end{figure}
 The problem with a non-staggered  grid is that obvious centered difference discretization lead to wrong divergence free vector.
@@ -564,7 +564,7 @@ This leads to  non-physical solutions that are divergence free.
 
 \begin{figure}
 \directlua{dofile('fixed/unstaggered_div.lua')}
-\caption{Values used to calculate the divergence at red point are in blue}
+\caption{Values used to calculate the divergence at the red point are in blue}
 \label{fixed:unstaggered_div}
 \end{figure}
 
