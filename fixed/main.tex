@@ -741,16 +741,15 @@ We use the same method, but instead to use the centered difference, we use an up
 \intertext{if ${v^{ji}}_{\vect{k}}<0$}
 \left(v^{j}\partial_{j}v^{i}\right)^{i}_{\vect{k}}&={v^{ji}}_{\vect{k}}\frac{{v^{i}}_{\vect{k}+\vect{e}_j}-{v^{i}}_{\vect{k}}}{\Delta x_{j}},\\
 \intertext{if ${v^{ji}}_{\vect{k}}>0$}
-\left(v^{j}\partial_{j}v^{i}\right)^{i}_{\vect{k}}&={v^{ji}}_{\vect{k}}\frac{{v^{i}}_{\vect{k}}-{v^{i}}_{\vect{k}-\vect{e}_j}}{\Delta x_{j}}\\
+\left(v^{j}\partial_{j}v^{i}\right)^{i}_{\vect{k}}&={v^{ji}}_{\vect{k}}\frac{{v^{i}}_{\vect{k}}-{v^{i}}_{\vect{k}-\vect{e}_j}}{\Delta x_{j}},\\
 \intertext{if ${v^{ji}}_{\vect{k}}=0$}
-\left(v^{j}\partial_{j}v^{i}\right)^{i}_{\vect{k}}&=0
+\left(v^{j}\partial_{j}v^{i}\right)^{i}_{\vect{k}}&=0.
 \end{align}
-Upwind is considered more stable (can be proven easily in one dimension for burger's equation) but more diffusive.
 
 \FloatBarrier
 \section{Pseudo code}
 
-The pseudo code is not very complicate in principle.
+The pseudo code is not very complicated in principle.
 We need to put all mathematical discretizations and pieces together.
 
 We will use the following order of operation:
