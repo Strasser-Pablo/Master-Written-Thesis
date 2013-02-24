@@ -1199,32 +1199,32 @@ We remark that we can easily parallelisable the $\mathop{\textbf{for all}}$ loop
  \item The parallelism to solve the linear system will depend on the method used.
 \end{itemize}
 
-But technically this is only true if the method of manipulation of speed are thread safe.
+But technically this is only true if the method of manipulation of speed is thread safe.
 
 \subsection{Conclusion}
 
-We have shown a working pseudo code that solve the Navier-Stokes equation for fixed boundary conditions.
+We have shown a working pseudo code that solves the Navier-Stokes equation for fixed boundary conditions.
 We have shown that the complexity is dominated by the resolution of a Laplacian and can be linear.
-To have a real implementation we need to provide some storage related function to access neighbor for example.
+To have a real implementation we need to provide some storage related function to access neighbors for example.
 
 This pseudo code is part of the simplified version of the original \textbf{C++} code.
-As linear solver Umfpack direct solver was used. Other iteratif libraries were tested too.
-The storage methods are constructed around \textbf{C++11} standard library \textbf{Unordered Map} container which consist of a hash table.
+As linear solver the Umfpack direct solver was used. Other iterative libraries were tested too.
+The storage methods are constructed around the \textbf{C++11} standard library \textbf{Unordered Map} container which consist of a hash table.
 
 \FloatBarrier
-\section{Numerical experiment}
+\section{Numerical experiments}
 
-We will now do some numerical experiment in fixed boundary conditions to show how it works.
+We will now do some numerical experiments with fixed boundary conditions to show how the code works.
 
 \subsection{Heat equation}
 
-The more complicated term in the Navier-Stokes equation in grid representation is the convection term, because it's non linear.
+The more complicated term in the Navier-Stokes equation in grid representation is the convection term, because it is non linear,
 \begin{equation}
-	(\vect{v}\cdot \vect{\nabla})\vect{v}
+	(\vect{v}\cdot \vect{\nabla})\vect{v}.
 \end{equation}
 We can have this term $0$ everywhere, if we ensure that the direction of variation is orthogonal to the direction of speed.
 
-For example, for a two dimensional problem we work with a flow with a speed only in the $y$ direction. And the value depending only on the position on the $x$ axis.
+For example, for a two dimensional problem we work with a flow with a speed only in the $y$ direction. And the value depending only on the position on the $x$ axis,
 \begin{equation}
 	\vect{v}=\begin{pmatrix}
 	         	0\\f(x,t)
@@ -1232,7 +1232,7 @@ For example, for a two dimensional problem we work with a flow with a speed only
 \end{equation}
 The convection term is then:
 \begin{equation}
-	(f(x)\partial_{y})\begin{pmatrix}
+	(f(x,t)\partial_{y})\begin{pmatrix}
 	         	0\\f(x,t)
 	         \end{pmatrix}=0
 \end{equation}
@@ -1242,8 +1242,8 @@ The Navier-Stokes equations reduces then to:
 	\partial_{y}f(x,t)&=0\\
 	\frac{\partial f(x,t)}{\partial t}&=F(x,t)+\nu\frac{\partial^2 f(x,t)}{\partial x^2}-\vect{\nabla}p
 \end{align}
-Equation \ref{fix:solheat:a} is automatically true because we have no dependence on $x$.
-The pressure term role is only to cancel non divergence free part coming from the force. Because the part with the viscosity $\nu$ is a linear operator
+Equation (\ref{fix:solheat:a}) is automatically true because we have no dependence on $x$.
+The pressure term role is only to cancel non divergence free parts coming from the force, because the part with the viscosity $\nu$ is a linear operator
 of a divergence free term.
 For a potential force like gravity, the force can be absorbed in the pressure with a proper account of boundary conditions.
 This equation is an equation of heat.
