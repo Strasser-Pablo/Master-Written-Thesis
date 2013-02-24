@@ -969,7 +969,7 @@ The convection speed derivative with upwind is done in algorithm \ref{code:GetCo
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Algorithm which calculates $u_{j}\partial_{j}u_{i}$ with upwind scheme. The discretization is detailed in section \ref{fixed:upwind}}
+\caption{Algorithm which calculates $u_{j}\partial_{j}u_{i}$ with the upwind scheme. The discretization explanation details are in section \ref{fixed:upwind}}
 \label{code:GetConvectionElement}
 \begin{algorithmic}[1]
 \Function {GetConvectionElement}{$i,j,cell$}
@@ -1010,28 +1010,28 @@ The convection speed derivative with upwind is done in algorithm \ref{code:GetCo
 
 \subsection{Projection of acceleration.}
 
-The projection of acceleration is done in following the following step:
+The projection of acceleration is done in the following steps:
 \begin{enumerate}
  \item Calculate the divergence of the acceleration ($a$ is the acceleration).
  \begin{equation}
-  b=\nabla \cdot a
+  b=\nabla \cdot a.
  \end{equation}
  \item Solve the linear system
  \begin{equation}
-  \Delta p=b
+  \Delta p=b.
  \end{equation}
- \item Change the acceleration to:
+ \item Change the acceleration to
  \begin{equation}
-  a_{new}=a-\nabla p
+  a_{new}=a-\nabla p.
  \end{equation}
 \end{enumerate}
-If we have boundary conditions, the $b$ vector need to be translated.
+If we have boundary conditions, the $b$ vector needs to be translated.
 The divergence is calculated by algorithm \ref{code:GetDivergence}, the gradient by algorithm \ref{code:GetGradiant}.
 A function $\FuncCall{GetIsInDomain}(cell)$ is used, we can consider it similar to $cell.\FuncCall{GetIsFluid}()$.
 The pressure is then solved with algorithm \ref{code:ProjectAcceleration}.
 
 \begin{algorithm}
-\caption{Algorithm that calculates the divergence. The discretization is detailed in section \ref{fixed:divergence}}
+\caption{Algorithm that calculates the divergence. The discretization explanation details are in section \ref{fixed:divergence}}
 \label{code:GetDivergence}
 \begin{algorithmic}[1]
 \Function{GetDivergence}{$cell$}
@@ -1046,7 +1046,7 @@ The pressure is then solved with algorithm \ref{code:ProjectAcceleration}.
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Algorithm that calculates the gradient. The discretization is detailed in section \ref{fixed:gradient}.}
+\caption{Algorithm that calculates the gradient. The discretization explanation details are in section \ref{fixed:gradient}.}
 \label{code:GetGradiant}
 \begin{algorithmic}[1]
 \Function{GetGradiant}{$cell,i$}
@@ -1058,8 +1058,8 @@ The pressure is then solved with algorithm \ref{code:ProjectAcceleration}.
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Algorithm to calculate the correction to acceleration to make divergence free.
-In this case we assume a case with 0 Dirichlet boundary conditions.}
+\caption{Algorithm to calculate the correction to acceleration to make the velocity divergence free.
+We assume a case with 0 Dirichlet boundary conditions.}
 \label{code:ProjectAcceleration}
 \begin{algorithmic}[1]
 \Procedure{ProjectAcceleration}{}
