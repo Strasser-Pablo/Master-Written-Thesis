@@ -783,22 +783,24 @@ The principal difference of the two methods are:
  \item Boundary conditions need to be transformed as in section \ref{fixed:sect:runge-kutta:affine}.
 \end{itemize}
 
-We will in the next section show the implementation of principals parts.
+We will in the next section show the implementation of the principal parts.
 
 \subsection{Pseudo code semantic and notation.}
 
-The notation of pseudo code is inspired of \textbf{C-like} language.
+The notation of pseudo code is inspired by \textbf{C-like} language.
 
 \begin{description}
  \item[Variables] are introduced when used by giving their name.
-\item[Affectations] are done with $\gets$ which indicate that the left variable take the right value.
-\item[Boolean operations] are done with there standard mathematical notation ($=$, $\neq$,$<$,$>$,$\leq$,$\geq$).
-\item[Arithmetic operations] uses the standard mathematical operation ($+$,$-$,$\cdot$,$\frac{x}{x}$).
+\item[Assignments] are done with $\gets$ which indicate that the left variable take the right value.
+\item[Boolean operations] are done with standard mathematical notation ($=$, $\neq$,$<$,$>$,$\leq$,$\geq$).
+\item[Arithmetic operations] uses the standard mathematical operations ($+$,$-$,$\cdot$,$\frac{x}{x}$).
 \end{description}
 
-The following special control flow operation are used:
+The following special control flow operations are used:
 \begin{description}
  \item[$\mathop{\textbf{Loop}}$:] An infinite loop, is only stopped by a $\Break$ or \Return statement.
+ In the case where we use this kind of loop we cannot have infinite loop, because we use it in case where 
+ all cell need to be treated once but in a specific order. When all cell are treated the loop stop.
  \item[$\mathop{\textbf{For all}}$:] A loop which takes all elements of a container.
  $\mathop{\textbf{for all}}$ expressions are normally good candidates for parallelism.
 \end{description}
@@ -807,43 +809,43 @@ The following special control flow operation are used:
 
 The following container will be used:
 \begin{description}
- \item[Grid:] Consists of all cell. Used in expression like $\mathop{\textbf{for all}}(it \in Grid)$.
- \item[Unordered Stack:] A container where elements can be added and accessed in a $\mathop{\textbf{for all}}$. The order are not important.
- After usage, the stack is no more used. Duplicate elements are inserted more than one time.
+ \item[Grid:] Consists of all cells. Used in expression like $\mathop{\textbf{for all}}(it \in Grid)$.
+ \item[Unordered Stack:] A container where elements can be added and accessed in a $\mathop{\textbf{for all}}$. The order is not important.
+ After usage, the stack is not used any more. Duplicate elements are inserted more than once.
  A new unordered stack is created with the function call $\FuncCall{newunorderedstack}()$.
  \item[Set:] A set is a container which is like a mathematical set, where elements can be added and each element accessed.
- The difference with a stack is that in a set duplicate elements are stored once and the set element are not discarded after usage.
+ The difference with a stack is that in a set duplicate elements are stored once and the set elements are not discarded after usage.
  A new set is created with the function call $\FuncCall{newset}()$.
 \end{description}
 
 \subsubsection{Data type}
 
-The first data type is the $cell$. The $cell$ are element of the grid container.
+The first data type is the $cell$. The $cell$ are elements of the grid container.
 
-The principal method defined on a cell are:
+The principal methods defined on a cell are:
 \begin{description}
- \item[$\FuncCall{SpeedGet}(i)$ :] Which gets the speed at direction $i$. We use staggered grid and consider speed component of a given cell
+ \item[$\FuncCall{SpeedGet}(i)$ :] Which gets the speed in direction $i$. We use a staggered grid and consider speed components of a given cell
  to be below left.
   \item[$\FuncCall{SpeedGet}()$ :] Which gets the speed vector.
  \item[$\FuncCall{SpeedSet}(i,val)$ :] Sets the speed component $i$ with value $val$.
  \item[$\FuncCall{SpeedSet}(val)$ :] Sets the speed vector to value $val$.
- \item[$\FuncCall{AccelerationGet}(i)$ :] Which gets the acceleration at direction $i$.
- \item[$\FuncCall{AccelerationGet}()$ :] Which gets the acceleration vector.
- \item[$\FuncCall{AccelerationSet}(i,val)$ :] Sets the acceleration component $i$ with value $val$.
+ \item[$\FuncCall{AccelerationGet}(i)$ :]  Gets the acceleration into direction $i$.
+ \item[$\FuncCall{AccelerationGet}()$ :]  Gets the acceleration vector.
+ \item[$\FuncCall{AccelerationSet}(i,val)$ :] Sets the acceleration component $i$ to value $val$.
  \item[$\FuncCall{AccelerationSet}(val)$ :] Sets the acceleration vector to value $val$.
- \item[$\FuncCall{PressureGet}()$ :] Gets the pressure at given cell.
- \item[$\FuncCall{PressureSet}(val)$ :] Sets the pressure at given cell to $val$.
+ \item[$\FuncCall{PressureGet}()$ :] Gets the pressure at a given cell.
+ \item[$\FuncCall{PressureSet}(val)$ :] Sets the pressure at a given cell to $val$.
  \item[$\FuncCall{GetIsFluid}()$ :] Indicates if the cell is fluid or not.
  \item[$\FuncCall{GetIsAir()}$ :] Indicates if the cell is air or not. This is the opposite of $\FuncCall{GetIsFluid}()$.
- \item[$\FuncCall{FluidSet()}$ :] Sets the cell as fluid.
- \item[$\FuncCall{AirSet()}$ :] Sets the cell as air.
- \item[$\FuncCall{GetNeighbour}(dir,s)$ :] Gets the neighbor cell in direction $dir$ positif or negatif depending on the sign of $s$.
+ \item[$\FuncCall{FluidSet()}$ :] Sets the cell to fluid.
+ \item[$\FuncCall{AirSet()}$ :] Sets the cell to air.
+ \item[$\FuncCall{GetNeighbour}(dir,s)$ :] Gets the neighboring cell in the direction $dir$ positive or negative depending on the sign of $s$.
 \end{description}
 
-We define the following method for vector:
+We define the following methods for vectors:
 \begin{description}
- \item[$\FuncCall{Get}(i)$] Gets the value at indice $i$ of the vector.
-  \item[$\FuncCall{Set}(i,val)$] Sets the value at indice $i$ of the vector with value $val$.
+ \item[$\FuncCall{Get}(i)$] Gets the value of index $i$ of the vector.
+  \item[$\FuncCall{Set}(i,val)$] Sets the value of index $i$ of the vector to value $val$.
 \end{description}
 
 The following global variables are used:
@@ -858,18 +860,18 @@ The following global variables are used:
 \subsection{Acceleration evaluation}
 
 To apply gravity we simply add a constant acceleration cf. algorithm \ref{code:ApplyGravity} and algorithm \ref{code:ApplyGravityCell}.
-We test if we need to apply gravity with code like algorithm \ref{code:NeedToApplyGravity} which apply gravity to speed component
-that touch fluid.
+We test if we need to apply gravity with a code like algorithm \ref{code:NeedToApplyGravity} which applies gravity to speed components
+that touch the fluid.
 
-To apply the viscosity we need to calculate the Laplacian and a condition of when apply.
-The same condition as for gravity work.
-The application is in algorithm \ref{code:ApplyViscosity} the calculation of the Laplacian is in algorithm \ref{code:GetLaplacianSpeed}.
+To apply the viscosity we need to calculate the Laplacian and a condition of when to apply.
+The same condition as for gravity works.
+The application is in algorithm \ref{code:ApplyViscosity}, the calculation of the Laplacian is in algorithm \ref{code:GetLaplacianSpeed}.
 
-For the convection the application is in algorithm \ref{code:ApplyConvection} the condition is similar than for Gravity.
+For the convection the application is in algorithm \ref{code:ApplyConvection}, the condition is similar to the one for gravity.
 The convection speed derivative with upwind is done in algorithm \ref{code:GetConvectionElement} and algorithm \ref{code:GetConvectionSpeed}.
 
 \begin{algorithm}
-\caption{Algorithm which test if gravity acceleration need to be applied}
+\caption{Algorithm which tests if gravity acceleration needs to be applied}
 \label{code:NeedToApplyGravity}
 \begin{algorithmic}[1]
 \Function{NeedToApplyGravity}{cell}
@@ -890,7 +892,7 @@ The convection speed derivative with upwind is done in algorithm \ref{code:GetCo
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Algorithm which apply the gravity acceleration.}
+\caption{Algorithm which applies the gravity acceleration.}
 \label{code:ApplyGravity}
 \begin{algorithmic}[1]
 \Function{ApplyGravity}{cell}
@@ -902,7 +904,7 @@ The convection speed derivative with upwind is done in algorithm \ref{code:GetCo
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Algorithm which apply the gravity acceleration for every cell.}
+\caption{Algorithm which applies the gravity acceleration for every cell.}
 \label{code:ApplyGravityCell}
 \begin{algorithmic}[1]
 \Procedure{ApplyGravityCell}{}
@@ -914,7 +916,7 @@ The convection speed derivative with upwind is done in algorithm \ref{code:GetCo
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Algorithm which apply the viscosity acceleration.}
+\caption{Algorithm which applies the viscosity acceleration.}
 \label{code:ApplyViscosity}
 \begin{algorithmic}[1]
 \Procedure{ApplyViscosity}{}
@@ -929,7 +931,7 @@ The convection speed derivative with upwind is done in algorithm \ref{code:GetCo
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Algorithm which applies the vector Laplacian. The discretization is detailed in section \ref{fixed:vect:laplacian}}
+\caption{Algorithm which applies the vector Laplacian. The discretization explanation details are in section \ref{fixed:vect:laplacian}}
 \label{code:GetLaplacianSpeed}
 \begin{algorithmic}[1]
 \Function{GetLaplacianSpeed}{cell}
