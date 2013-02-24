@@ -1653,55 +1653,56 @@ We are in excellent agreement with this low resolution. The reason can be becaus
 
 \subsubsection{Analytical solution}
 
-An analytical solution for Navier-Stokes equation without gravity is given in radial coordinate by:
+An analytical solution for the Navier-Stokes equation without gravity is given in polar coordinates by,
 \begin{align}\label{fixed:vortex}
- v_{\theta}&=\frac{\Gamma}{2\pi r}\left(1-e^{-\frac{x^2}{4\nu t}}\right)\\
- v_{r}&=0
+ v_{\theta}&=\frac{\Gamma}{2\pi r}\left(1-e^{-\frac{r^2}{4\nu t}}\right),\\
+ v_{r}&=0.
 \end{align}
 
-This can be proven in radial coordinate in the vorticity version of Navier-Stokes equation (not used in this work).
-In the vorticity version of the equation it consist only of a time derivative and a diffusive term.
-The convectif term is 0.
+This can be proved in polar coordinates in the vorticity version of the Navier-Stokes equation (not used in this work).
+In the vorticity version of the equation it consists only of a time derivative and a diffusive term.
+The convective term is 0.
 
-The pressure solution can be found inserting the equations \ref{fixed:vortex} in Navier-Stokes equations and find $\nabla p$.
+The pressure solution can be found inserting the equations (\ref{fixed:vortex}) into the Navier-Stokes equations and finding $\nabla p$.
 
 We now need to choose a domain and boundary conditions.
-As domain, we take a circle centered in $0$. Because of symetry, the boundary condition for $\nabla p$ are constant on the circle.
-If they weren't we would not have a radial symetry on speed.
+As domain, we take a circle centered at $0$. Because of symmetry, the boundary condition for $\nabla p$ is constant on the circle.
+If not we would not have radial symmetry for the speed.
 Constant Dirichlet boundary condtions are then a good boundary condition.
-The choice of the constant will not change the gradiant.
+The choice of the constant will not change the gradient.
 
-\subsubsection{Numerical result}
+\subsubsection{Numerical results}
 
-This problem is interesting for numerical result because we have an simple analytical solution but in radial coordinate and
+This problem is interesting for numerical results because we have a simple analytical solution but in polar coordinates and
 which is found in vortex formulation, this solution is very far away of the cartesian speed pressure formulation used to
 derive the Navier-Stokes solver.
 
-We use as domain a circle of radius $\unit{1}{\meter}$. We use a viscosity of $\unit{1}{\pascal\second}$.
-We use as boundary conditions for pressure $0$ Dirichlet boundary condtions.
+We use as domain a disque of radius $\unit{1}{\meter}$. We use a viscosity of $\unit{1}{\meter \squared \per \second}$.
+We use as boundary conditions for pressure $0$ Dirichlet boundary conditions.
 We use an initial time of $t=0.01$ because at $t=0$ the initial conditions have a singularity which will not be fair for the 
-comparison of diffirent grid spacing.
+comparison of different grid spacings.
 $N$ is the radius in cell of the problem.
 $\alpha$ is the condition so that a particle with the maximun speed of the fluid cannot traverse
-more of $\alpha$ fraction of a cell.
+more of an $\alpha$ fraction of a cell.
 
-For speed we use the analytical solution (cf. equations \ref{fixed:vortex}) outside the domain
+For the speed we use the analytical solution (cf. equations (\ref{fixed:vortex})) outside the domain.
 
-Because the analytical solution is radial, it's better to compare in radial coordinate.
-For this, we do the following, from the numerical solution on staggered grid,
-we average the speed per cell. Then in the postprocessing stage, we calculate the cartesian analytical on staggered grid and
-average like for the numerical solution. We then transform the numerical and analytical solution to radial coordinate and compare them.
+Because the analytical solution is radial, it is better to compare in polar coordinates.
+For this, we do the following:
+from the numerical solution on the staggered grid,
+we average the speed per cell. Then in the postprocessing stage, we calculate the cartesian analytical solution on the staggered grid and
+average like for the numerical solution. We then transform the numerical and analytical solution to polar coordinates and compare them.
 
-The result are plotted in figures \ref{fix:normtheta} and \ref{fix:normr}.
+The results are plotted in figures \ref{fix:normtheta} and \ref{fix:normr}.
 
-The first interesting result is that we have no better error when we don't diverge with respect a better time step and better integration method.
+The first interesting result is that we have no better error when we do not diverge with respect to a better time step and better integration method.
 This is a sign that the error is dominated by the spatial discretization.
-Only changing the grid spacing change the precision.
+Only changing the grid spacing changes the precision.
 But a better method and time step gives a better stability.
 
-We see, that the numerical result are not too good and need finner grid to become better.
-The difficulty in this numerical problem is that the choosen grid is not appropriated to the problem 
-(cartesian grid for a radial problem).
+We see that the numerical results are not too good and need a finer grid to become better.
+The difficulty in this numerical problem is that the chosen grid is not appropriate for the problem 
+(cartesian grid for a polar problem).
 
 
 \begin{figure}
