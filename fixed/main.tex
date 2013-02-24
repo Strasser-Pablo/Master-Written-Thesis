@@ -1096,16 +1096,16 @@ We assume a case with 0 Dirichlet boundary conditions.}
 
 To implement the Runge-Kutta method, some new elements are needed.
 We need to have a copy of speed. To do this we add a method $\FuncCall{GetArray}(i)$ which gets the array $i$.
-We need to set the default array if no array is precised this is done by function $SetArraySpeed(i)$.
+We need to set the default array if no array is given; this is done by the function $SetArraySpeed(i)$.
 By default if not changed array $0$ is used.
 The function $\FuncCall{CalculateAcceleration}()$ calculates the acceleration using the default array.
-The only part of code that uses explicit array is this one.
+The only part of the code that uses explicitly array is this one.
 
-The function $\FuncCall{CalculateAcceleration}()$ consists to calculate the acceleration and then do the projection.
+The function $\FuncCall{CalculateAcceleration}()$ consists in calculating the acceleration and then do the projection.
 This is shown in algorithm \ref{code:CalculateAcceleration}.
 
-The Runge-Kutta algorithm for order $4$ is shown in algorithm \ref{code:RungeKutta}.
-Depending of the Runge-Kutta scheme choosed the number of copy of speed needed change.
+The Runge-Kutta algorithm of order $4$ is shown in algorithm \ref{code:RungeKutta}.
+Depending on the Runge-Kutta scheme chosen the number of copies of speed needed changes.
 
 \begin{algorithm}
 \caption{Algorithm which calculates the acceleration.}
@@ -1175,26 +1175,26 @@ Depending of the Runge-Kutta scheme choosed the number of copy of speed needed c
 
 \subsection{Complexity}
 
-The complexity is dominated by the $4$ call to $\FuncCall{CalculateAcceleration}()$.
-Function $\FuncCall{CalculateAcceleration}()$ then call the function to calculate acceleration.
-This function consist for cell where the acceleration apply to calculate a term which depend of the cell itself and his neighbor.
-The complexity is then linear on the number of cell.
+The complexity is dominated by the $4$ calls to $\FuncCall{CalculateAcceleration}()$.
+The function $\FuncCall{CalculateAcceleration}()$ then calls the function to calculate acceleration.
+This function consists for cell where the acceleration apply to calculate a term which depend of the cell itself and his neighbor.
+The complexity is then linear in the number of cells.
 The complexity for the projection of acceleration will depend on the complexity to solve the Laplacian which depending
 on the method used can be linear (multigrid for example is linear). The complexity to calculate the gradient is linear too.
 The complexity is then dominated by the complexity to solve the Laplacian.
 
-A more technical complexity is the storage of data on grid. For fixed topology we can use a fixed size array.
+A more technical complexity is the storage of data on the grid. For fixed topology we can use a fixed size array.
 But for variable topology we need to choose how we store the data.
-To be robust, our method need to be able to do dynamic allocation of memory to be able to represent all possible topology.
-Depending the choice made the average access time can be constant or $\log(n)$ and the worst case can be $n$.
-The method $\FuncCall{GetNeighbour}(dir,s)$ was used instead of index vector manipulation because it allow to create storage
-with fast access to neighbor cell.
+To be robust, our method needs to be able to do dynamic allocation of memory to be able to represent all possible topology.
+Depending on the choice made the average access time can be constant or $\log(n)$ and the worst case can be $n$.
+The method $\FuncCall{GetNeighbour}(dir,s)$ was used instead of index vector manipulation because it allows us to create storage
+with fast access to neighboring cells.
 
 \subsection{Parallelism}
 
-We remark that we can without problem make parallel the $\mathop{\textbf{for all}}$ loop, because we have no dependency:
+We remark that we can easily parallelisable the $\mathop{\textbf{for all}}$ loop, because we have no dependency:
 \begin{itemize}
- \item The calculation of the acceleration doesn't modify the speed and only reads there propper acceleration.
+ \item The calculation of the acceleration does not modify the speed and only reads there propper acceleration.
  \item The projection of acceleration when applying the gradient uses the already calculated pressure.
  \item The parallelism to solve the linear system will depend on the method used.
 \end{itemize}
