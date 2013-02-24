@@ -1246,10 +1246,10 @@ Equation (\ref{fix:solheat:a}) is automatically true because we have no dependen
 The pressure term role is only to cancel non divergence free parts coming from the force, because the part with the viscosity $\nu$ is a linear operator
 of a divergence free term.
 For a potential force like gravity, the force can be absorbed in the pressure with a proper account of boundary conditions.
-This equation is an equation of heat.
-We consider no external force as gravity.
-We will consider as domain $x=[0,2L]$ with fixed speed in $x=0$ and $x=L$,  Neumann boundary conditions for pressure in $x=0$ and $x=L$.
-Analytically the domain in $y$ expand from $-\infty$ to $\infty$. Numerically, we use Dirichlet boundary conditions $y=[0,2L]$ for pressure.
+This equation is a heat equation.
+We consider no external force.
+We will consider as domain $x=[0,2L]$ with fixed speed at $x=0$ and $x=L$,  Neumann boundary conditions for pressure at $x=0$ and $x=L$.
+Analytically the domain in $y$ expand from $-\infty$ to $\infty$. Numerically, we use Dirichlet boundary conditions at $y=[0,2L]$ for pressure.
 \begin{align*}
     v(x=0,t)&=1\\
     v(x=2L,t)&=-1\\
@@ -1261,49 +1261,49 @@ Analytically the domain in $y$ expand from $-\infty$ to $\infty$. Numerically, w
 
 \subsubsection{Analytical solution}
 
-$\vect{\nabla}p$ is everywhere 0 because the linear combination of a divergence free field is divergence free.
+$\vect{\nabla}p$ is everywhere 0 because the linear combination of a divergence free field is divergence free,
 \begin{equation}
-\frac{\partial f(x,t)}{\partial t}=\nu\frac{\partial^2 f(x,t)}{\partial x^2}
+\frac{\partial f(x,t)}{\partial t}=\nu\frac{\partial^2 f(x,t)}{\partial x^2}.
 \end{equation}
 
-We first look for 0 boundary conditions. We will denote this case by $f_0$
-We first use as ansatz that we can separate variable:
+We first look for 0 boundary conditions. We will denote this case by $f_0$.
+We first use as ansatz that we can separate variables,
 \begin{equation}
- f_0(x,t)=X(x)T(t)
+ f_0(x,t)=X(x)T(t).
 \end{equation}
 
-The equation then gives:
+The equation then gives
 \begin{equation}
-	\frac{\dot{T}}{\nu T}=\frac{X''}{X}
+	\frac{\dot{T}}{\nu T}=\frac{X''}{X}.
 \end{equation}
-Because the rhs only depends on $x$ and the lhs only depends on $t$. This needs to depend only on a constant value $-\lambda$.
-This gives use two uncoupled equations depending on $\lambda$.
+Because the rhs only depends on $x$ and the lhs only depends on $t$, this needs to equal a constant value $-\lambda$.
+This gives use two uncoupled equations depending on $\lambda$,
 \begin{align}
-\dot{T}&=-\lambda \nu T\\
-X''&=-\lambda X
+\dot{T}&=-\lambda \nu T,\\
+X''&=-\lambda X.
 \end{align}
-The solution for $T$ is:
+The solution for $T$ is
 \begin{equation}
-  T\propto e^{-\lambda \nu t}
+  T\propto e^{-\lambda \nu t}.
 \end{equation}
-The solution for $X$ is:
+The solution for $X$ is
 \begin{equation}
-	X\propto \sin(\sqrt{\lambda} x)
+	X\propto \sin(\sqrt{\lambda} x).
 \end{equation}
 We only have $\sin$ because $\sin(0)=0$.
-Because we ask $\sin(2L)=0$:
+Because we ask $\sin(2L)=0$
 \begin{equation}
-	0=\sin(2\sqrt{\lambda} L)=\sin\left(n\frac{\pi}{2L}\right)
+	0=\sin(2\sqrt{\lambda} L)=\sin\left(n\frac{\pi}{2L}\right).
 \end{equation}
-This then gives the condition on $\lambda$:
+This then gives the condition on $\lambda$
 \begin{equation}
-	\sqrt{\lambda}=n\frac{\pi}{2L}
+	\sqrt{\lambda}=n\frac{\pi}{2L}.
 \end{equation}
 A linear combination of this for different $n$ is solution too.
-We found the good linear combination from the Fourier series of the initial condition $f(0,t)$:
+We find the good linear combination from the Fourier series of the initial condition $f(0,t)$,
 \begin{align}
-  f_0(x,t)&=\sum_{n=1}^{\infty}C_{n}\sin\left(\frac{n\pi}{2L}x\right)e^{-\frac{n^2\pi^2\nu t}{4L^2}}\\
-  C_{n}&=\frac{1}{L}\int_{0}^{2L}f(x,0)\sin\left(\frac{n\pi}{2L}x\right) dx
+  f_0(x,t)&=\sum_{n=1}^{\infty}C_{n}\sin\left(\frac{n\pi}{2L}x\right)e^{-\frac{n^2\pi^2\nu t}{4L^2}},\\
+  C_{n}&=\frac{1}{L}\int_{0}^{2L}f(x,0)\sin\left(\frac{n\pi}{2L}x\right) dx.
 \end{align}
 For a non 0 boundary conditions, we need to add a particular solution, so that $f_p(0,0)=1$ and $f_p(2L,0)=-1$.
 \begin{equation}
@@ -1321,14 +1321,14 @@ The general solution is then:
   f(x,t)&=-\frac{x-L}{L}+\sum_{n=1}^{\infty}C_{n}\sin\left(\frac{n\pi}{2L}x\right)e^{-\frac{n^2\pi^2\nu t}{4L^2}}\\
   C_{n}&=\frac{1}{L}\int_{0}^{2L}f(x,0)\sin\left(\frac{n\pi}{2L}x\right) dx
 \end{align}
-This is plotted for $2L=\unit{0.1}{\metre}$ and $\nu=\unit{1.307\cdot 10^{-6}}{\pascal\second}$ which is the viscosity of water for $\unit{10}{\degreecelsius}$ and for $n_{max}=1'000'000$ in figure \ref{fixed:solheat:fig:sol}.
+This is plotted for $2L=\unit{0.1}{\metre}$ and $\nu=\unit{1.307\cdot 10^{-6}}{\meter \squared \per \second}$ which is the viscosity of water for $\unit{10}{\degreecelsius}$ and for $n_{max}=1'000'000$ in figure \ref{fixed:solheat:fig:sol}.
 
-Note that the fact that we have truncated the sum can be considered as a slightly change of initial condition, and an analytical solution of this solution.
-Numerically the difference is of the level of the numerical precision.
+Note that the fact that we have truncated the sum can be considered as a slight change of initial condition.
+Numerically the truncation error is of the level of the numerical precision.
 
 The analytical solution shows that the effect of viscosity is to smooth the speed distribution. The time needed to do that is of $\unit{500}{\second}$
-which is a very long time with respect of the distance traveled in this time ($\unit{500}{\meter}$).
-But this doesn't say that viscosity is not important, because it's effect is inversely proportional squared of $L$.
+which is a very long time with respect to the distance traveled in this time ($\unit{500}{\meter}$).
+But this does not say that viscosity is not important, because it is effect is inversely proportional to the square of $L$.
 
 \pgfplotstableread{fixed/solheat/sol_0.txt}\HeatSolaa
 %\pgfplotstabletypeset[columns={x,u}]\HeatSolaa
@@ -1639,13 +1639,13 @@ For the following method:
 \subsubsection{Numerical solution}
 
 We now use our numerical program to solve the same problem. The effective problem that we will solve is the heat equation with as solver Runge-Kutta.
-The other part of the program as convection and projection are done but should have a negligible effect.
+The other part of the program as convection and projection are done but should have no effect.
 
-The solution for different times $t$ are shown in figure \ref{fix:solheat:fig:num1}, \ref{fix:solheat:fig:num100}, \ref{fix:solheat:fig:num300} ,\ref{fix:solheat:fig:num500}. We have an excellent agreement with the analytical result.
+The solution for different times $t$ are shown in figures \ref{fix:solheat:fig:num1}, \ref{fix:solheat:fig:num100}, \ref{fix:solheat:fig:num300} ,\ref{fix:solheat:fig:num500}. We have an excellent agreement with the analytical results if the timestep used is sufficiently small.
 For $dt=2\second$ for the Euler method and $dt=\unit{3}{\second}$ for the Runge-Kutta method we have divergence (result completely wrong).
-Note that the time step used is bigger than the CFL condition that is $dt_{max}=hu_{max}=\unit{0.002}{\second}$. This can be done because the viscosity is small and the non linear term cancel.
+Note that the time step used is bigger than the CFL condition that is $dt_{max}=hu_{max}=\unit{0.002}{\second}$. This can be done because the viscosity is small and the non linear terms cancel.
 
-The solution with low resolution for different time $t$ are shown in figure \ref{fix:solheat:fig:num1b}, \ref{fix:solheat:fig:num100b}, \ref{fix:solheat:fig:num300b} ,\ref{fix:solheat:fig:num500b}.
+The solutions with low resolution for different times $t$ are shown in figures \ref{fix:solheat:fig:num1b}, \ref{fix:solheat:fig:num100b}, \ref{fix:solheat:fig:num300b} ,\ref{fix:solheat:fig:num500b}.
 We are in excellent agreement with this low resolution. The reason can be because the equation is linear. 
 
 
