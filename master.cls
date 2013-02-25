@@ -25,7 +25,7 @@
 \usepackage{amsmath,amssymb}
 \usepackage{psfrag}
 \usepackage{graphicx}
-\usepackage[nottoc]{tocbibind}
+%\usepackage[nottoc]{tocbibind}
 
 %Package used by Pablo
 
@@ -51,6 +51,8 @@
 \usepackage{algpseudocode,algorithm}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{biblatex}
+
 %Float Style
 \floatstyle{ruled}
 \floatplacement{figure}{hbtp}
