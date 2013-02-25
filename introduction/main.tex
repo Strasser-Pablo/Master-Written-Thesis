@@ -75,14 +75,14 @@ A vector version of the Laplacian consists of applying the Laplacian to all comp
 \end{definition}
 
 \begin{property}
- The gradient is curl free.
+ The gradient is curl free:
  \begin{equation}
   \vect{\nabla}\times \vect{\nabla} p=\vect{0}.
  \end{equation}
 \end{property}
 
 \begin{property}
-The curl is divergence free.
+The curl is divergence free:
  \begin{equation}
   \vect{\nabla}\cdot \vect{\nabla} \times \vect{v}=0.
  \end{equation}
@@ -115,9 +115,9 @@ The curl is divergence free.
 
   
   \begin{remark}
- This works as long as:
+ This works as long as
  \begin{equation}
-  \Delta=\vect{\nabla}\cdot \vect{\nabla}\label{introduction:ProjectionDelta}
+  \Delta=\vect{\nabla}\cdot \vect{\nabla}.\label{introduction:ProjectionDelta}
  \end{equation}
  So this can also be used in the discretized case and will be exact as long as (\ref{introduction:ProjectionDelta}) is respected.
  \end{remark}
@@ -129,7 +129,7 @@ We define the projection operator $P(\vect{v})$
   \begin{equation}
     P(\vect{v})=\vect{\nabla}\Delta^{-1}\vect{\nabla}\cdot \vect{v}.
   \end{equation}
-  The projection of section \ref{introduction:projection} is then:
+  The projection of section \ref{introduction:projection} is then
   \begin{equation}
     \vect{v}_{new}=\vect{v}-P(\vect{v}).
   \end{equation}
@@ -144,7 +144,7 @@ We define the projection operator $P(\vect{v})$
   \begin{equation}
    \Delta p=\vect{\nabla} \cdot \vect{v}.
   \end{equation}
-This can be rewritten for Dirchlet or Neumann boundary conditions
+This can be rewritten for Dirchlet or Neumann boundary conditions by
 \begin{equation}
  B p=\vect{\nabla} \cdot \vect{v}-\vect{c},
 \end{equation}
@@ -159,8 +159,8 @@ and the projection is
 \end{equation}
 This can be rewritten as
 \begin{align}
-P(\vect{v},\vect{T})&=A\vect{v}+\vect{T}\\
-A&=\nabla B^{-1}\vect{\nabla} \cdot\\
+P(\vect{v},\vect{T})&=A\vect{v}+\vect{T},\\
+A&=\vect{\nabla} B^{-1}\vect{\nabla} \cdot,\\
 \vect{T}&=\vect{\nabla} B^{-1}\vect{c}.
 \end{align}
   
@@ -168,7 +168,7 @@ A&=\nabla B^{-1}\vect{\nabla} \cdot\\
   
   The important change is that the projection of a divergence free vector field is no more 0,
   \begin{equation}
-  P(v,T)=Av+T=0+T=T.
+  P(\vect{v},\vect{T})=A\vect{v}+\vect{T}=0+\vect{T}=\vect{T}.
   \end{equation}
 
 

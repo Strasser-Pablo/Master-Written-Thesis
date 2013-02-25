@@ -27,8 +27,8 @@ We use the work of section \ref{analytical:fixe_eulerian} that Navier-Stokes equ
 $\eye-P$ projects a non divergence free vector to obtain a divergence free vector.
 The solution $\vect{v}$ is a divergence free vector as long that initial conditions are divergence free, because the integral of a divergence free vector is again a divergence free vector
 \begin{align*}
- v(t)&=\int_{t_0}^{t}\partial_{\tilde{t}} \vect{v}(\vect{x} ,\tilde{t})=\int_{t_0}^{t} (\eye-P)f(\vect{v}(\vect{x},\tilde{t})) d\tilde{t}\\
- \vect{\nabla}\cdot v(t)&= \vect{\nabla}\cdot\int_{t_0}^{t} (\eye-P)f(\vect{v}(\vect{x},\tilde{t})) d\tilde{t}=\int_{t_0}^{t} \vect{\nabla}\cdot(\eye-P)f(\vect{v}(\vect{x},\tilde{t})) d\tilde{t}=\int_{t_0}^{t} 0 d\tilde{t}=0
+ \vect{v}(t)&=\int_{t_0}^{t}\partial_{\tilde{t}} \vect{v}(\vect{x} ,\tilde{t})=\int_{t_0}^{t} (\eye-P)f(\vect{v}(\vect{x},\tilde{t})) d\tilde{t}+\vect{v}_{0}\\
+ \vect{\nabla}\cdot \vect{v}(t)&= \vect{\nabla}\cdot\int_{t_0}^{t} (\eye-P)f(\vect{v}(\vect{x},\tilde{t})) d\tilde{t}+\vect{\nabla}\cdot \vect{v}_{0}=\int_{t_0}^{t} \vect{\nabla}\cdot(\eye-P)f(\vect{v}(\vect{x},\tilde{t})) d\tilde{t}=\int_{t_0}^{t} 0 d\tilde{t}=0
 \end{align*}
 
 
@@ -79,8 +79,8 @@ We project at every input of the non linear $f$ function and at the final speed,
 The scheme for the analytical expression for the pressure
 \begin{subequations}
 \begin{align}
-	\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
-	k_{i}&=\Delta t f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right)-\Delta t P\left(f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right)\right)
+	\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i},\\
+	k_{i}&=\Delta t f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right)-\Delta t P\left(f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right)\right).
 \end{align}
 \end{subequations}
 
@@ -154,12 +154,12 @@ k&=\begin{pmatrix}
     \vect{k}_{1}\\
     \vdots\\
     \vect{k}_{s}\\
-  \end{pmatrix}\\
+  \end{pmatrix},\\
 \tilde{k}&=\begin{pmatrix}
     \vect{\tilde{k}}_{1}\\
     \vdots\\
     \vect{\tilde{k}}_{s}\\
-  \end{pmatrix}
+  \end{pmatrix}.
 \end{align}
 We form $\hat{P}$ and $\hat{f}$ from a Kronecker product
 \begin{align}
@@ -200,46 +200,46 @@ We now define $\hat{A}$ with the following Kronecker product
   \end{pmatrix} .
 \end{equation}
 
-$\hat{A}$ and $\hat{P}$ commute, because of the mixed-product property.
+$\hat{A}$ and $\hat{P}$ commute, because of the mixed-product property
 \begin{align}
 \hat{A}\hat{P}&=\left(A\kron \eye \right)
   \left(\eye_{s}\kron P\right)=
-	A\kron P\\
+	A\kron P,\\
     %
     \hat{P}\hat{A}&=
   \left(\eye_{s}\kron P\right)
 	\left(A \kron \eye \right)=
-	A\kron P
+	A\kron P.
 \end{align}
 
 The two expressions can now be written:
 \begin{align}
-k&=(1-\hat{P})\Delta t\hat{f}(\hat{v}_{n}+\hat{A}k)\\
-\tilde{k}&=\Delta t \hat{f}((1-\hat{P})(\hat{v}_{n}+\hat{A}k))
+k&=(1-\hat{P})\Delta t\hat{f}(\hat{v}_{n}+\hat{A}k),\\
+\tilde{k}&=\Delta t \hat{f}((1-\hat{P})(\hat{v}_{n}+\hat{A}k)).
 \end{align}
 
 We begin to define 2 functions:
 \begin{align}
-k&=g(k)\\
-\tilde{k}&=\tilde{g}(\tilde{k})\\
-g(x)&=(1-\hat{P})\Delta t \hat{f}(\hat{v}_{n}+\hat{A}x)\\
-\tilde{g}(x)&=\Delta t \hat{f}((1-\hat{P})(\hat{v}_{n}+\hat{A}x))
+k&=g(k),\\
+\tilde{k}&=\tilde{g}(\tilde{k}).\\
+g(x)&=(1-\hat{P})\Delta t \hat{f}(\hat{v}_{n}+\hat{A}x),\\
+\tilde{g}(x)&=\Delta t \hat{f}((1-\hat{P})(\hat{v}_{n}+\hat{A}x)).
 \end{align}
 
 $k$ and $\tilde{k}$ are fixed points of functions $g$ and $\tilde{g}$.
 
 We now calculate:
 \begin{align}
-(1-\hat{P})\tilde{g}(x)&=(1-\hat{P})\Delta t \hat{f}((1-\hat{P})(\hat{v}_{n}+\hat{A}x))\\
+(1-\hat{P})\tilde{g}(x)&=(1-\hat{P})\Delta t \hat{f}((1-\hat{P})(\hat{v}_{n}+\hat{A}x)).\\
 \intertext{Using}
 \hat{P}\hat{v}_{n}=0.
 \intertext{Using that $\hat{A}$ and $\hat{P}$ commute}
-(1-\hat{P})\tilde{g}(x)&=(1-\hat{P})\Delta t \hat{f}(\hat{v}_{n}+\hat{A} (1-\hat{P})x).\\
-&=g((1-\hat{P})x)
+(1-\hat{P})\tilde{g}(x)&=(1-\hat{P})\Delta t \hat{f}(\hat{v}_{n}+\hat{A} (1-\hat{P})x)\\
+&=g((1-\hat{P})x).
 \end{align}
 We now substitute $x$ with $\tilde{k}$
 \begin{align}
-(1-\hat{P})\tilde{g}(\tilde{k})&=g((1-\hat{P})\tilde{k})
+(1-\hat{P})\tilde{g}(\tilde{k})&=g((1-\hat{P})\tilde{k}),
 \intertext{by definition $\tilde{k}$ is a fixed point of $\tilde{g}$}
 (1-\hat{P})\tilde{k}&=g((1-\hat{P})\tilde{k}),
 \end{align}
@@ -248,7 +248,7 @@ But fixed point of $g$ is $k$.
 
 With relabeling of solution if needed, this directly gives the result with $\vect{k}^{j}$ the $j$-th solution:
 \begin{equation}
-\vect{k}^{j}=(1-\hat{P})\vect{\tilde{k}}^{j}
+\vect{k}^{j}=(1-\hat{P})\vect{\tilde{k}}^{j}.
 \end{equation}
 This is exactly the vector version of what we wanted to prove.
 \end{proof}
@@ -295,8 +295,8 @@ We use the notation of \ref{introduction:projectiondef}.
 The scheme for the projection at every evaluation of the speed is
 \begin{subequations}
 \begin{align}
-\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i},\vect{\tilde{T}}_0\right)\\
-\vect{\tilde{k}}_{i}&=\Delta t f\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}-P\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j},\vect{\tilde{T}}_i\right)\right)
+\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i},\vect{\tilde{T}}_0\right),\\
+\vect{\tilde{k}}_{i}&=\Delta t f\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}-P\left(\vect{\tilde{v}}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j},\vect{\tilde{T}}_i\right)\right).
 \end{align}
 \end{subequations}
 We project at every estimation of speed. Making by construction every speed divergence free.
@@ -304,8 +304,8 @@ We project at every estimation of speed. Making by construction every speed dive
 Scheme for analytical expression for pressure:
 \begin{subequations}
 \begin{align}
-	\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
-	\vect{k}_{i}&=\Delta t f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right)-\Delta t P\left(f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right),\vect{T}_{i}\right)
+	\vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i},\\
+	\vect{k}_{i}&=\Delta t f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right)-\Delta t P\left(f\left(\vect{v}_{n}+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right),\vect{T}_{i}\right).
 \end{align}
 \end{subequations}
 
@@ -316,8 +316,8 @@ If $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ are divergence free then
 With the relation for the translation:
 \begin{align}
 \intertext{For $0< i\leq s$}
-  \vect{\tilde{T}}_i&=\sum_{j=1}^{i-1}a_{ij}\Delta t \vect{T}_{j}\\
-  \vect{\tilde{T}}_0&=\sum_{i=1}^{s}b_{i}\Delta t \vect{T}_{i}
+  \vect{\tilde{T}}_i&=\sum_{j=1}^{i-1}a_{ij}\Delta t \vect{T}_{j},\\
+  \vect{\tilde{T}}_0&=\sum_{i=1}^{s}b_{i}\Delta t \vect{T}_{i}.
 \end{align}
 
 \end{theorem}
@@ -369,7 +369,7 @@ We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ us
 \end{proof}
 
 \begin{theorem}
-For the implicit Runge-Kutta case, where the sum on $i-1$ goes now to $s$,
+For the implicit Runge-Kutta case, where the sum on $i-1$ goes now to $s$ and $a_{ij}$ is invertible,
 if $\vect{v}_{n}=\vect{\tilde{v}}_{n}$ and $\vect{v}_n$ are divergence free then $\vect{v}_{n+1}=\vect{\tilde{v}}_{n+1}$,
 and the translation is given by
 \begin{align}
@@ -399,30 +399,30 @@ k&=\begin{pmatrix}
     \vect{k}_{1}\\
     \vdots\\
     \vect{k}_{s}\\
-  \end{pmatrix}\\
+  \end{pmatrix},\\
 \tilde{k}&=\begin{pmatrix}
     \vect{\tilde{k}}_{1}\\
     \vdots\\
     \vect{\tilde{k}}_{s}\\
-  \end{pmatrix}
+  \end{pmatrix}.
 \end{align}
 
-We form $\hat{L}$ the linear part of the projection from $L$ the linear part from the projection $P$.
+We form $\hat{L}$ the linear part of the projection from $L$ the linear part from the projection $P$:
 \begin{align}
 \hat{L}&=\eye_{s}\kron L=\begin{pmatrix}L	&\ldots	&0\\
 			\vdots &\ddots 	&\vdots\\
 			0	&\ldots	&L\\
-	\end{pmatrix}
+	\end{pmatrix}.
 \end{align}
 We have the following property:
 \begin{equation}
-\hat{L}\hat{v}_{n}=0
+\hat{L}\hat{v}_{n}=0.
 \end{equation}
 This is true because $\hat{v}_{n}$ is divergence free.
 $\hat{L}$ is the linear part and consist to make the projection with 0 boundary conditions.
 
-$\tau_{i}$ the translation vector from $\vect{T}_i$ the translation part of $P$.
-$\tau$ is the sum of all individual translation.
+$\tau_{i}$ the translation vector from $\vect{T}_i$ the translation part of $P$,
+$\tau$ is the sum of all individual translation:
 \begin{align}
 	\tau_i&=\begin{pmatrix}
 			\vect{0}\\
@@ -431,22 +431,22 @@ $\tau$ is the sum of all individual translation.
 			\vdots\\
 			\vect{0}\\
 	\end{pmatrix}
-	\\
+	,\\
 	\tau&=\sum_{i}\tau_{i}=\begin{pmatrix}
 			\vect{T}_{1}\\
 			\vdots\\
 			\vect{T}_{s}\\
-	\end{pmatrix}
+	\end{pmatrix}.
 \end{align}
 
-Same for $\tilde{\tau}_{i}$ with $\vect{T}_{i}$ changed with $\vect{\tilde{T}}_i$
+Same for $\tilde{\tau}_{i}$ with $\vect{T}_{i}$ changed with $\vect{\tilde{T}}_i$.
 
 We now form the function $\hat{f}$ from $f$ with:
 \begin{align}
 \hat{f}&=\eye_{s}\kron f=\begin{pmatrix}f	&\ldots	&0\\
 			\vdots &\ddots 	&\vdots\\
 			0	&\ldots	&f\\
-	\end{pmatrix}
+	\end{pmatrix}.
 \end{align}
 
 We now define $\hat{v}_n$:
@@ -455,7 +455,7 @@ We now define $\hat{v}_n$:
 	      \vect{v}_{n}\\
 	      \vdots\\
 	      \vect{v}_{n}
-	      \end{pmatrix}
+	      \end{pmatrix}.
 \end{equation}
 
 We now define $\hat{A}$ with the following Kronecker product:
@@ -464,32 +464,32 @@ We now define $\hat{A}$ with the following Kronecker product:
     a_{11}	&\ldots	&a_{1s}\\
     \vdots	&\ddots	&\vdots\\
     a_{s1}	&\ldots	&a_{ss}\\
-  \end{pmatrix} \kron \eye=A \kron \eye
+  \end{pmatrix} \kron \eye=A \kron \eye.
 \end{equation}
 
-$\hat{A}$ and $\hat{L}$ are commutative, because of the mixed-product property.
+$\hat{A}$ and $\hat{L}$ are commutative, because of the mixed-product property
 \begin{align}
 \hat{A}\hat{L}&=\left(A\kron \eye \right)
   \left(\eye_{s}\kron L\right)=
-	A\kron L\\
+	A\kron L,\\
     %
     \hat{L}\hat{A}&=
   \left(\eye_{s}\kron L\right)
 	\left(A \kron \eye \right)=
-	A\kron L
+	A\kron L.
 \end{align}
 
 \begin{align}
-k&=(1-\hat{L})\Delta t\hat{f}(\hat{v}_{n}+\hat{A}k)+\Delta t\tau\\
-\tilde{k}&=\Delta t \hat{f}((1-\hat{L})(\hat{v}_{n}+\hat{A}k)+\tilde{\tau})
+k&=(1-\hat{L})\Delta t\hat{f}(\hat{v}_{n}+\hat{A}k)+\Delta t\tau,\\
+\tilde{k}&=\Delta t \hat{f}((1-\hat{L})(\hat{v}_{n}+\hat{A}k)+\tilde{\tau}).
 \end{align}
 
 We begin to define 2 functions:
 \begin{align}
-k&=g(k)\\
-\tilde{k}&=\tilde{g}(\tilde{k})\\
-g(x)&=(1-\hat{L})\Delta t \hat{f}(\hat{v}_{n}+\hat{A}x)+\Delta t\tau\\
-\tilde{g}(x)&=\Delta t \hat{f}((1-\hat{L})(\hat{v}_{n}+\hat{A}x)+\tilde{\tau})
+k&=g(k),\\
+\tilde{k}&=\tilde{g}(\tilde{k}).\\
+g(x)&=(1-\hat{L})\Delta t \hat{f}(\hat{v}_{n}+\hat{A}x)+\Delta t\tau,\\
+\tilde{g}(x)&=\Delta t \hat{f}((1-\hat{L})(\hat{v}_{n}+\hat{A}x)+\tilde{\tau}).
 \end{align}
 
 $k$ and $\tilde{k}$ are fixed points of function $g$ and $\tilde{g}$.
@@ -518,7 +518,7 @@ But fixed point of $g$ is $k$.
 
 After relabeling of solution, this directly gives the result with $k^{j}$ the $j$-th solution:
 \begin{equation}
-k^{j}=(1-\hat{L})\tilde{k}^{j}+\Delta t \tau
+k^{j}=(1-\hat{L})\tilde{k}^{j}+\Delta t \tau.
 \end{equation}
 This is exactly the vector version of what we wanted to prove.
 \end{proof}
@@ -553,11 +553,11 @@ The problem with a non-staggered  grid is that obvious centered difference discr
 
 We define the derivative of a scalar by:
 \begin{equation}
-  \partial_x a_i=\frac{a_{i+1}-a_{i-1}}{\Delta x}
+  \partial_x a_i=\frac{a_{i+1}-a_{i-1}}{\Delta x}.
 \end{equation}
 The divergence discretization is then given by (notation for 2d, but for 3d it's the same):
 \begin{equation}
-  \vect{\nabla} \cdot \vect{v}_{i,j}=\frac{{v_{x}}_{i+1,j}-{v_{x}}_{i-1,j}}{\Delta x}+\frac{{v_{y}}_{i+1,j}-{v_{y}}_{i-1,j}}{\Delta y}
+  \vect{\nabla} \cdot \vect{v}_{i,j}=\frac{{v_{x}}_{i+1,j}-{v_{x}}_{i-1,j}}{\Delta x}+\frac{{v_{y}}_{i+1,j}-{v_{y}}_{i-1,j}}{\Delta y}.
 \end{equation}
 The problem can be seen in figure \ref{fixed:unstaggered_div} is that the divergence at the red point only uses values at blue points and not the point at the center (red point).
 This leads to  non-physical solutions that are divergence free.
@@ -609,10 +609,10 @@ To label variables, we label by cell and then take the lower left component (cf.
 We now define the divergence and the gradient
 \begin{align}
   \vect{\nabla}p_{ij}&=\begin{pmatrix}
-    \frac{p_{i,j}-p_{i-1,j}}{\Delta x},\\
-    \frac{p_{i,j}-p_{i,j-1}}{\Delta y}.\\
-                      \end{pmatrix}\\
-  \vect{\nabla}\cdot \vect{v}_{i,j}&=\frac{{v_{x}}_{i+1,j}-{v_{x}}_{i,j}}{\Delta x}+\frac{{v_{y}}_{i,j+1}-{v_{y}}_{i,j}}{\Delta y}
+    \frac{p_{i,j}-p_{i-1,j}}{\Delta x}\\
+    \frac{p_{i,j}-p_{i,j-1}}{\Delta y}\\
+                      \end{pmatrix},\\
+  \vect{\nabla}\cdot \vect{v}_{i,j}&=\frac{{v_{x}}_{i+1,j}-{v_{x}}_{i,j}}{\Delta x}+\frac{{v_{y}}_{i,j+1}-{v_{y}}_{i,j}}{\Delta y}.
 \end{align}
 These two expressions are geometrically very clear.
 
@@ -672,7 +672,7 @@ We prove it for the one dimensional case by s Taylor expansion around $x$,
   f(x+\Delta x)-2f(x)+f(x-\Delta x)
   &=f(x)+\Delta x f'(x) +(\Delta x)^2 \frac{f''(x)}{2}+(\Delta x)^3 \frac{f'''(x)}{6}+O((\Delta x)^4)-2f(x)\\
   &\qquad+f(x)-\Delta x f'(x) +(\Delta x)^2 \frac{f''(x)}{2}-(\Delta x)^3 \frac{f'''(x)}{6}\\
-  &=(\Delta x)^2f''(x) +O((\Delta x)^4)\\
+  &=(\Delta x)^2f''(x) +O((\Delta x)^4),\\
   f''(x)&=\frac{f(x+\Delta x)-2f(x)+f(x-\Delta x)}{(\Delta x)^2}+O((\Delta x)^2).
 \end{align*}
 
@@ -694,7 +694,7 @@ We can discretize this in two ways.
 
 \subparagraph{Centered difference}
 \begin{equation}
-{v^{i}}_{\vect{k}}\frac{{v^{i}}_{\vect{k}+\vect{e}_i}-{v^{i}}_{\vect{k}-\vect{e}_i}}{2\Delta x_{i}}
+{v^{i}}_{\vect{k}}\frac{{v^{i}}_{\vect{k}+\vect{e}_i}-{v^{i}}_{\vect{k}-\vect{e}_i}}{2\Delta x_{i}}.
 \end{equation}
 
 \subparagraph{Upwind difference}
@@ -711,9 +711,9 @@ We use the same method, but instead of using a centered difference, we use an up
 \end{align}
 Upwind is considered more stable (can be proved easily in one dimension for Burger's equation \cite{citeulike:11163809}) but more diffusive.
 
-We now consider:
+We now consider
 \begin{equation}
-\left(v^{j}\partial_{j}v^{i}\right)^{i}_{\vect{k}}
+\left(v^{j}\partial_{j}v^{i}\right)^{i}_{\vect{k}}.
 \end{equation}
 
 \begin{remark}
@@ -731,7 +731,7 @@ We can discretize this again in two ways:
 
 \subparagraph{Centred difference}
 \begin{equation}
-\left(v^{j}\partial_{j}v^{i}\right)^{i}_{\vect{k}}={v^{ji}}_{\vect{k}}\frac{{v^{i}}_{\vect{k}+\vect{e}_j}-{v^{i}}_{\vect{k}-\vect{e}_j}}{2\Delta x_{j}}
+\left(v^{j}\partial_{j}v^{i}\right)^{i}_{\vect{k}}={v^{ji}}_{\vect{k}}\frac{{v^{i}}_{\vect{k}+\vect{e}_j}-{v^{i}}_{\vect{k}-\vect{e}_j}}{2\Delta x_{j}}.
 \end{equation}
 
 \subparagraph{Upwind difference}
@@ -1228,19 +1228,19 @@ For example, for a two dimensional problem we work with a flow with a speed only
 \begin{equation}
 	\vect{v}=\begin{pmatrix}
 	         	0\\f(x,t)
-	         \end{pmatrix}
+	         \end{pmatrix}.
 \end{equation}
 The convection term is then:
 \begin{equation}
 	(f(x,t)\partial_{y})\begin{pmatrix}
 	         	0\\f(x,t)
-	         \end{pmatrix}=0
+	         \end{pmatrix}=0.
 \end{equation}
 The Navier-Stokes equations reduces then to:
 \begin{align}
 \label{fix:solheat:a}
-	\partial_{y}f(x,t)&=0\\
-	\frac{\partial f(x,t)}{\partial t}&=F(x,t)+\nu\frac{\partial^2 f(x,t)}{\partial x^2}-\vect{\nabla}p
+	\partial_{y}f(x,t)&=0,\\
+	\frac{\partial f(x,t)}{\partial t}&=F(x,t)+\nu\frac{\partial^2 f(x,t)}{\partial x^2}-\vect{\nabla}p.
 \end{align}
 Equation (\ref{fix:solheat:a}) is automatically true because we have no dependence on $x$.
 The pressure term role is only to cancel non divergence free parts coming from the force, because the part with the viscosity $\nu$ is a linear operator
@@ -1307,7 +1307,7 @@ We find the good linear combination from the Fourier series of the initial condi
 \end{align}
 For a non 0 boundary conditions, we need to add a particular solution, so that $f_p(0,0)=1$ and $f_p(2L,0)=-1$.
 \begin{equation}
-	f_{p}(x,t)=-\frac{x-L}{L}
+	f_{p}(x,t)=-\frac{x-L}{L}.
 \end{equation}
 $f_{0}(x,0)$ is then given by:
 \begin{equation}
@@ -1318,8 +1318,8 @@ $f_{0}(x,0)$ is then given by:
 \end{equation}
 The general solution is then:
 \begin{align}
-  f(x,t)&=-\frac{x-L}{L}+\sum_{n=1}^{\infty}C_{n}\sin\left(\frac{n\pi}{2L}x\right)e^{-\frac{n^2\pi^2\nu t}{4L^2}}\\
-  C_{n}&=\frac{1}{L}\int_{0}^{2L}f(x,0)\sin\left(\frac{n\pi}{2L}x\right) dx
+  f(x,t)&=-\frac{x-L}{L}+\sum_{n=1}^{\infty}C_{n}\sin\left(\frac{n\pi}{2L}x\right)e^{-\frac{n^2\pi^2\nu t}{4L^2}},\\
+  C_{n}&=\frac{1}{L}\int_{0}^{2L}f(x,0)\sin\left(\frac{n\pi}{2L}x\right) dx.
 \end{align}
 This is plotted for $2L=\unit{0.1}{\metre}$ and $\nu=\unit{1.307\cdot 10^{-6}}{\meter \squared \per \second}$ which is the viscosity of water for $\unit{10}{\degreecelsius}$ and for $n_{max}=1'000'000$ in figure \ref{fixed:solheat:fig:sol}.
 
