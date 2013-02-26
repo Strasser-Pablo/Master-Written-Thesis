@@ -53,7 +53,7 @@ def compsol(xexp,vexp,vsol,esp,xmin,xmax,xout,vout):
 			xout.append(x)
 			vout.append(abs(getsol(vsol,x,esp)-vexp[i]))
 
-fig=figure()
+fig=figure(figsize=(7,6))
 
 l=[['sol_1.txt','data0_1.csv','ob','leg1'],['sol_100.txt','data0_100.csv','vb','leg3'],
 		['sol_300.txt','data0_300.csv','*b','leg3'],['sol_500.txt','data0_500.csv','+b','leg3'],
@@ -63,8 +63,6 @@ l=[['sol_1.txt','data0_1.csv','ob','leg1'],['sol_100.txt','data0_100.csv','vb','
 		['sol_100.txt','data4_100.csv','vr','leg3'],['sol_300.txt','data4_300.csv','*r','leg3'],['sol_500.txt','data4_500.csv','+r','leg3'],
 		['sol_1.txt','data5_1.csv','oc','leg1'],
 		['sol_100.txt','data5_100.csv','vc','leg3'],['sol_300.txt','data5_300.csv','*c','leg3'],['sol_500.txt','data5_500.csv','+c','leg3'],
-		['sol_100.txt','data6_100.csv','vm','leg100'],
-		['sol_300.txt','data6_300.csv','*m','leg300'],['sol_500.txt','data6_500.csv','+m','leg500']
 		]
 
 
@@ -114,7 +112,3 @@ for fsol,fexp,st,leg in l:
 xlabel(r'$\unit{x}{\metre}$')
 ylabel(r'$\unit{|v_{exp}-v_{th}|}{\metre \per \second}$')
 savefig('heatcomp.pdf')
-
-
-fig=figure()
-

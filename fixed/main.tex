@@ -1439,8 +1439,6 @@ for the following methods:
 		\label{fix:heatdata5_100}
 		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data4_100.csv};
 		\label{fix:heatdata4_100}
-		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data6_100.csv};
-		\label{fix:heatdata6_100}
 		\addplot table[x=x,y=u]{\HeatSolc};
 		\label{fix:heatsol_100}
 	\end{axis}
@@ -1451,7 +1449,7 @@ for the following methods:
 \begin{align*}
 &\text{Euler}&&\text{Runge-Kutta}&\\
 \ref{fix:heatdata2_100} dt&=\unit{0.1}{\second}& \ref{fix:heatdata5_100} dt&=\unit{0.1}{\second}&\\
-\ref{fix:heatdata0_100} dt&=\unit{1}{\second}&\ref{fix:heatdata4_100} dt&=\unit{1}{\second}&\\
+\ref{fix:heatdata0_100} dt&=\unit{1}{\second}&\ref{fix:heatdata4_100} dt&=\unit{1}{\second}&
 \end{align*}
 \begin{center}
 \ref{fix:heatsol_100} Analytical
@@ -1472,8 +1470,6 @@ for the following methods:
 		\label{fix:heatdata5_300}
 		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data4_300.csv};
 		\label{fix:heatdata4_300}
-		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data6_300.csv};
-		\label{fix:heatdata6_300}
 		\addplot table[x=x,y=u]{\HeatSole};
 		\label{fix:heatsol_300}
 	\end{axis}
@@ -1484,8 +1480,7 @@ for the following methods:
 \begin{align*}
 &\text{Euler}&&\text{Runge-Kutta}&\\
 \ref{fix:heatdata2_300} dt&=\unit{0.1}{\second}& \ref{fix:heatdata5_300} dt&=\unit{0.1}{\second}&\\
-\ref{fix:heatdata0_300} dt&=\unit{1}{\second}&\ref{fix:heatdata4_300} dt&=\unit{1}{\second}&\\
-&&\ref{fix:heatdata6_300} dt&=2\second&
+\ref{fix:heatdata0_300} dt&=\unit{1}{\second}&\ref{fix:heatdata4_300} dt&=\unit{1}{\second}&
 \end{align*}
 \begin{center}
 \ref{fix:heatsol_300} Analytical
@@ -1506,8 +1501,6 @@ for the following methods:
 		\label{fix:heatdata5_500}
 		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data4_500.csv};
 		\label{fix:heatdata4_500}
-		\addplot table[col sep=comma,x expr=\thisrow{x}+0.002,y=u]{fixed/solheat/data6_500.csv};
-		\label{fix:heatdata6_500}
 		\addplot table[x=x,y=u]{\HeatSolg};
 		\label{fix:heatsol_500}
 	\end{axis}
@@ -1517,8 +1510,7 @@ Numerical solution for $t=\unit{500}{\second}$, for the following methods:
 \begin{align*}
 &\text{Euler}&&\text{Runge-Kutta}&\\
 \ref{fix:heatdata2_500} dt&=\unit{0.1}{\second}& \ref{fix:heatdata5_500} dt&=\unit{0.1}{\second}&\\
-\ref{fix:heatdata0_500} dt&=\unit{1}{\second}&\ref{fix:heatdata4_500} dt&=\unit{1}{\second}&\\
-&&\ref{fix:heatdata6_500} dt&=\unit{2}{\second}&
+\ref{fix:heatdata0_500} dt&=\unit{1}{\second}&\ref{fix:heatdata4_500} dt&=\unit{1}{\second}&
 \end{align*}
 \begin{center}
 \ref{fix:heatsol_500} Analytical
@@ -1633,6 +1625,28 @@ for the following methods:
 \label{fix:solheat:fig:num500b}
 \end{figure}
 
+\begin{figure}
+\includegraphics{fixed/solheat/heatcomp}
+\caption[.]{
+Comparison of the solution to the analytical solution.
+The form of the marker indicate the time:
+\begin{align*}
+ \text{\input{fixed/solheat/marko.pgf}}\qquad t&=\unit{1}{\second}&   \text{\input{fixed/solheat/mark*.pgf}}\qquad t&=\unit{300}{\second}\\
+ \text{\input{fixed/solheat/markv.pgf}}\qquad t&=\unit{100}{\second}&  \text{\input{fixed/solheat/mark+.pgf}}\qquad t&=\unit{500}{\second}
+\end{align*}
+
+The color of the marker indicate the method:
+\begin{align*}
+&\text{Euler}&&\text{Runge-Kutta}&\\
+\intertext{\centering $h=0.002$ }
+ \text{\input{fixed/solheat/markg.pgf}}\qquad dt&=\unit{0.1}{\second}&   \text{\input{fixed/solheat/markc.pgf}}\qquad dt&=\unit{0.1}{\second}\\
+ \text{\input{fixed/solheat/markb.pgf}}\qquad dt&=\unit{1}{\second}&  \text{\input{fixed/solheat/markr.pgf}}\qquad dt&=\unit{1}{\second}\\
+\intertext{\centering $h=0.01$ }
+\text{\input{fixed/solheat/marky.pgf}}\qquad dt&=\unit{0.1}{\second}&   \text{\input{fixed/solheat/markk.pgf}}\qquad dt&=\unit{0.1}{\second}
+ \end{align*}
+}
+\label{fix:solheat:fig:comp}
+\end{figure}
 
 
 \subsubsection{Numerical solution}
