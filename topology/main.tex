@@ -2182,11 +2182,11 @@ A complete iteration consists of Algorithm \ref{code:RungeKutta3}
 \end{algorithm}
 
 \FloatBarrier
-\section{Numerical experiment}
+\section{Numerical experiments}
 
 \subsection{One particle fall}
 \label{top:exp:one}
-We have discussed this case qualitatively we will now simulated it numerically.
+We have discussed this case qualitatively, we will now simulate it numerically.
 
 We take as initial condition a single particle with 0 speed everywhere without viscosity falling from gravity.
 
@@ -2200,29 +2200,29 @@ If we add viscosity the same is true.
 
 \subsubsection{Result}
 
-We see in figure \ref{topo:singl_part:fig1} that the non splitted method coincide with the analytical solution for as
+We see in figure \ref{topo:singl_part:fig1} that the non split method coincides with the analytical solution for the
 integration method Runge-Kutta of order 4. The reason is that the analytical solution is a polynomial of order 2.
 
-At the contrary because of the splitting a splitting method will incorrectly approximate the result, because it's of order 1 at general.
+In contrast, because of the splitting, a splitting method will incorrectly approximate the result, because it is of order 1 at general.
 
-When we have big time step like $\alpha=2$ non splitted method behave better. But it's important to recall the result on fixed grid,
+When we have big time steps like $\alpha=2$ the non splitted method behaves better. But it is important to recall the results on fixed grid,
 that having a too big time step make diverge.
 
 \begin{figure}
 \begin{tikzpicture}
 	\begin{axis}[width=\textwidth,use units,x unit=\second,y unit=\meter,xlabel=$t$ Position,ylabel=$y$ Position,no markers]
 		\addplot table[col sep=comma,x=t,y=y]{topology/single_part/traj1.csv};
-		\addlegendentry{Splitted $\alpha=0.1$}
+		\addlegendentry{Split $\alpha=0.1$}
 		\label{top:single_part:traj1}
 		\addplot table[col sep=comma,x=t,y=y]{topology/single_part/traj2.csv};
 		\label{top:single_part:traj2}
-		\addlegendentry{None Splitted $\alpha=0.1$}
+		\addlegendentry{None Split $\alpha=0.1$}
 		\addplot[green] table[col sep=comma,x=t,y=y]{topology/single_part/traj3.csv};
-		\addlegendentry{Splitted $\alpha=2$}
+		\addlegendentry{Split $\alpha=2$}
 		\label{top:single_part:traj3}
 		\addplot[purple] table[col sep=comma,x=t,y=y]{topology/single_part/traj4.csv};
 		\label{top:single_part:traj4}
-		\addlegendentry{None Splitted $\alpha=2$}
+		\addlegendentry{None Split $\alpha=2$}
 		\addplot[domain=0:2,dotted] gnuplot{-x*x*9.81/2};
 		\label{top:single_part:anal1}
 		\addlegendentry{Analytical}
