@@ -821,33 +821,33 @@ For 3d it is calculated similarly.
 
 We will now give pseudo code to augment the program seen in the previous chapter.
 
-\subsection{Data type}
+\subsection{Data types}
 
-In addition to data type that we have seen in the previous chapter. We add the following data type.
+In addition to the data types that we have seen in the previous chapter, we add the following data types:
 
 \begin{description}
 \item[Layer:]
-layers are integer stored in the cell which indicates the distance from the fluid.
+layers are integers stored in the cell which indicates the distance from the fluid.
 Two methods are defined. A method to set ($\FuncCall{LayerSet}$) and a method to get ($\FuncCall{LayerGet}$).
-A special value of $-1$ is used for indicating empty cells. This is used in the initialization algorithm before considerating
+A special value of $-1$ is used for indicating empty cells. This is used in the initialization algorithm before considering
 which values the layer have.
 \item[Depth:]
-Depths are integer stored in the cell which indicates the depth in the fluid.
-This is used for optimization of the number of particle. Particles are only used near the surface.
+Depths are integers stored in the cell which indicate the depth in the fluid.
+This is used for optimization of the number of particles. Particles are only used near the surface.
 Not deep inside the fluid.
 Two methods are defined. A method to set ($\FuncCall{DepthSet}$) and a method to get ($\FuncCall{DepthGet}$).
-A special value of $-1$ is used for indicating empty cell
+A special value of $-1$ is used for indicating an empty cell
 \item[Particle:]
-We need a list of particle which consist only of list of position.
+We need a list of particles which consist only of a list of position.
 A method ($\FuncCall{CellGet}()$) that transforms a particle in the cell which it lays in is needed.
-This method can be written in term of rounding after a scaling so that cell spacing are $1$.
-Method to add and remove particle of the list are needed.
-The order in the list is not relevant we only need to be able to remove a particle in an arbitrary position in the list.
+This method can be written in terms of rounding after a scaling so that cell spacings are $1$.
+Methods to add and remove particles in the list are needed.
+The order in the list is not relevant, we only need to be able to remove a particle in an arbitrary position in the list.
 \item[Interior:]
 A special cell type, interior cell is used.
-Interior cells are considered as cell fluid, but where the method $\FuncCall{GetIsInterior}$ return true.
-Interior cells are cell which don't need to have fluid particle in there.
-The only mean to remove an interior cell is to ``Remove'' the fluid cell around it.
+Interior cells are considered as cell fluid, but where the method $\FuncCall{GetIsInterior}$ returns true.
+Interior cells are cells which do not need to have fluid particle in there.
+The only mean to remove an interior cell is to ``Remove'' the fluid cells around it.
 \end{description}
 
 \subsection{Initialisation}
@@ -856,43 +856,43 @@ The only mean to remove an interior cell is to ``Remove'' the fluid cell around 
 In this part we need to do the following:
 \begin{itemize}
  \item From the position of the particle determine which cell is fluid.
- \item Add particle in inflow cell.
+ \item Add particles in inflow cell.
  \item Create air cell around the fluid to store extrapolation data.
- \item Create a variable named layer which has value $0$ in the fluid and the distance from the fluid in air cell.
- This is used in extrapolation method.
+ \item Create a variable named layer which has value $0$ in the fluid and the distance from the fluid in air cells.
+ This is used in the the extrapolation method.
 \end{itemize}
 This part is the only part that creates cells or creates particles.
-The difficulty of this part is that we have value that are not updated or do not exist.
-Order of the algorithm are very important.
+The difficulty of this part is that we have values that are not updated or do not exist.
+The order of the algorithm is very important.
 
-To do this we use the following step:
+To do this we use the following steps:
 \begin{enumerate}
  \item We initialize a variable called layer on every cell to a value of $-1$.
- \item We put layer to $0$ for cell with a particle in it and set the cell type to fluid.
- \item We create particle in inflow if needed.
- \item We iteratively set layer away from surface and set air cell.
- \item We delete cell with layer of $-1$.
+ \item We put layer to $0$ for cells with a particle in it and set the cell type to fluid.
+ \item We create particles in inflow if needed.
+ \item We iteratively set layers away from surface and set air cells.
+ \item We delete cells with layer of $-1$.
 \end{enumerate}
 
-Because of compression and for optimization of number of particle we use another variable called depth.
-This variable indicate the depth in fluid from the surface.
-Cell which are bigger than a certain depth are interior cell.
-Interior cells are considered as fluid cells but which don't need particle in there.
-Particles are created from  a certain depth in cell to allow compression effect which will deform the sampling of particle.
-To have only particles at the surface allows to have more particles at the surface with the same performance. This is important in 3d flow
-where the number of particle increase with $h^3$ if we put particle everywhere.
-We can do this mathematically because an oppening in the fluid can only happen when we have a discontinuity in speed.
+Because of compression and for optimization of the number of particles we use another variable called depth.
+This variable indicates the depth in fluid from the surface.
+Cells which are bigger than a certain depth are interior cells.
+Interior cells are considered as fluid cells but which do not need particles in there.
+Particles are created from  a certain depth in cell to allow a compression effect which will deform the sampling of particles.
+To have only particles at the surface allows us to have more particles at the surface with the same performance. This is important in 3d flows
+where the number of particles increases with $h^3$ if we put particles everywhere.
+We can do this mathematically because an opening in the fluid can only happen when we have a discontinuity in speed.
 This discontinuity can be detected in the speed on the grid.
 
 \subsubsection{Initialize layer and depth}
 
-This algorithm initialize the layer of every cell to -1 so that we can set the layer to 0 of cells which have particle in it.
-For depth we only consider celld which are in the exterior fluid cells and don't touch interior cell so that they have the maximal depth
+This algorithm initializes the layer of every cell to -1 so that we can set the layer to 0 of cells which have a particle in it.
+For depth we only consider cell which are in the exterior fluid cells and do not touch interior cells so that they have the maximal depth
 of the preceding iteration.
 This is shown in algorithm \ref{code:Algorithm:InitializeLayerAndDepth}
 
 \begin{algorithm}
-\caption{Algorithm which Initialize the layer and depth.}
+\caption{Algorithm which initializes the layer and depth.}
 \label{code:Algorithm:InitializeLayerAndDepth}
 \begin{algorithmic}[1]
 \Procedure{InitializeLayerAndDepth}{}
@@ -909,7 +909,7 @@ This is shown in algorithm \ref{code:Algorithm:InitializeLayerAndDepth}
 \subsubsection{Initialize layer with particle and depth}
 
 This algorithm will use the position of the particles to set the layer where the particles are to $0$.
-It will also delete particles that are at interior more than a given depth because particle are not needed there.
+It will also delete particles that are in the interior more than a given depth because particles are not needed there.
 This can be seen in algorithm \ref{code:Algorithm:LayerInitialWithParticleDepth}
 
 \begin{algorithm}
@@ -935,19 +935,19 @@ This can be seen in algorithm \ref{code:Algorithm:LayerInitialWithParticleDepth}
 
 \subsubsection{Create fluid particle depth}
 
-This algorithm creates particle if needed and force that interior cells are filled.
+This algorithm creates particles if needed and forces that interior cells are filled.
 New particles are needed if:
 \begin{enumerate}
-\item It's a inbound cell which has no particle in it (has layer $-1$) which represent a source of fluid of the physical problem.
-\item It's a interior cell which has depth smaller than the limit to remove particle.
+\item It is a inbound cell which has no particles in it (has layer $-1$) which represent a source of fluid of the physical problem.
+\item It is an interior cell which has depth smaller than the limit to remove particles.
 \end{enumerate}
 
-The need of interior cell are for two reasons:
+The needs of interior cells are for two reasons:
 \begin{enumerate}
- \item Performance optimization because at interior the only mean to not be fluid is by a discontinuity on the speed.
- This discontinuity can be found on the speed on grid. So we don't need particle at interior.
- \item By deformation of the fluid the sampling of fluid can be insufficient and air cell can manifest because we have no sufficient particle.
- It allow to have a bigger number of particle by cell to be more resistant to deformation effect only where it's needed,
+ \item Performance optimization because with interior the only means to not be fluid is by a discontinuity on the speed.
+ This discontinuity can be found on the speed on the grid. So we do not need particles at interior.
+ \item By deformation of the fluid the sampling of fluid can be insufficient and air cells can manifest because we have not sufficient particles.
+ It allow to have a bigger number of particle by cell to be more resistant to deformation effect only where it is needed,
  at the surface. Particle are created in the interior region if needed to go in the surface region to add sampling.
 \end{enumerate}
 
@@ -955,8 +955,8 @@ The algorithm is shown in algorithm \ref{code:LayerInitialWithParticleDepth}.
 The method $\FuncCall{InboundNeedFilling}$ and $\FuncCall{AddParticle}$ need to be defined.
 The first tests if we are an empty inbound cell. The second will create one or more particles in the cell.
 
-An identique algorithm without creation of particle named $\FuncCall{CreateInteriorDepth}$
-is used (cf. algorithm \ref{code:CreateInteriorDepth}) when we are in a Runge-Kutta step and don't want
+An identical algorithm without creation of particles named $\FuncCall{CreateInteriorDepth}$
+is used (cf. algorithm \ref{code:CreateInteriorDepth}) when we are in a Runge-Kutta step and do not want
 to create new particles because vectors will no more have the same length which is problematic for a Runge-Kutta method.
 
 \begin{algorithm}
@@ -1004,9 +1004,9 @@ to create new particles because vectors will no more have the same length which 
 We now need to create the layer variable and depth variable and create air cell around the fluid.
 We do this recursively beginning from the fluid and avancing neighbour by neighbour.
 
-This is done in 3 parts. First algorithm \ref{code:CreateInteriorDepth1} create the first list with boundary cell.
+This is done in 3 parts. First algorithm \ref{code:CreateInteriorDepth1} create the first list with boundary cells.
 Then algorithm \ref{code:CreateInteriorDepth2} create the layer moving away from the fluid.
-At the contrary algorithm \ref{code:CreateInteriorDepth3} create the depth moving in the fluid from the surface.
+In contrary algorithm \ref{code:CreateInteriorDepth3} creates the depth moving into the fluid from the surface.
 
 \begin{algorithm}
 \caption{Algorithm which creates the first layer list with cells at the boundary.}
@@ -1119,8 +1119,8 @@ At the contrary algorithm \ref{code:CreateInteriorDepth3} create the depth movin
 
 \subsubsection{Delete macCell}
 
-We delete cells that have layer of $-1$ because they are cells that are not fluid and not in the air layer around fluid.
-Retain cell with layer of $-1$ will not change the mathematics. They will only be dead weight.
+We delete cells that have layerw of $-1$ because they are cells that are not fluid and not in the air layer around the fluid.
+Retaining cell with layer of $-1$ will not change the mathematics. They will only be dead weight.
 This is shown in algorithm \ref{code:DeleteMacCell}.
 \begin{algorithm}
 \caption{Algorithm to delete cell if layer is $-1$.}
@@ -1139,7 +1139,7 @@ This is shown in algorithm \ref{code:DeleteMacCell}.
 \subsubsection{Calculate time step}
 
 We calculate the optimun time step.
-The optimun time step is given so that a particle move a maximun of a given fraction of a cell.
+The optimun time step is given so that a particle moves a maximun of a given fraction of a cell.
 This is shown in algorithm \ref{code:CalculateTimeStep}
 \begin{algorithm}
 \caption{Calculates the optimum time step.}
@@ -1164,16 +1164,16 @@ max=0;
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{conclusion}
+\subsubsection{Conclusion}
 
 We now have all the algorithms to initialize the topology.
-We note that all these steps only involve integer calculation, this allows the compiler to do extensive optimization
-to simplify calculation.
+We note that all these steps only involve integer calculations, this allows the compiler to do extensive optimization
+to simplify calculations.
 
 We have two different initialization cases:
 \begin{enumerate}
- \item Complete initialization done before a Runge-Kutta step. We create particle and calculate the optimum time step.
- \item Partial initialization done in a Runge-Kutta step. We don't create particle and don't change time step.
+ \item Complete initialization done before a Runge-Kutta step. We create particles and calculate the optimum time step.
+ \item Partial initialization done in a Runge-Kutta step. We do not create particle and do not change the time step.
  But the rest is the same as a complete initialization step.
 \end{enumerate}
 The two algorithms are shown in algorithms \ref{code:initialization} and \ref{code:initialization2}.
@@ -1205,7 +1205,7 @@ The two algorithms are shown in algorithms \ref{code:initialization} and \ref{co
 \end{algorithmic}
 \end{algorithm}
 
-We will now consider extrapolation method.
+We will now consider extrapolation methods.
 
 \subsection{Boundary conditions extrapolation}
 \subsubsection{Overview}
