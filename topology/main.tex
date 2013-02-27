@@ -265,24 +265,24 @@ ylabel={$v$}
 \section{Extrapolation}
 
 We will now discuss how to define the extrapolation operator.
-We have seen that the extrapolation operator need to do two things:
+We have seen that the extrapolation operator needs to do two things:
 \begin{enumerate}
 	\item Ensure correct boundary conditions.
 	\item Extrapolate the rest of speed.
 \end{enumerate}
 
-We now are interested in the ensuring of boundary condition.
-Numerically this will be done in extrapolating the value at exterior from the boundary conditions on the derivative.
-One important point is how we enforce the boundary conditions in discretized grid.
+We now are interested in enforcing the boundary condition.
+Numerically this will be done by extrapolating the value at exterior from the boundary conditions on the derivative.
+One important point is how we enforce the boundary conditions on the discrete grid.
 We recall our equation of section \ref{ana:free:surface}:
 \begin{align}
-	\sum_{i,j}\sigma_{ij}n_{i}n_{j}&=0\\
-	\sum_{i,j}\sigma_{ij}t^{1}_{i}n_{j}&=0\\
-	\sum_{i,j}\sigma_{ij}t^{2}_{i}n_{j}&=0\\
+	\sum_{i,j}\sigma_{ij}n_{i}n_{j}&=0,\\
+	\sum_{i,j}\sigma_{ij}t^{1}_{i}n_{j}&=0,\\
+	\sum_{i,j}\sigma_{ij}t^{2}_{i}n_{j}&=0.\\
 \end{align}
-Because the constraints are linear, with sufficiently equation and know value we can find an unique solution.
+Because the constraints are linear, with sufficiently additional equation (divergence free) and know value we can find an unique solution.
 
-We now will treat the different possible cases in 2d. This will then be generalized in 3d.
+We now will treat the different possible cases in 2d. This will then be generalized to 3d.
 We will use different discretisation points for pressure and speed.
 We begin with the discretisation for speed.
 
@@ -290,85 +290,83 @@ We begin with the discretisation for speed.
 \label{topo:extrap:2d}
 \subsubsection{Plane}
 
-The first case is a surface which is a plane following one of the cell boundary.
-Without loss of generality we consider the plane in the $x$ direction(the other case are isometrie of this case).
+The first case is a surface which is a plane following one of the cell boundaries.
+Without loss of generality we consider the plane in the $x$ direction (the other case are just rotations of this case).
 The normal and tangent vectors are then given by:
 \begin{align}
 	\vect{n}&=\begin{pmatrix}
 			0\\
 			1
-		\end{pmatrix}\\
+		\end{pmatrix},\\
 	\vect{t}&=\begin{pmatrix}
 			1\\
 			0
-		\end{pmatrix}
+		\end{pmatrix}.
 \end{align}
-
 The equation is then given by:
 \begin{align}
-	\sum_{i,j}\sigma_{ij}t_{i}n_{j}&=0\\
+	\sum_{i,j}\sigma_{ij}t_{i}n_{j}&=0,\\
 	\sigma_{12}&=0\\
-	-p \delta_{12}+\nu\left(\frac{\partial v_{1}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{1}}\right)&=0\\
-	\frac{\partial v_{1}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{1}}&=0\\
+	-p \delta_{12}+\nu\left(\frac{\partial v_{1}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{1}}\right)&=0,\\
+	\frac{\partial v_{1}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{1}}&=0.\\
 \end{align}
 
 We discretize this equation at point $i+\frac{1}{2},j+\frac{1}{2}$:
 \begin{equation}
 \label{var:extr:droitCont}
-	\frac{v^{1}_{i+\frac{1}{2},j+1}-v^{1}_{i+\frac{1}{2},j}}{\Delta x_{2}}+\frac{v^{2}_{i+1,j+\frac{1}{2}}-v^{2}_{i,j+\frac{1}{2}}}{\Delta x_{1}}=0
+	\frac{v^{1}_{i+\frac{1}{2},j+1}-v^{1}_{i+\frac{1}{2},j}}{\Delta x_{2}}+\frac{v^{2}_{i+1,j+\frac{1}{2}}-v^{2}_{i,j+\frac{1}{2}}}{\Delta x_{1}}=0,
 \end{equation}
-Where $\Delta x_{1}$ and $\Delta x_{2}$ are the spacing in $x$ and $y$.
+where $\Delta x_{1}$ and $\Delta x_{2}$ are the spacings in $x$ and $y$.
 We have one equation for 3 unknowns, only $v^{1}_{i+\frac{1}{2},j}$ are known.
 But we can add two equations using the divergence free condition in the fluid for cell $i,j$ and $i+1,j$.
 This gives us:
 \begin{align}
 \label{var:extr:droitContA}
-	0&=\frac{v^{1}_{i+\frac{1}{2},j}-v^{1}_{i-\frac{1}{2}},j}{\Delta x_{1}}+\frac{v^{2}_{i,j+\frac{1}{2}}-v^{2}_{i,j-\frac{1}{2}}}{\Delta x_2}\\
+	0&=\frac{v^{1}_{i+\frac{1}{2},j}-v^{1}_{i-\frac{1}{2}},j}{\Delta x_{1}}+\frac{v^{2}_{i,j+\frac{1}{2}}-v^{2}_{i,j-\frac{1}{2}}}{\Delta x_2},\\
 \label{var:extr:droitContB}
-	v^{2}_{i,j+\frac{1}{2}}&=v^{2}_{i,j-\frac{1}{2}}-\frac{v^{1}_{i+\frac{1}{2},j}-v^{1}_{i-\frac{1}{2},j}}{\Delta x_{1}}\Delta x_{2}\\
+	v^{2}_{i,j+\frac{1}{2}}&=v^{2}_{i,j-\frac{1}{2}}-\frac{v^{1}_{i+\frac{1}{2},j}-v^{1}_{i-\frac{1}{2},j}}{\Delta x_{1}}\Delta x_{2},\\
 \label{var:extr:droitContC}
-	0&=\frac{v^{1}_{i+\frac{3}{2},j}-v^{1}_{i+\frac{1}{2}},j}{\Delta x_{1}}+\frac{v^{2}_{i+1,j+\frac{1}{2}}-v^{2}_{i,j-\frac{1}{2}}}{\Delta x_2}\\
+	0&=\frac{v^{1}_{i+\frac{3}{2},j}-v^{1}_{i+\frac{1}{2}},j}{\Delta x_{1}}+\frac{v^{2}_{i+1,j+\frac{1}{2}}-v^{2}_{i,j-\frac{1}{2}}}{\Delta x_2},\\
 \label{var:extr:droitContD}
-	v^{2}_{i+1,j+\frac{1}{2}}&=v^{2}_{i+1,j-\frac{1}{2}}-\frac{v^{1}_{i+\frac{3}{2},j}-v^{1}_{i+\frac{1}{2},j}}{\Delta x_{1}}\Delta x_{2}
+	v^{2}_{i+1,j+\frac{1}{2}}&=v^{2}_{i+1,j-\frac{1}{2}}-\frac{v^{1}_{i+\frac{3}{2},j}-v^{1}_{i+\frac{1}{2},j}}{\Delta x_{1}}\Delta x_{2}.
 \end{align}
-We substitute the two equations \ref{var:extr:droitContB} and \ref{var:extr:droitContD} in equation \ref{var:extr:droitCont}.
-Which will now only depend on one unknown $v^{1}_{i+\frac{1}{2},j+1}$ which depends on quantity that can be found using the speed in the domain.
-Figure \ref{topology:extrap:plane} shows the variables used and which are substitute from other.
+We substitute the two equations (\ref{var:extr:droitContB}) and (\ref{var:extr:droitContD}) in equation (\ref{var:extr:droitCont}),
+which will now only depend on one unknown $v^{1}_{i+\frac{1}{2},j+1}$ which depends on a quantity that can be found using the speed in the domain.
+Figure \ref{topology:extrap:plane} shows the variables used and the unknowns.
 
-We can only do the things that we have done only if we have a depth of minimal two cells.
+We can do the things that we have done only if we have a depth of minimal two cells.
 If we have only one cell, we have no $y$ speed in the domain of calculation.
-For this case, consider the speed $y$ at boundary as in the domain and let it evolve without constraint.
+For this case, consider the speed $y$ at the boundary as in the domain and let it evolve without constraint.
 
 \begin{figure}
 \directlua{dofile('topology/plane_extrapolation.lua')}
-\caption{The red point is the place where the boundary conditions is discretized.
-The green dots are cells where the divergence free rule is enforced. Red vector are calculated with respect of the blue one.}
+\caption{The red point is the place where the boundary condition is discretized.
+The green dots are cells where the divergence free rule is enforced. Red vectors are calculated with respect to the blue one.}
 \label{topology:extrap:plane}
 \end{figure}
 
 \subsubsection{\unit{45}{\degree} plane}
 
-If we have a cell in domain with two adjacent cells which are not in the domain.
-We take as normal a \unit{45}{\degree} plane.
+If we have a cell in the domain with two adjacent cells which are not in the domain,
+we take as normal a \unit{45}{\degree} plane.
 
 The normal and tangent vectors are then:
 \begin{align}
 	\vect{n}&=\begin{pmatrix}
 	\frac{\sqrt{2}}{2}\\
 	\frac{\sqrt{2}}{2}
-	\end{pmatrix}\\
+	\end{pmatrix},\\
 	\vect{t}&=\begin{pmatrix}
 			\frac{\sqrt{2}}{2}\\
 			-\frac{\sqrt{2}}{2}
-		\end{pmatrix}
+		\end{pmatrix}.
 \end{align}
-
 The constraint is given by:
 \begin{align}
 	\sum_{ij}\sigma_{ij}n_{i}t_{j}&=0\\
 	\sigma_{11}n_{1}t_{1}+\sigma_{22}n_{2}t_{2}+\sigma_{12}(n_{1}t_{2}+n_{2}t_{1})&=0\\
 	2\frac{\partial v_{1}}{\partial x_{1}}\frac{1}{2}-2\frac{\partial v_{2}}{\partial x_{2}}\frac{1}{2}&=0\\
-	\frac{\partial v_{1}}{\partial x_{1}}-\frac{\partial v_{2}}{\partial x_{2}}&=0
+	\frac{\partial v_{1}}{\partial x_{1}}-\frac{\partial v_{2}}{\partial x_{2}}&=0.
 \end{align}
 We discretize at cell center $i,j$ which gives:
 \begin{equation}
@@ -377,11 +375,11 @@ We discretize at cell center $i,j$ which gives:
 We have two unknowns $v^{1}_{i+\frac{1}{2},j}$ and $v^{2}_{i,j+\frac{1}{2}}$.
 We add an additional equation using the divergence free condition at cell $i,j$:
 \begin{equation}
-	\frac{v^{1}_{i+\frac{1}{2},j}-v^{1}_{i-\frac{1}{2}},j}{\Delta x_{1}}+\frac{v^{2}_{i,j+\frac{1}{2}}-v^{2}_{i,j-\frac{1}{2}}}{\Delta x_2}=0
+	\frac{v^{1}_{i+\frac{1}{2},j}-v^{1}_{i-\frac{1}{2}},j}{\Delta x_{1}}+\frac{v^{2}_{i,j+\frac{1}{2}}-v^{2}_{i,j-\frac{1}{2}}}{\Delta x_2}=0.
 \end{equation}
 Figure \ref{topology:extrap:plane_45} shows the position of variables and  their elimination.
 
-For this to work, we need to have the left and below boundary speed to be known.
+For this to work, we need to have the left and bottom boundary speed to be known.
 The boundary needs to be like that because in the contrary we will have no data in the $x$ or $y$ directions.
 
 \begin{figure}
@@ -392,12 +390,12 @@ Red vector are expressed with respect of blue one.}
 \end{figure}
 
 \subsection{3d}
-The method used in 2d is generalized to 3d. The only change will be that the expressions are more complicate, and that we have more variables.
+The method used in 2d is generalized to 3d. The only change will be that the expressions are more complicated, and that we have more variables.
 The two cases that we have seen in 2d will be similar for the 2d variable but with added dependency in the $z$ variable.
 
 \subsubsection{Plane}
 
-The first case is a surface which is a plane following one of the cell boundary.
+The first case is a surface which is a plane following one of the cell boundaries.
 Without loss of generality we consider the plane in the $x$ and $z$ directions.
 The normal and tangent vectors are then given by:
 \begin{align}
@@ -405,44 +403,44 @@ The normal and tangent vectors are then given by:
 			0\\
 			1\\
 			0
-		\end{pmatrix}\\
+		\end{pmatrix}\\,
 	\vect{t^1}&=\begin{pmatrix}
 			1\\
 			0\\
 			0
-		\end{pmatrix}\\
+		\end{pmatrix}\\,
 		\vect{t^2}&=\begin{pmatrix}
 			0\\
 			0\\
 			1
-		\end{pmatrix}
+		\end{pmatrix}.
 \end{align}
 
 The equations are then given by:
 \begin{align}
 \intertext{For $\vect{t^1}$}
-	\sum_{i,j}\sigma_{ij}t^{1}_{i}n_{j}&=0\\
-	\sigma_{12}&=0\\
-	-p \delta_{12}+\nu\left(\frac{\partial v_{1}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{1}}\right)&=0\\
+	\sum_{i,j}\sigma_{ij}t^{1}_{i}n_{j}&=0,\\
+	\sigma_{12}&=0,\\
+	-p \delta_{12}+\nu\left(\frac{\partial v_{1}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{1}}\right)&=0.\\
 	\frac{\partial v_{1}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{1}}&=0\label{topo:extrap:3d:plane:eq1}
 	\displaybreak[0]\\
 	\intertext{For $\vect{t^2}$}
-	\sum_{i,j}\sigma_{ij}t^{2}_{i}n_{j}&=0\\
-	\sigma_{32}&=0\\
-	-p \delta_{32}+\nu\left(\frac{\partial v_{3}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{3}}\right)&=0\\
-	\frac{\partial v_{3}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{3}}&=0\label{topo:extrap:3d:plane:eq2}
+	\sum_{i,j}\sigma_{ij}t^{2}_{i}n_{j}&=0,\\
+	\sigma_{32}&=0\,\
+	-p \delta_{32}+\nu\left(\frac{\partial v_{3}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{3}}\right)&=0,\\
+	\frac{\partial v_{3}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{3}}&=0.\label{topo:extrap:3d:plane:eq2}
 \end{align}
-We discretize equation \ref{topo:extrap:3d:plane:eq1} at point $i+\frac{1}{2},j+\frac{1}{2},k$:
+We discretize equation (\ref{topo:extrap:3d:plane:eq1}) at point $i+\frac{1}{2},j+\frac{1}{2},k$:
 \begin{equation}
 \label{var:extr:3d:droitCont1}
-	\frac{v^{1}_{i+\frac{1}{2},j+1,k}-v^{1}_{i+\frac{1}{2},j,k+\frac{1}{2}}}{\Delta x_{2}}+\frac{v^{2}_{i+1,j+\frac{1}{2},k}-v^{2}_{i,j+\frac{1}{2},k}}{\Delta x_{1}}=0
+	\frac{v^{1}_{i+\frac{1}{2},j+1,k}-v^{1}_{i+\frac{1}{2},j,k+\frac{1}{2}}}{\Delta x_{2}}+\frac{v^{2}_{i+1,j+\frac{1}{2},k}-v^{2}_{i,j+\frac{1}{2},k}}{\Delta x_{1}}=0.
 \end{equation}
-We discretize equation \ref{topo:extrap:3d:plane:eq2} at point $i,j+\frac{1}{2},k+\frac{1}{2}$:
+We discretize equation (\ref{topo:extrap:3d:plane:eq2}) at point $i,j+\frac{1}{2},k+\frac{1}{2}$:
 \begin{equation}
 \label{var:extr:3d:droitCont2}
-	\frac{v^{3}_{i,j+1,k+\frac{1}{2}}-v^{3}_{i,j,k+\frac{1}{2}}}{\Delta x_{2}}+\frac{v^{2}_{i,j+\frac{1}{2},k+1}-v^{2}_{i,j+\frac{1}{2},k}}{\Delta x_{3}}=0
+	\frac{v^{3}_{i,j+1,k+\frac{1}{2}}-v^{3}_{i,j,k+\frac{1}{2}}}{\Delta x_{2}}+\frac{v^{2}_{i,j+\frac{1}{2},k+1}-v^{2}_{i,j+\frac{1}{2},k}}{\Delta x_{3}}=0,
 \end{equation}
-Where $\Delta x_{1}$, $\Delta x_{2}$ and $\Delta x_{3}$ are the spacing in $x$, $y$ and $z$.
+where $\Delta x_{1}$, $\Delta x_{2}$ and $\Delta x_{3}$ are the spacing in $x$, $y$ and $z$.
 We have 2 equations for 5 unknowns, only $v^{1}_{i+\frac{1}{2},j,k}$ and $v^{3}_{i,j,k+\frac{1}{2}}$ are known.
 But we can add 3 equations using the divergence free condition in the fluid for cell $i,j,k$, $i+1,j,k$ and $i,j,k+1$.
 This gives us:
@@ -460,50 +458,45 @@ This gives us:
 \label{var:extr:3:droitContF}
 	v^{2}_{i,j+\frac{1}{2},k+1}&=v^{2}_{i,j-\frac{1}{2},k+1}+\Delta x_{2}\left(-\frac{v^{1}_{i+\frac{1}{2},j,k+1}-v^{1}_{i-\frac{1}{2},j,k+1}}{\Delta x_{1}}-\frac{v^{3}_{i,j,k+\frac{3}{2}}-v^{3}_{i,j,k+\frac{1}{2}}}{\Delta x_{3}}\right)\\
 \end{align}
-We substitute the  equations \ref{var:extr:3:droitContB}, \ref{var:extr:3:droitContD} and \ref{var:extr:3:droitContF}  in equations \ref{var:extr:3d:droitCont1} and \ref{var:extr:3d:droitCont2}.
-Which will now only depend on two unknowns $v^{1}_{i+\frac{1}{2},j+1,k}$ and $v^{3}_{i,j+1,k+\frac{1}{2}}$ which depends on quantity that can be found using the speed in the domain.
-
-We can only do what we have done only if we have a depth of minimal two cells.
-If we have only one cell, we have no $y$ speed in the domain in calculation.
-For this case, consider the speed $y$ at boundary as in the domain.
+We substitute the  equations (\ref{var:extr:3:droitContB}), (\ref{var:extr:3:droitContD}) and (\ref{var:extr:3:droitContF})  in equations (\ref{var:extr:3d:droitCont1}) and (\ref{var:extr:3d:droitCont2}),
+Which will now only depend on two unknowns $v^{1}_{i+\frac{1}{2},j+1,k}$ and $v^{3}_{i,j+1,k+\frac{1}{2}}$ which depend on quantities that can be found using the speed in the domain.
 
 \subsubsection{\unit{45}{\degree} plane}
 
-If we have a cell in domain with two adjacent cells which are not in the domain.
-We take as normal a \unit{45}{\degree} plane.
+If we have a cell in domain with two adjacent cells which are not in the domain,
+we take as normal a \unit{45}{\degree} plane.
 The normal and tangent vectors are then:
 \begin{align}
 	\vect{n}&=\begin{pmatrix}
 	\frac{\sqrt{2}}{2}\\
 	\frac{\sqrt{2}}{2}\\
 	0
-	\end{pmatrix}\\
+	\end{pmatrix},\\
 	\vect{t^1}&=\begin{pmatrix}
 			\frac{\sqrt{2}}{2}\\
 			-\frac{\sqrt{2}}{2}\\
 			0
-		\end{pmatrix}\\
+		\end{pmatrix},\\
 		\vect{t^2}&=\begin{pmatrix}
 			0\\
 			0\\
 			1
-		\end{pmatrix}
+		\end{pmatrix}.
 \end{align}
-
 The constraints are given by:
 \begin{align}
 \intertext{For $\vect{t^1}$}
-	\sum_{ij}\sigma_{ij}n_{i}t^{1}_{j}&=0\\
-	\sigma_{11}n_{1}t^{1}_{1}+\sigma_{22}n_{2}t^{1}_{2}+\sigma_{12}(n_{1}t^{1}_{2}+n_{2}t^{1}_{1})&=0\\
-	2\frac{\partial v_{1}}{\partial x_{1}}\frac{1}{2}-2\frac{\partial v_{2}}{\partial x_{2}}\frac{1}{2}&=0\\
-	\label{topo:extrap:3d:plane_45:first}\frac{\partial v_{1}}{\partial x_{1}}-\frac{\partial v_{2}}{\partial x_{2}}&=0
+	\sum_{ij}\sigma_{ij}n_{i}t^{1}_{j}&=0,\\
+	\sigma_{11}n_{1}t^{1}_{1}+\sigma_{22}n_{2}t^{1}_{2}+\sigma_{12}(n_{1}t^{1}_{2}+n_{2}t^{1}_{1})&=0,\\
+	2\frac{\partial v_{1}}{\partial x_{1}}\frac{1}{2}-2\frac{\partial v_{2}}{\partial x_{2}}\frac{1}{2}&=0,\\
+	\label{topo:extrap:3d:plane_45:first}\frac{\partial v_{1}}{\partial x_{1}}-\frac{\partial v_{2}}{\partial x_{2}}&=0.
 	\displaybreak[0]\\
 	\intertext{For $\vect{t^2}$}
-	\sum_{ij}\sigma_{ij}n_{i}t^{2}_{j}&=0\\
-	\sigma_{13}n_{1}t^{2}_{3}+\sigma_{23}n_{2}t^{2}_{3}&=0\\
-	\label{topo:extrap:3d:plane_45:second}\frac{\partial v_{1}}{\partial x_{3}}+\frac{\partial v_{3}}{\partial x_{1}}+\frac{\partial v_{2}}{\partial x_{3}}+\frac{\partial v_{3}}{\partial x_{2}}&=0
+	\sum_{ij}\sigma_{ij}n_{i}t^{2}_{j}&=0,\\
+	\sigma_{13}n_{1}t^{2}_{3}+\sigma_{23}n_{2}t^{2}_{3}&=0,\\
+	\label{topo:extrap:3d:plane_45:second}\frac{\partial v_{1}}{\partial x_{3}}+\frac{\partial v_{3}}{\partial x_{1}}+\frac{\partial v_{2}}{\partial x_{3}}+\frac{\partial v_{3}}{\partial x_{2}}&=0.
 \end{align}
-In this case, we are able to solve equation \ref{topo:extrap:3d:plane_45:first}.
+In this case, we are able to solve equation (\ref{topo:extrap:3d:plane_45:first}).
 We discretize at cell center $i,j,k$ which gives:
 \begin{equation}
 	\frac{v^{1}_{i+\frac{1}{2},j,k}-v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_{1}}-\frac{v^{2}_{i,j+\frac{1}{2},k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_{2}}=0
@@ -515,10 +508,10 @@ We add an additional equation using the divergence free condition at cell $i,j,k
 \end{equation}
 
 If we want to be exact, we will need to consider in this equation  $v^{3}_{i,j,k+\frac{1}{2}}$ and $v^{3}_{i,j,k-\frac{1}{2}}$
-as unknown and try to determine them from equation \ref{topo:extrap:3d:plane_45:second}.
-But a good discretisation will need to use speed outside of the cell. Which will lead to a recursif solving.
+as unknown and try to determine them from equation (\ref{topo:extrap:3d:plane_45:second}).
+But a good discretisation will need to use speed outside of the cell. Which will lead to a recursive solving.
 
-A first approximation is to ignore equation \ref{topo:extrap:3d:plane_45:second} and consider $v^{3}_{i,j,k+\frac{1}{2}}$ and $v^{3}_{i,j,k-\frac{1}{2}}$ as known.
+A first approximation is to ignore equation (\ref{topo:extrap:3d:plane_45:second}) and consider $v^{3}_{i,j,k+\frac{1}{2}}$ and $v^{3}_{i,j,k-\frac{1}{2}}$ as known.
 
 % But for this equation we need $v^{3}_{i,j,k+\frac{1}{2}}$ and $v^{3}_{i,j,k-\frac{1}{2}}$ which are on the boundary.
 % They can be determined in discretizing the second equation at point $i,j,k-\frac{1}{2}$ and $i,j,k-\frac{1}{2}$,
@@ -538,51 +531,50 @@ For this to work, we need to have the left and below boundary speed to be known.
 The boundary needs to be like that because in the contrary we will have no data in the $x$ or $y$ directions.
 
 
-\subsubsection{Diagonal slopped plane}
+\subsubsection{Diagonal sloped plane}
 
-We now look a really 3d case, where the plane is diagonal on the 3 axis.
+We now look at a really 3d case, where the plane is diagonal on the 3 axes.
 The normal and tangent vectors are:
 \begin{align}
 	\vect{n}&=\begin{pmatrix}
 		\frac{\sqrt{3}}{3}\\
 		\frac{\sqrt{3}}{3}\\
 		\frac{\sqrt{3}}{3}
-	\end{pmatrix}\\
+	\end{pmatrix},\\
 	\vect{t}^1&=\begin{pmatrix}
 			-\frac{\sqrt{2}}{2}\\
 			\frac{\sqrt{2}}{2}\\
 			0
-		\end{pmatrix}\\
+		\end{pmatrix},\\
 		\vect{t}^2&=\begin{pmatrix}
 			0\\
 			\frac{\sqrt{2}}{2}\\
 			-\frac{\sqrt{2}}{2}
-		\end{pmatrix}
+		\end{pmatrix}.
 \end{align}
-
 The constraints are then:
 \begin{align}
 \intertext{For $\vect{t^{1}}$}
-	0&=\sum_{ij}\sigma_{ij}n_{i}t^{1}_{j}\\
-	0&=\sigma_{11}n_{1}t^{1}_{1}+\sigma_{12}n_{1}t^{1}_{2}+\sigma_{21}n_{2}t^{1}_{1}+\sigma_{22}n_{2}t^{1}_{2}+\sigma_{31}n_{3}t^{1}_{1}+\sigma_{32}n_{3}t^{1}_{2}\\
+	0&=\sum_{ij}\sigma_{ij}n_{i}t^{1}_{j},\\
+	0&=\sigma_{11}n_{1}t^{1}_{1}+\sigma_{12}n_{1}t^{1}_{2}+\sigma_{21}n_{2}t^{1}_{1}+\sigma_{22}n_{2}t^{1}_{2}+\sigma_{31}n_{3}t^{1}_{1}+\sigma_{32}n_{3}t^{1}_{2},\\
 	\intertext{using that $t^{1}_1=-t^{1}_2$ and $\sigma_{ij}=\sigma_{ji}$}
-	0&=n_{1}t^{1}_{1}\left(\sigma_{11}-\sigma_{12}\right)+n_{2}t^{1}_1\left(\sigma_{21}-\sigma_{22}\right)+n_{3}t^{1}_1\left(\sigma_{31}-\sigma_{32}\right)\\
+	0&=n_{1}t^{1}_{1}\left(\sigma_{11}-\sigma_{12}\right)+n_{2}t^{1}_1\left(\sigma_{21}-\sigma_{22}\right)+n_{3}t^{1}_1\left(\sigma_{31}-\sigma_{32}\right),\\
 	\intertext{using that $n_1=n_2=n_3$}
 	0&=\sigma_{11}-\sigma_{12}+\sigma_{21}-\sigma_{22}+\sigma_{31}-\sigma_{32}\\
-	0&=2\frac{\partial u_{1}}{\partial x_{1}}-2\frac{\partial u_{2}}{\partial x_{2}}+\frac{\partial u_{3}}{\partial x_{1}}+\frac{\partial u_{1}}{\partial x_{3}}-\frac{\partial u_{3}}{\partial x_{2}}-\frac{\partial u_{2}}{\partial x_{3}}
+	0&=2\frac{\partial u_{1}}{\partial x_{1}}-2\frac{\partial u_{2}}{\partial x_{2}}+\frac{\partial u_{3}}{\partial x_{1}}+\frac{\partial u_{1}}{\partial x_{3}}-\frac{\partial u_{3}}{\partial x_{2}}-\frac{\partial u_{2}}{\partial x_{3}}.
 	\label{topo:extrap:3d:diag:eq1}
 	\displaybreak[0]\\
 	\intertext{For $\vect{t^{2}}$}
-		0&=\sum_{ij}\sigma_{ij}n_{i}t^{2}_{j}\\
-	0&=\sigma_{13}n_{1}t^{2}_{3}+\sigma_{12}n_{1}t^{2}_{2}+\sigma_{23}n_{2}t^{2}_{3}+\sigma_{22}n_{2}t^{2}_{2}+\sigma_{33}n_{3}t^{2}_{3}+\sigma_{32}n_{3}t^{2}_{2}\\
+		0&=\sum_{ij}\sigma_{ij}n_{i}t^{2}_{j},\\
+	0&=\sigma_{13}n_{1}t^{2}_{3}+\sigma_{12}n_{1}t^{2}_{2}+\sigma_{23}n_{2}t^{2}_{3}+\sigma_{22}n_{2}t^{2}_{2}+\sigma_{33}n_{3}t^{2}_{3}+\sigma_{32}n_{3}t^{2}_{2},\\
 	\intertext{using that $t^{2}_2=-t^{2}_3$ and $\sigma_{ij}=\sigma_{ji}$}
-	0&=n_{1}t^{2}_{3}\left(\sigma_{13}-\sigma_{12}\right)+n_{2}t^{2}_3\left(\sigma_{23}-\sigma_{22}\right)+n_{3}t^{2}_3\left(\sigma_{33}-\sigma_{32}\right)\\
+	0&=n_{1}t^{2}_{3}\left(\sigma_{13}-\sigma_{12}\right)+n_{2}t^{2}_3\left(\sigma_{23}-\sigma_{22}\right)+n_{3}t^{2}_3\left(\sigma_{33}-\sigma_{32}\right),\\
 	\intertext{using that $n_1=n_2=n_3$}
-	0&=\sigma_{13}-\sigma_{12}+\sigma_{23}-\sigma_{22}+\sigma_{33}-\sigma_{32}\\
-	0&=2\frac{\partial u_{3}}{\partial x_{3}}-2\frac{\partial u_{2}}{\partial x_{2}}+\frac{\partial u_{1}}{\partial x_{3}}+	\frac{\partial u_{3}}{\partial x_{1}}-\frac{\partial u_{1}}{\partial x_{2}}-\frac{\partial u_{2}}{\partial x_{1}}
+	0&=\sigma_{13}-\sigma_{12}+\sigma_{23}-\sigma_{22}+\sigma_{33}-\sigma_{32},\\
+	0&=2\frac{\partial u_{3}}{\partial x_{3}}-2\frac{\partial u_{2}}{\partial x_{2}}+\frac{\partial u_{1}}{\partial x_{3}}+	\frac{\partial u_{3}}{\partial x_{1}}-\frac{\partial u_{1}}{\partial x_{2}}-\frac{\partial u_{2}}{\partial x_{1}}.
 	\label{topo:extrap:3d:diag:eq2}
 	\end{align}
-We discretize equation \ref{topo:extrap:3d:diag:eq1} at position $i,j,k$:
+We discretize equation (\ref{topo:extrap:3d:diag:eq1}) at position $i,j,k$:
 \begin{equation}\label{extrap:3d:3:eq3}
  \begin{split}
 	0&=2\frac{v^{1}_{i+\frac{1}{2},j,k}-v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_1}-2\frac{v^{2}_{i,j+\frac{1}{2}.k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}\\
@@ -615,7 +607,6 @@ Contrary to the other case we have not a direct method to solve by substitution.
    v^{3}_{i,j,k+\frac{1}{2}}
   \end{pmatrix}=b
 \end{equation}
-
 $b_3$ is given by equation \ref{extrap:3d:3:div}:
 \begin{equation}
  b_3=\frac{v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_1}+\frac{v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}+\frac{v^{3}_{i,j,k-\frac{1}{2}}}{\Delta x_3}
@@ -648,7 +639,7 @@ The matrix $A$ is then:
     \frac{1}{\Delta x_1}&\frac{1}{\Delta x_2}&\frac{1}{\Delta x_3}
    \end{pmatrix}
 \end{equation}
-This matrix only depend on the spacing so it can be calculated at initialization.
+This matrix only depends on the spacing so it can be calculated at initialization.
 
 The general case is:
 \begin{align}
@@ -656,19 +647,18 @@ The general case is:
 		\frac{s_1\sqrt{3}}{3}\\
 		\frac{s_2\sqrt{3}}{3}\\
 		\frac{s_3\sqrt{3}}{3}
-	\end{pmatrix}\\
+	\end{pmatrix},\\
 	\vect{t}^1&=\begin{pmatrix}
 			-s_1\frac{\sqrt{2}}{2}\\
 			s_2\frac{\sqrt{2}}{2}\\
 			0
-		\end{pmatrix}\\
+		\end{pmatrix},\\
 		\vect{t}^2&=\begin{pmatrix}
 			0\\
 			s_2\frac{\sqrt{2}}{2}\\
 			-s_3\frac{\sqrt{2}}{2}
-		\end{pmatrix}
+		\end{pmatrix}.
 \end{align}
-
 The constraints are then:
 \begin{align}
 \intertext{For $\vect{t^{1}}$}
@@ -685,7 +675,7 @@ The constraints are then:
 	0&=-2\frac{\partial u_{3}}{\partial x_{3}}+2\frac{\partial u_{2}}{\partial x_{2}}-s_1s_3\frac{\partial u_{1}}{\partial x_{3}}-s_1s_3\frac{\partial u_{3}}{\partial x_{1}}+s_1s_2\frac{\partial u_{1}}{\partial x_{2}}+s_2s_1\frac{\partial u_{2}}{\partial x_{1}}
 	\label{topo:extrap:3d:diag:gen2}
 \end{align}
-We discretize equation \ref{topo:extrap:3d:diag:gen1} at position $i,j,k$:
+We discretize equation (\ref{topo:extrap:3d:diag:gen1}) at position $i,j,k$:
 \begin{equation}\label{extrap:3d:3:eq3}
  \begin{split}
 	0&=-2\frac{v^{1}_{i+\frac{1}{2},j,k}-v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_1}+2\frac{v^{2}_{i,j+\frac{1}{2}.k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}\\
@@ -695,7 +685,7 @@ We discretize equation \ref{topo:extrap:3d:diag:gen1} at position $i,j,k$:
 	&\qquad +s_2\frac{v^{2}_{i,j+\frac{1}{2},k}+v^2_{i,j-\frac{1}{2},k}-v^{2}_{i,j+\frac{1}{2},k-s_3}-v^{2}_{i,j-\frac{1}{2},k-s_3}}{2\Delta x_3}
 \end{split}
 	\end{equation}
-We discretize equation \ref{topo:extrap:3d:diag:gen2} at position $i,j,k$:
+We discretize equation (\ref{topo:extrap:3d:diag:gen2}) at position $i,j,k$:
 \begin{equation}\label{extrap:3d:3:eq2}
 \begin{split}
 	0&=-2\frac{v^{3}_{i,j,k+\frac{1}{2}}-v^{3}_{i,j,k-\frac{1}{2}}}{\Delta x_3}+2\frac{v^{2}_{i,j+\frac{1}{2}.k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}\\
@@ -715,7 +705,6 @@ We can write it by matrix form:
    v^{3}_{i,j,k+s_3\frac{1}{2}}
   \end{pmatrix}=b
 \end{equation}
-
 $b_3$ is given by equation \ref{extrap:3d:3:div}:
 \begin{equation}
  b_3=s_1\frac{v^{1}_{i-s_1\frac{1}{2},j,k}}{\Delta x_1}+s_2\frac{v^{2}_{i,j-s_2\frac{1}{2},k}}{\Delta x_2}+s_3\frac{v^{3}_{i,j,k-s_3\frac{1}{2}}}{\Delta x_3}
@@ -747,40 +736,39 @@ The matrix $A$ is then:
    \end{pmatrix}
 \end{equation}
 
-\subsection{Other case}
+\subsection{Other cases}
 With the different cases seen above, we cannot treat all cases. Two things can happen.
 \begin{enumerate}
-	\item We are too thin (only one cell), in this case we consider the boundary speed as in the domain,
-	because we need at least 2 speeds of same component in a given direction to be able to make calculation.
-	\item We have a succession of plane and diagonal cells. But the plane cells are not sufficiently long to use the above case.
-	Or other case that cannot be decomposed in the above case.
+	\item The domain is too thin (only one cell), in this case we consider the boundary speed as in the domain,
+	because we need at least 2 speeds of the same component in a given direction to be able to do calculations.
+	\item We have a succession of plane and diagonal cells, but the plane cells are not sufficiently long to use the above case.
+	 Or other cases that cannot be decomposed into the above case.
 	In this case we extrapolate unknown speed from the mean of the neighboring speed in the same speed component.
 	We then evenly distribute the divergence to the unknown speed to be divergence free.
 \end{enumerate}
-This technique allows to define a speed to every bound of a cell in the domain.
+This technique allows us to define a speed to every boundary of a cell in the domain.
 
 We will then need to extrapolate it further away with a technique shown in the next section.
 If a speed that is not directly at boundary is defined it will be protected from erasure for the next stage (an implementation technique for this
-is to put a nan value in unknown).
+is to put a NaN value into unknown).
 
 \subsection{Pressure boundary conditions}
 
-The pressure boundary conditions are applied in cell outside of the domain.
+The pressure boundary conditions are applied to the cells outside of the domain.
 The condition comes from the study from a plane of only one cell.
-For example for normal of:
+For example for a normal of:
 \begin{equation}
 	\vect{n}=\begin{pmatrix}
 			1\\
 			0
-		\end{pmatrix}
+		\end{pmatrix}.
 \end{equation}
 The equations are:
 \begin{align}
-	0&=\sigma_{11}n_{1}=-p+2\nu\frac{\partial v_{1}}{\partial x_{1}}\\
-	p&=2\nu\frac{\partial v_{1}}{\partial x_{1}}
+	0&=\sigma_{11}n_{1}=-p+2\nu\frac{\partial v_{1}}{\partial x_{1}},\\
+	p&=2\nu\frac{\partial v_{1}}{\partial x_{1}}.
 \end{align}
-
-Which in using the boundary speed found from the extrapolation and boundary conditions gives:
+Which using the speed found from previous step gives:
 \begin{equation}
 	p=2\nu\frac{v^{1}_{i+\frac{1}{2},j}-v^{1}_{i,j}}{\Delta x_{1}}
 \end{equation}
@@ -789,17 +777,16 @@ In this case we sum the given pressure.
 
 \subsection{Extrapolate further away}
 
-We now need to extrapolate further away to be able to use bigger time steps.
-And for some pathological case motion where the boundary conditions need speed that  where not in the boundary condition at step before.
-The following method can be used:
+We now need to extrapolate further away to be able to use bigger time step,
+and for corner case to have speed defined if a particle visit a new corner:
 \begin{quote}
-For every not known speed, average from known speeds that are nearer from a surface of fluid.
+For every unknown speed, average from known speeds that are nearer from a surface of the fluid.
 \end{quote}
 This is done by implementing first a notion of ``Layer'' which indicates the distance from the fluid for a given cell.
-The extrapolation is then done layer by layer using only value of layer before.
+The extrapolation is then done layer by layer using only values of the layer before.
 
-The exact code is a little complicated because of the staggered grid which brings a little asymmetry in choosing which cell layer need to be used
-(a speed component is between 2 cell).
+The exact code is a little complicated because of the staggered grid which brings a little asymmetry in choosing which cell layer needs to be used
+(a speed component is between 2 cells).
 
 %\begin{figure}
 %\directlua{dofile('topology/one_cell_extrapolation.lua')}
@@ -809,26 +796,26 @@ The exact code is a little complicated because of the staggered grid which bring
 
 \section{Interpolation}
 
-For interpolation, we don't have constraint on the scheme. A simple one can for example be $n$-linear interpolation.
+For interpolation, we do not have constraints on the scheme. A simple one can for example be $n$-linear interpolation.
 The only thing to take care is that we are in a staggered grid so that known speeds are not at the same place
 for all components.
 
 \subsection{$n$-linear}
 
-A $n$ linear interpolation is a non linear interpolation but a product of linear interpolation so that in every direction the interpolation is linear.
+A $n$ linear interpolation is a non linear interpolation but a product of linear interpolations so that in every direction the interpolation is linear.
 
-For 1d it's given for $c_1$ and $c_2$ the value at $x_1$ and $x_2$ by:
+For 1d it is given for $c_1$ and $c_2$ the value at $x_1$ and $x_2$ by:
 \begin{equation}
-	f(x,y)=c_2\frac{x-x_{1}}{x_{2}-x_{1}}+c_1\frac{x-x_{2}}{x_{1}-x_{2}}
+	f(x,y)=c_2\frac{x-x_{1}}{x_{2}-x_{1}}+c_1\frac{x-x_{2}}{x_{1}-x_{2}}.
 \end{equation}
 
-For 2d it's given by:
+For 2d it is given by:
 \begin{equation}
-	f(x,y)=c_{11}\frac{x-x_{2}}{x_{1}-x_{2}}\frac{y-y_{2}}{y_{1}-y_{2}}+c_{12}\frac{x-x_(2)}{x_{1}-x_{2}}\frac{y-y_{1}}{y_{2}-y_{1}}
-	+c_{21}\frac{x-x_{1}}{x_{2}-x_{1}}\frac{y-y_{2}}{y_{1}-y_{2}}+c_{22}\frac{x-x_{2}}{x_{1}-x_{2}}\frac{y-y_{2}}{y_{1}-y_{2}}
+	f(x,y)=c_{11}\frac{x-x_{2}}{x_{1}-x_{2}}\frac{y-y_{2}}{y_{1}-y_{2}}+c_{12}\frac{x-x_{2}}{x_{1}-x_{2}}\frac{y-y_{1}}{y_{2}-y_{1}}
+	+c_{21}\frac{x-x_{1}}{x_{2}-x_{1}}\frac{y-y_{2}}{y_{1}-y_{2}}+c_{22}\frac{x-x_{2}}{x_{1}-x_{2}}\frac{y-y_{2}}{y_{1}-y_{2}}.
 \end{equation}
 
-For 3d it's calculated similarly.
+For 3d it is calculated similarly.
 
 \section{Pseudo code}
 
