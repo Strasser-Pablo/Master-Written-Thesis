@@ -1212,18 +1212,18 @@ We will now consider extrapolation methods.
 
 The following steps are needed to determine boundary conditions in 2d:
 \begin{enumerate}
-\item  Mark all speed between air cell to $\Nan$.
- \item Find boundary cell: Fluid cells that are neighbor of air cell.
+\item  Mark all speeds between air cells to $\Nan$.
+ \item Find boundary cells: Fluid cells that are neighbor of air cells.
  \item Choose which case of section \ref{topo:extrap:2d} and apply it. 
  If we cannot use a case we mark the speed with $\Nan$.
  \item Extrapolate boundary speeds which are $\Nan$ and correct divergence.
 \end{enumerate}
-Extreme care need to be taken to only use known speed. Topology is very important for this part.
+Extreme care needs to be taken to only use known speeds. Topology is very important for this part.
 
 \subsubsection{Speed in domain}
 
 A speed component is in the domain if its two neighbor cells are in the domain or we are too thin.
-The function take 2 arguments, a cell and a direction and return a boolean.
+The function takes 2 arguments, a cell and a direction and returns a boolean.
 This pseudo code assumes that all cells exist and are fluid or not fluid.
 In the real code the existence of the cell muss be checked.
 
@@ -1257,7 +1257,7 @@ In the real code the existence of the cell muss be checked.
 We now need to know when a fluid cell is a boundary between fluid and air, and extract information of which direction is the boundary.
 As input, we take the cell which we are interested in.
 As output a boolean if we are a boundary, and 2 arrays where we return every direction and sign of the interface.
-The value $n$ indicates how many interface we have.
+The value $n$ indicates how many interfaces we have.
 This is shown in algorithm \ref{code:IsBoundary}.
 
 \begin{algorithm}
@@ -1293,14 +1293,14 @@ $n$ is the number of interface and the number of element filled in the array.  }
 
 
 \subsubsection{Choose boundary case}
-We are now able to detect boundary cell. We now need to recognize the different cases.
-For this we use the information on the number of neighbor and which neighbor:
+We are now able to detect the boundary cells. We now need to recognize the different cases.
+For this we use the information on the number of neighbors and which neighbors:
 \begin{itemize}
 \item If we have one neighbour we are candidate for a plane case. We need then to try every neighbor along the surface to
-see if it has the same interface with same direction.
+see if it has the same interface with the same direction.
 \item  If we have two neighbor interfaces of different components, we are in a diagonal plane case.
-This case is the more easy because we don't need to verify other thing.
-\item If it's not possible we put $\Nan$ in the given component to know for the rest of the algorithm that this speed is not known.
+This case is the more easy because we do not need to verify other things.
+\item If it is not possible we put $\Nan$ in the given component to know for the rest of the algorithm that this speed is not known.
 \end{itemize}
 The application of plane rules is given in section \ref{topo:extrap:2d}.
 This is shown in algorithm \ref{code:ChooseBoundaryCase2d}.
@@ -1366,10 +1366,10 @@ $dir$, $sign$ and $n$ are the same as $\FuncCall{IsBoundary}(cell,dir,sign,n)$}
 \subsubsection{Apply 2D plane}
 
 
-To Apply the 2d plane rule we do the following thing:
+To Apply the 2d plane rule we do the following things:
 \begin{enumerate}
 \item We use the divergence free condition 2 times for 3 known speeds and one unknown.
-\item We use the last equation \ref{var:extr:droitCont} to find the last unknown.
+\item We use the last equation (\ref{var:extr:droitCont}) to find the last unknown.
 \end{enumerate}
 The divergence part equation is shown in algorithm \ref{code:ApplyDiv2d}.
 The plane part is shown in algorithm \ref{code:Apply2dPlane}.
@@ -1450,7 +1450,7 @@ This is shown in algorithm \ref{code:Apply2dPlane45}.
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Apply set nan}
+\subsubsection{Apply set NaN}
 
 We need to set to $\Nan$ all speed component that are not boundary with a fluid cell.
 This are speed component between two air cells.
@@ -1484,9 +1484,9 @@ This is shown in algorithm \ref{code:ApplySetNan}.
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Nan extrapolation}
+\subsubsection{NaN extrapolation}
 
-We have cells with $\Nan$ at booundary, and need to extrapolate a speed in the $\Nan$ in respecting the divergence free condition.
+We have cells with $\Nan$ at boundary, and need to extrapolate a speed in the $\Nan$ in respecting the divergence free condition.
 For this, we to do the following for every cell.
 \begin{enumerate}
 \item We remember the position of $\Nan$ value.
@@ -1495,7 +1495,7 @@ For this, we to do the following for every cell.
 \item We distribute the divergence to all $\Nan$ value.
 \end{enumerate}
 
-The important point that makes that we have existence and unicity of a solution.
+The important point that makes that we have existence and uniqueness of a solution.
 Is that we cannot have a $\Nan$ value which has no non $\Nan$ neighbour.
 This is the case because if this happens we consider the given speed component as in the domain.
 For example the single fluid cell case. Could make this case if we consider the 4 speeds as out of the domain.
@@ -1594,7 +1594,7 @@ We need to do each step in a separate foreach because we have dependance on the 
 But we have no dependance between the same foreach.
 A foreach can be called in parallel, if we ensure that concurent write at the same speed component of the same value
 give the given value and not garbage.
-And if we ensure that we can get and set speed concurently on different speed component without problem.
+And if we ensure that we can get and set speed concurently on different speeds component without problem.
 
 Note that in all this foreach loop we do not change the speed component number, only their value.
 A simple fixed matrix implementation will respect all this condition.
@@ -1628,17 +1628,17 @@ This is shown in algorithm \ref{code:Do2d}.
 \end{algorithm}
 
 \subsubsection{Conclusion}
-In conclusion, we have an algorithm of linear complexity (only one level of nested for each) which can be possibly parallelizable.
+In conclusion, we have an algorithm of linear complexity (only one level of nested for each) which is parallelizable.
 
-This algorithm is specialized for boundary condition in straight plane and in corner. For the other case an extrapolation scheme is used.
+This algorithm is specialized for boundary conditions in straight plane and in corners. For the other case an extrapolation scheme is used.
 If more accurate boundary conditions are needed, the given case can be added in the choose section.
 
 \subsection{Extrapolation}
 
-We now need to extrapolate $\Nan$ value from known value which is nearer from the surface.
+We now need to extrapolate $\Nan$ values from known values which are nearer to the surface.
 This is done iteratively layer by layer.
-Exact pseudo code is a little complicate because of the staggered grid. For details look the algorithm  \ref{code:AlgorithmsExtrapolateNan1}
-, \ref{code:AlgorithmsExtrapolateNan2} and \ref{code:AlgorithmsExtrapolateNan3}. And the figure given in comment.
+Exact pseudo code is a little complicated because of the staggered grid. For details look at the algorithms  \ref{code:AlgorithmsExtrapolateNan1}
+, \ref{code:AlgorithmsExtrapolateNan2} and \ref{code:AlgorithmsExtrapolateNan3}. And the figure given in the comment.
 
 \begin{algorithm}
 \caption{Algorithm which calculates the extrapolation given by boundary conditions. First Part, with the header and the first big loop.}
@@ -1857,7 +1857,7 @@ Exact pseudo code is a little complicate because of the staggered grid. For deta
 \node[align=center] at (1.5,0.5){$cell2$\\$lay2\geq lay$};
 \end{tikzpicture}
 }
-\caption{This are the case used in algorithm \ref{code:AlgorithmsExtrapolateNan1}. This are case where the speed component
+\caption{These are the cases used in algorithm \ref{code:AlgorithmsExtrapolateNan1}. These are cases where the speed component
 is right the considered cell. In black is the speed component to set, in red is the speed component to read from.}
 \end{center}
 \end{figure}
@@ -1921,7 +1921,7 @@ is right the considered cell. In black is the speed component to set, in red is 
 \end{tikzpicture}
 }
 \end{center}
-\caption{These are the case used in algorithm \ref{code:AlgorithmsExtrapolateNan2}. These are case where the speed component
+\caption{These are the cases used in algorithm \ref{code:AlgorithmsExtrapolateNan2}. These are cases where the speed component
 is left the considered cell. In black is the speed component to set, in red is the speed component to read from.}
 \end{figure}
 
@@ -1984,13 +1984,13 @@ is left the considered cell. In black is the speed component to set, in red is t
 \end{tikzpicture}
 }
 \end{center}
-\caption{These are the case used in algorithm \ref{code:AlgorithmsExtrapolateNan3}. These are case where the speed component
+\caption{These are the cases used in algorithm \ref{code:AlgorithmsExtrapolateNan3}. These are the cases where the speed component
 is left the considered cell but where the left cell doesn't exist. In black is the speed component to set, in red is the speed component to read from. The cell marked in red doesn't exist, we cannot access left and below speed of them.}
 \end{figure}
 \subsection{Interpolation}
 
 We will now show the pseudo code for interpolation for $N$ dimension with $N$-linear interpolation.
-The principal difficulty is that on a staggered grid the position of know speed vary for all component.
+The principal difficulty is that on a staggered grid the position of known speed varie for all components.
 The algorithm needed to do the translation is shown in algorithm \ref{code:GetSpeed}.
 The interpolation is shown in algorithm \ref{code:GetSpeedImpl}.
 
@@ -2056,19 +2056,19 @@ $i$ is the recursif parameter it's first value should be 1.}
 
 \subsection{Integration}
 
-For the non splitted case the acceleration is given by \ref{topo:equ:onediff}.
-We use to avoid to rewrite a extrapolation fonction a method $\FuncCall{SetSpeedToAcceleration}(bool)$
-which toggle that the method to set the speed and get the speed act on acceleration instead.
+For the non split case the acceleration is given by (\ref{topo:equ:onediff}).
+We use to avoid to rewrite an extrapolation fonction a method $\FuncCall{SetSpeedToAcceleration}(bool)$
+which toggles that the method to set the speed and get the speed act on acceleration instead.
 This is shown in algorithm \ref{code:CalculateAcceleration2}
 
 We now integrate with the Runge-Kutta method, the difference with respect to the case in section \ref{fixed:sec:rungekutta}
-is that we now have particle. We need to do the same that we have done having a copy of all particle position.
+is that we now have particles. We need to do the same that we have done having a copy of all particle positions.
 This is shown in algorithm \ref{code:RungeKutta2p1} and \ref{code:RungeKutta2p2}.
 
-A complete iteration consist of Algorithm \ref{code:RungeKutta3}
+A complete iteration consists of Algorithm \ref{code:RungeKutta3}
 
 \begin{algorithm}
-\caption{Calculate the acceleration for the non splitted method equation \ref{topo:equ:onediff}.}
+\caption{Calculate the acceleration for the non splitted method equation (\ref{topo:equ:onediff}).}
 \label{code:CalculateAcceleration2}
 \begin{algorithmic}[1]
 \Procedure{CalculateAcceleration2}{}
