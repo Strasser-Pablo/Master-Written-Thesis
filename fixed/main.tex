@@ -1657,11 +1657,13 @@ The other part of the program as convection and projection are done but should h
 The solution for different times $t$ are shown in figures \ref{fix:solheat:fig:num1}, \ref{fix:solheat:fig:num100}, \ref{fix:solheat:fig:num300} ,\ref{fix:solheat:fig:num500}. We have an excellent agreement with the analytical results if the timestep used is sufficiently small.
 For $dt=2\second$ for the Euler method and $dt=\unit{3}{\second}$ for the Runge-Kutta method we have divergence (result completely wrong).
 The CFL condition (for convection) is $dt_{max}=hu_{max}=\unit{0.002}{\second}$. The CFL condition for heat equation is $dt_{max}=\frac{h^2}{2\nu}=\unit{1.53}{\second}$.
-The CFL condition equation are detailed in \cite{cfl_heat}. This can be done because the viscosity is small and the non linear terms cancel.
+The CFL condition equation are detailed in \cite{cfl_heat}.
 Our chosen timestep doesn't respect the CFL condition for convection but convection term is normally 0. Our chosen timestep correctly diverge when we approach the CFL condition for the heat equation.
 
 The solutions with low resolution for different times $t$ are shown in figures \ref{fix:solheat:fig:num1b}, \ref{fix:solheat:fig:num100b}, \ref{fix:solheat:fig:num300b} ,\ref{fix:solheat:fig:num500b}.
-We are in excellent agreement with this low resolution. The reason can be because the equation is linear. 
+As can be seen in the comparatif figure \ref{fix:solheat:fig:comp} better integration methods does not change precision but allows
+higher timesteps, the reason is because the spatial error is dominating. Smaller spatial steps improve discretization.
+The error at early time is bigger because of the steep change in the initial condition.
 
 
 \FloatBarrier
