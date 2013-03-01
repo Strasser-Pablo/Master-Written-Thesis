@@ -2232,7 +2232,7 @@ We do not know why we have small jump in precision for split method.}
 
 \subsection{Lateral jet}
 
-We consider a continuous source of speed in the $x$ direction. With gravity at the $y$ direction.
+We consider a continuous source of speed in the $x$ direction, with gravity in the $y$ direction.
 The analytical solution can be found without consideration of the boundary condition.
 
 A single particle with initial $x$ speed $v_{0}$ which go from $y$ position $y_0$ and with initial time $t_0$.
@@ -2263,7 +2263,7 @@ The speed is then given by:
 This is divergence free.
 So we are a solution of the Navier-Stokes equation.
 
-But we doesn't respect the boundary condition.
+But we does not respect the boundary condition.
 
 We cannot know apriori if the numerical solution with correct boundary condition will respect this solution.
 But we can expect that a perturbation at boundary that will respect the boundary condition,
@@ -2271,17 +2271,17 @@ will rest in the boundary and not enter in the fluid.
 This approximation is called Boundary Layer.
 
 
-\subsubsection{Result}
+\subsubsection{Results}
 
 
 For the numerical method, we have added a small perturbation in the initial $x$ speed.
 
 We see in figure \ref{topo:extrap:lateral:8_1}, \ref{topo:extrap:lateral:9_1} and \ref{topo:extrap:lateral:10_1} that lateral
-speed are smirred by the viscosity and is quasi constant which is the analytical solution.
+speed are smoothed by the viscosity and is quasi constant which is the analytical solution.
 
 The boundary of the analytical solution is near to the numerical solution.
-Only the end of the fluid don't follow the analytical solution.
-This indicate that boundary layer is a correct approximation.
+Only the end of the fluid does not follow the analytical solution.
+This indicates that boundary layers are  correctly approximated.
 \begin{figure}
 	\includegraphics{topology/lateral_jet/plot_8__1_186.pdf}
 	\caption{Non splitted result with Runge-Kutta rk4 with $\nu=1.307e-6$, $\alpha=0.5$.
@@ -2358,17 +2358,17 @@ This indicate that boundary layer is a correct approximation.
 
 \subsection{Jet}
 
-We now try to simulate the same problem than the lateral jet but in the same direction of gravity.
+We now try to simulate the same problem as the lateral jet but in the same direction of gravity.
 We have no analytical solution in this case because the trivial particle solution is no more divergence free.
 Pressure is needed to push the fluid up.
 
-We have done two final numerical run of this problem.
-All numerical run were done with 50 cells at basis. With a spacing of $\unit{0.0002}{\meter}$.
-The viscosity is $\nu=\unit{1.307\cdot 10^{-6}}{\pascal\second}$ which is the viscosity of water.
-We use $\alpha=0.5$. We use non splitted rk4 integration method.
+We have done two final numerical runs of this problem.
+All numerical run were done with 50 cells at the basis. With a spacing of $\unit{0.0002}{\meter}$.
+The viscosity is $\nu=\unit{1.307\cdot 10^{-6}}{\meter \squared \per\second}$ which is the viscosity of water.
+We use $\alpha=0.5$. We use the non split rk4 integration method.
 Particles which go below the 0 altitude are supressed.
 
-The two run took a day to complete. 3 dimmensional run was not possible for reason of time and
+The two runs took a day to complete. 3 dimensional runs were not possible for reasons of time and
 computing power.
 
 This is shown in figure \ref{top:jet:G}, \ref{top:jet:Gx}, \ref{top:jet:Gy}, \ref{top:jet:P}, \ref{top:jet:Px} and
@@ -2376,17 +2376,17 @@ This is shown in figure \ref{top:jet:G}, \ref{top:jet:Gx}, \ref{top:jet:Gy}, \re
 
 The most expensive operation is to calculate the projection operator for every iteration.
 
-We see three phase in the computed result:
+We see three phases in the computed result:
 \begin{enumerate}
  \item Vertical motion without deformation. Gravity had not the time to act a lot on the speed.
- \item The top particle want to push the below particles because of gravity.
- But because of incompressibility the below region become larger. This generate
+ \item The top particles want to push the below particles because of gravity.
+ But because of incompressibility the below region becomes larger. This generates
  a lateral speed.
  \item We touch the supression particles limit and have now a stationary state.
 \end{enumerate}
 
-We think that the reason why the jet lateral distance is so big, is because we are in a 2d problem where
-we have less spatial liberty. The pression exerced by the gravity can in 2d escape only in one dimension
+We think that the reason why the jet lateral distance is so big is because we are in a 2d problem where
+we have less spatial liberty. The pressure exerted by the gravity can in 2d escape only in one dimension
 and not two.
 
 \begin{figure}
