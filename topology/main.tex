@@ -2200,41 +2200,34 @@ If we add viscosity the same is true.
 
 \subsubsection{Result}
 
-We see in figure \ref{topo:singl_part:fig1} that the non split method coincides with the analytical solution for the
+We see in figure \ref{topo:singl_part:fig1} and \ref{topo:singl_part:fig2} that the non split method coincides with the analytical solution for the
 integration method Runge-Kutta of order 4. The reason is that the analytical solution is a polynomial of order 2.
 
 In contrast, because of the splitting, a splitting method will incorrectly approximate the result, because it is of order 1 at general.
 
-When we have big time steps like $\alpha=2$ the non splitted method behaves better. But it is important to recall the results on fixed grid,
+When we have big time steps like $\alpha=2$ the non split method behaves better. But it is important to recall the results on fixed grid,
 that having a too big time step make diverge.
 
 \begin{figure}
-\begin{tikzpicture}
-	\begin{axis}[width=\textwidth,use units,x unit=\second,y unit=\meter,xlabel=$t$ Position,ylabel=$y$ Position,no markers]
-		\addplot table[col sep=comma,x=t,y=y]{topology/single_part/traj1.csv};
-		\addlegendentry{Split $\alpha=0.1$}
-		\label{top:single_part:traj1}
-		\addplot table[col sep=comma,x=t,y=y]{topology/single_part/traj2.csv};
-		\label{top:single_part:traj2}
-		\addlegendentry{None Split $\alpha=0.1$}
-		\addplot[green] table[col sep=comma,x=t,y=y]{topology/single_part/traj3.csv};
-		\addlegendentry{Split $\alpha=2$}
-		\label{top:single_part:traj3}
-		\addplot[purple] table[col sep=comma,x=t,y=y]{topology/single_part/traj4.csv};
-		\label{top:single_part:traj4}
-		\addlegendentry{None Split $\alpha=2$}
-		\addplot[domain=0:2,dotted] gnuplot{-x*x*9.81/2};
-		\label{top:single_part:anal1}
-		\addlegendentry{Analytical}
-	\end{axis}
-\end{tikzpicture}
+\includegraphics{topology/single_part/tab2.pdf}
 \caption{Comparison between splitting and not splitting for a single particle problem. 
 The integration method is Runge-Kutta of order 4 for the two case.
-We see that the none splitting method (\ref{top:single_part:traj2} and \ref{top:single_part:traj4}) is a very good approximation to the analytical solution (\ref{top:single_part:anal1}).
-Instead the splitting method (\ref{top:single_part:traj1} and \ref{top:single_part:traj3}) is different than the analytical solution (\ref{top:single_part:anal1}).
+We see that the non split method is a very good approximation to the analytical solution.
+Instead the split method  and is different than the analytical solution.
 For the two methods, we have used $\Delta x=0.01$. The time step limiter was a maximal time step $dt_{max}=0.01$.
 }
 \label{topo:singl_part:fig1}
+\end{figure}
+
+\begin{figure}
+\includegraphics{topology/single_part/tab.pdf}
+\caption{Comparison between splitting and not splitting for a single particle problem. 
+The integration method is Runge-Kutta of order 4 for the two case.
+We see that the non split method is a very good approximation to the analytical solution.
+Instead the split method  and is different than the analytical solution.
+For the two methods, we have used $\Delta x=0.01$. The time step limiter was a maximal time step $dt_{max}=0.01$.
+We do not know why we have small jump in precision for split method.}
+\label{topo:singl_part:fig2}
 \end{figure}
 
 \subsection{Lateral jet}
