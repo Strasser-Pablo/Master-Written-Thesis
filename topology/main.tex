@@ -36,7 +36,7 @@ We can write a non discretized particle method equation as:
 	\dot{x}&=v,\\
 	x&=x_{0},
 \end{align*}
-Where $x$ is a continuous representation of the space with particle.
+where $x$ is a continuous representation of the space with particle.
 $D(\vect{x})$ is the domain with particle in it.
 The notation $P(D(\vect{x}))$ says that we consider the projection operator with boundary conditions in the domain given by $D(\vect{x})$.
 
@@ -140,9 +140,9 @@ If we consider that indices from $1$ to $n_d$ are in the domain (for speed) and 
 using as notation the : as in matlab in indicating by an indice its position in the vector:
 \begin{align}
 	\intertext{For $i<n_d+1$}
-	E_{i :}&=\left( 0 \ldots 1_{i} \ldots 0\right)\\
+	E_{i :}&=\left( 0 \ldots 1_{i} \ldots 0\right).\\
 	\intertext{For $i>n_d$}
-	E_{i :}&=\left( e^i_{1}\ldots e^i_{n_d} 0\ldots 0\right)\\
+	E_{i :}&=\left( e^i_{1}\ldots e^i_{n_d} 0\ldots 0\right).\\
 \end{align}
 
 Taking the derivative of $E(D_v(D(\vect{x})))\vect{v}$ has two terms, the first gives:
@@ -306,7 +306,7 @@ The normal and tangent vectors are then given by:
 The equation is then given by:
 \begin{align}
 	\sum_{i,j}\sigma_{ij}t_{i}n_{j}&=0,\\
-	\sigma_{12}&=0\\
+	\sigma_{12}&=0,\\
 	-p \delta_{12}+\nu\left(\frac{\partial v_{1}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{1}}\right)&=0,\\
 	\frac{\partial v_{1}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{1}}&=0.\\
 \end{align}
@@ -363,14 +363,14 @@ The normal and tangent vectors are then:
 \end{align}
 The constraint is given by:
 \begin{align}
-	\sum_{ij}\sigma_{ij}n_{i}t_{j}&=0\\
-	\sigma_{11}n_{1}t_{1}+\sigma_{22}n_{2}t_{2}+\sigma_{12}(n_{1}t_{2}+n_{2}t_{1})&=0\\
-	2\frac{\partial v_{1}}{\partial x_{1}}\frac{1}{2}-2\frac{\partial v_{2}}{\partial x_{2}}\frac{1}{2}&=0\\
+	\sum_{ij}\sigma_{ij}n_{i}t_{j}&=0,\\
+	\sigma_{11}n_{1}t_{1}+\sigma_{22}n_{2}t_{2}+\sigma_{12}(n_{1}t_{2}+n_{2}t_{1})&=0,\\
+	2\frac{\partial v_{1}}{\partial x_{1}}\frac{1}{2}-2\frac{\partial v_{2}}{\partial x_{2}}\frac{1}{2}&=0,\\
 	\frac{\partial v_{1}}{\partial x_{1}}-\frac{\partial v_{2}}{\partial x_{2}}&=0.
 \end{align}
 We discretize at cell center $i,j$ which gives:
 \begin{equation}
-	\frac{v^{1}_{i+\frac{1}{2},j}-v^{1}_{i-\frac{1}{2},j}}{\Delta x_{1}}-\frac{v^{2}_{i,j+\frac{1}{2}}-v^{2}_{i,j-\frac{1}{2}}}{\Delta x_{2}}=0
+	\frac{v^{1}_{i+\frac{1}{2},j}-v^{1}_{i-\frac{1}{2},j}}{\Delta x_{1}}-\frac{v^{2}_{i,j+\frac{1}{2}}-v^{2}_{i,j-\frac{1}{2}}}{\Delta x_{2}}=0.
 \end{equation}
 We have two unknowns $v^{1}_{i+\frac{1}{2},j}$ and $v^{2}_{i,j+\frac{1}{2}}$.
 We add an additional equation using the divergence free condition at cell $i,j$:
@@ -403,12 +403,12 @@ The normal and tangent vectors are then given by:
 			0\\
 			1\\
 			0
-		\end{pmatrix}\\,
+		\end{pmatrix},\\
 	\vect{t^1}&=\begin{pmatrix}
 			1\\
 			0\\
 			0
-		\end{pmatrix}\\,
+		\end{pmatrix},\\
 		\vect{t^2}&=\begin{pmatrix}
 			0\\
 			0\\
@@ -421,12 +421,12 @@ The equations are then given by:
 \intertext{For $\vect{t^1}$}
 	\sum_{i,j}\sigma_{ij}t^{1}_{i}n_{j}&=0,\\
 	\sigma_{12}&=0,\\
-	-p \delta_{12}+\nu\left(\frac{\partial v_{1}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{1}}\right)&=0.\\
-	\frac{\partial v_{1}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{1}}&=0\label{topo:extrap:3d:plane:eq1}
+	-p \delta_{12}+\nu\left(\frac{\partial v_{1}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{1}}\right)&=0,\\
+	\frac{\partial v_{1}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{1}}&=0.\label{topo:extrap:3d:plane:eq1}
 	\displaybreak[0]\\
 	\intertext{For $\vect{t^2}$}
 	\sum_{i,j}\sigma_{ij}t^{2}_{i}n_{j}&=0,\\
-	\sigma_{32}&=0\,\
+	\sigma_{32}&=0,\\
 	-p \delta_{32}+\nu\left(\frac{\partial v_{3}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{3}}\right)&=0,\\
 	\frac{\partial v_{3}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{3}}&=0.\label{topo:extrap:3d:plane:eq2}
 \end{align}
@@ -446,17 +446,17 @@ But we can add 3 equations using the divergence free condition in the fluid for 
 This gives us:
 \begin{align}
 \label{var:extr:3:droitContA}
-	0&=\frac{v^{1}_{i+\frac{1}{2},j,k}-v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_{1}}+\frac{v^{2}_{i,j+\frac{1}{2},k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}+\frac{v^{3}_{i,j,k+\frac{1}{2}}-v^{3}_{i,j,k-\frac{1}{2}}}{\Delta x_{3}}\\
+	0&=\frac{v^{1}_{i+\frac{1}{2},j,k}-v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_{1}}+\frac{v^{2}_{i,j+\frac{1}{2},k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}+\frac{v^{3}_{i,j,k+\frac{1}{2}}-v^{3}_{i,j,k-\frac{1}{2}}}{\Delta x_{3}},\\
 \label{var:extr:3:droitContB}
-	v^{2}_{i,j+\frac{1}{2},k}&=v^{2}_{i,j-\frac{1}{2},k}+\Delta x_{2}\left(-\frac{v^{1}_{i+\frac{1}{2},j,k}-v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_{1}}-\frac{v^{3}_{i,j,k+\frac{1}{2}}-v^{3}_{i,j,k-\frac{1}{2}}}{\Delta x_{3}}\right)\\
+	v^{2}_{i,j+\frac{1}{2},k}&=v^{2}_{i,j-\frac{1}{2},k}+\Delta x_{2}\left(-\frac{v^{1}_{i+\frac{1}{2},j,k}-v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_{1}}-\frac{v^{3}_{i,j,k+\frac{1}{2}}-v^{3}_{i,j,k-\frac{1}{2}}}{\Delta x_{3}}\right),\\
 \label{var:extr:3:droitContC}
-	0&=\frac{v^{1}_{i+\frac{3}{2},j,k}-v^{1}_{i+\frac{1}{2},j,k}}{\Delta x_{1}}+\frac{v^{2}_{i+1,j+\frac{1}{2},k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}+\frac{v^{3}_{i+\frac{1}{2},j,k+\frac{1}{2}}-v^{3}_{i+\frac{1}{2},j,k-\frac{1}{2}}}{\Delta x_{3}}\\
+	0&=\frac{v^{1}_{i+\frac{3}{2},j,k}-v^{1}_{i+\frac{1}{2},j,k}}{\Delta x_{1}}+\frac{v^{2}_{i+1,j+\frac{1}{2},k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}+\frac{v^{3}_{i+\frac{1}{2},j,k+\frac{1}{2}}-v^{3}_{i+\frac{1}{2},j,k-\frac{1}{2}}}{\Delta x_{3}},\\
 \label{var:extr:3:droitContD}
-	v^{2}_{i+1,j+\frac{1}{2},k}&=v^{2}_{i+1,j-\frac{1}{2},k}+\Delta x_{2}\left(-\frac{v^{1}_{i+\frac{3}{2},j,k}-v^{1}_{i+\frac{1}{2},j,k}}{\Delta x_{1}}-\frac{v^{3}_{i+\frac{1}{2},j,k+\frac{1}{2}}-v^{3}_{i+\frac{1}{2},j,k-\frac{1}{2}}}{\Delta x_{3}}\right)\\
+	v^{2}_{i+1,j+\frac{1}{2},k}&=v^{2}_{i+1,j-\frac{1}{2},k}+\Delta x_{2}\left(-\frac{v^{1}_{i+\frac{3}{2},j,k}-v^{1}_{i+\frac{1}{2},j,k}}{\Delta x_{1}}-\frac{v^{3}_{i+\frac{1}{2},j,k+\frac{1}{2}}-v^{3}_{i+\frac{1}{2},j,k-\frac{1}{2}}}{\Delta x_{3}}\right),\\
 	\label{var:extr:3:droitContE}
-	0&=\frac{v^{1}_{i+\frac{1}{2},j,k+1}-v^{1}_{i-\frac{1}{2},j,k+1}}{\Delta x_{1}}+\frac{v^{2}_{i,j+\frac{1}{2},k+1}-v^{2}_{i,j-\frac{1}{2},k+1}}{\Delta x_2}+\frac{v^{3}_{i,j,k+\frac{3}{2}}-v^{3}_{i,j,k+\frac{1}{2}}}{\Delta x_{3}}\\
+	0&=\frac{v^{1}_{i+\frac{1}{2},j,k+1}-v^{1}_{i-\frac{1}{2},j,k+1}}{\Delta x_{1}}+\frac{v^{2}_{i,j+\frac{1}{2},k+1}-v^{2}_{i,j-\frac{1}{2},k+1}}{\Delta x_2}+\frac{v^{3}_{i,j,k+\frac{3}{2}}-v^{3}_{i,j,k+\frac{1}{2}}}{\Delta x_{3}},\\
 \label{var:extr:3:droitContF}
-	v^{2}_{i,j+\frac{1}{2},k+1}&=v^{2}_{i,j-\frac{1}{2},k+1}+\Delta x_{2}\left(-\frac{v^{1}_{i+\frac{1}{2},j,k+1}-v^{1}_{i-\frac{1}{2},j,k+1}}{\Delta x_{1}}-\frac{v^{3}_{i,j,k+\frac{3}{2}}-v^{3}_{i,j,k+\frac{1}{2}}}{\Delta x_{3}}\right)\\
+	v^{2}_{i,j+\frac{1}{2},k+1}&=v^{2}_{i,j-\frac{1}{2},k+1}+\Delta x_{2}\left(-\frac{v^{1}_{i+\frac{1}{2},j,k+1}-v^{1}_{i-\frac{1}{2},j,k+1}}{\Delta x_{1}}-\frac{v^{3}_{i,j,k+\frac{3}{2}}-v^{3}_{i,j,k+\frac{1}{2}}}{\Delta x_{3}}\right).\\
 \end{align}
 We substitute the  equations (\ref{var:extr:3:droitContB}), (\ref{var:extr:3:droitContD}) and (\ref{var:extr:3:droitContF})  in equations (\ref{var:extr:3d:droitCont1}) and (\ref{var:extr:3d:droitCont2}),
 Which will now only depend on two unknowns $v^{1}_{i+\frac{1}{2},j+1,k}$ and $v^{3}_{i,j+1,k+\frac{1}{2}}$ which depend on quantities that can be found using the speed in the domain.
@@ -499,12 +499,12 @@ The constraints are given by:
 In this case, we are able to solve equation (\ref{topo:extrap:3d:plane_45:first}).
 We discretize at cell center $i,j,k$ which gives:
 \begin{equation}
-	\frac{v^{1}_{i+\frac{1}{2},j,k}-v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_{1}}-\frac{v^{2}_{i,j+\frac{1}{2},k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_{2}}=0
+	\frac{v^{1}_{i+\frac{1}{2},j,k}-v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_{1}}-\frac{v^{2}_{i,j+\frac{1}{2},k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_{2}}=0.
 \end{equation}
 We have two unknowns $v^{1}_{i+\frac{1}{2},j}$ and $v^{2}_{i,j+\frac{1}{2}}$.
 We add an additional equation using the divergence free condition at cell $i,j,k$:
 \begin{equation}
-	\frac{v^{1}_{i+\frac{1}{2},j,k}-v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_{1}}+\frac{v^{2}_{i,j+\frac{1}{2},k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}+\frac{v^{3}_{i,j,k+\frac{1}{2}}-v^{3}_{i,j,k-\frac{1}{2}}}{\Delta x_{3}}=0
+	\frac{v^{1}_{i+\frac{1}{2},j,k}-v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_{1}}+\frac{v^{2}_{i,j+\frac{1}{2},k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}+\frac{v^{3}_{i,j,k+\frac{1}{2}}-v^{3}_{i,j,k-\frac{1}{2}}}{\Delta x_{3}}=0.
 \end{equation}
 
 If we want to be exact, we will need to consider in this equation  $v^{3}_{i,j,k+\frac{1}{2}}$ and $v^{3}_{i,j,k-\frac{1}{2}}$
@@ -560,7 +560,7 @@ The constraints are then:
 	\intertext{using that $t^{1}_1=-t^{1}_2$ and $\sigma_{ij}=\sigma_{ji}$}
 	0&=n_{1}t^{1}_{1}\left(\sigma_{11}-\sigma_{12}\right)+n_{2}t^{1}_1\left(\sigma_{21}-\sigma_{22}\right)+n_{3}t^{1}_1\left(\sigma_{31}-\sigma_{32}\right),\\
 	\intertext{using that $n_1=n_2=n_3$}
-	0&=\sigma_{11}-\sigma_{12}+\sigma_{21}-\sigma_{22}+\sigma_{31}-\sigma_{32}\\
+	0&=\sigma_{11}-\sigma_{12}+\sigma_{21}-\sigma_{22}+\sigma_{31}-\sigma_{32},\\
 	0&=2\frac{\partial u_{1}}{\partial x_{1}}-2\frac{\partial u_{2}}{\partial x_{2}}+\frac{\partial u_{3}}{\partial x_{1}}+\frac{\partial u_{1}}{\partial x_{3}}-\frac{\partial u_{3}}{\partial x_{2}}-\frac{\partial u_{2}}{\partial x_{3}}.
 	\label{topo:extrap:3d:diag:eq1}
 	\displaybreak[0]\\
@@ -581,7 +581,7 @@ We discretize equation (\ref{topo:extrap:3d:diag:eq1}) at position $i,j,k$:
 	&\qquad +\frac{v^{3}_{i,j,k+\frac{1}{2}}+v^{3}_{i,j,k-\frac{1}{2}}-v^{3}_{i-1,j,k+\frac{1}{2}}-v^{3}_{i-1,j,k-\frac{1}{2}}}{2\Delta x_1}\\
 	&\qquad +\frac{v^{1}_{i+\frac{1}{2},j,k}+v^1_{i-\frac{1}{2},j,k}-v^{1}_{i+\frac{1}{2},j,k-1}-v^{1}_{i-\frac{1}{2},j,k-1}}{2\Delta x_3}\\
 	&\qquad -\frac{v^{3}_{i,j,k+\frac{1}{2}}+v^{3}_{i,j,k-\frac{1}{2}}-v^{3}_{i,j-1,k+\frac{1}{2}}-v^{3}_{i,j-1,k-\frac{1}{2}}}{2\Delta x_2}\\
-	&\qquad -\frac{v^{2}_{i,j+\frac{1}{2},k}+v^2_{i,j-\frac{1}{2},k}-v^{2}_{i,j+\frac{1}{2},k-1}-v^{2}_{i,j-\frac{1}{2},k-1}}{2\Delta x_3}
+	&\qquad -\frac{v^{2}_{i,j+\frac{1}{2},k}+v^2_{i,j-\frac{1}{2},k}-v^{2}_{i,j+\frac{1}{2},k-1}-v^{2}_{i,j-\frac{1}{2},k-1}}{2\Delta x_3}.
 \end{split}
 	\end{equation}
 We discretize equation \ref{topo:extrap:3d:diag:eq2} at position $i,j,k$:
@@ -591,13 +591,13 @@ We discretize equation \ref{topo:extrap:3d:diag:eq2} at position $i,j,k$:
 	&\qquad +\frac{v^{3}_{i,j,k+\frac{1}{2}}+v^{3}_{i,j,k-\frac{1}{2}}-v^{3}_{i-1,j,k+\frac{1}{2}}-v^{3}_{i-1,j,k-\frac{1}{2}}}{2\Delta x_1}\\
 	&\qquad +\frac{v^{1}_{i+\frac{1}{2},j,k}+v^1_{i-\frac{1}{2},j,k}-v^{1}_{i+\frac{1}{2},j,k-1}-v^{1}_{i-\frac{1}{2},j,k-1}}{2\Delta x_3}\\
 	&\qquad -\frac{v^{1}_{i+\frac{1}{2},j,k}+v^{1}_{i-\frac{1}{2},j,k}-v^{1}_{i+\frac{1}{2},j-1,k}-v^{1}_{i-\frac{1}{2},j-1,k}}{2\Delta x_2}\\
-	&\qquad -\frac{v^{2}_{i,j+\frac{1}{2},k}+v^2_{i,j-\frac{1}{2},k}-v^{2}_{i-1,j+\frac{1}{2},k}-v^{2}_{i-1,j-\frac{1}{2},k}}{2\Delta x_1}
+	&\qquad -\frac{v^{2}_{i,j+\frac{1}{2},k}+v^2_{i,j-\frac{1}{2},k}-v^{2}_{i-1,j+\frac{1}{2},k}-v^{2}_{i-1,j-\frac{1}{2},k}}{2\Delta x_1}.
 \end{split}
 	\end{equation}
 The unknowns are $v^{1}_{i+\frac{1}{2},j,k}$, $v^2_{i,j+\frac{1}{2},k}$ and $v^{3}_{i,j,k+\frac{1}{2}}$.
 The last equation is given by the divergence free condition at cell $i,j,k$:
 \begin{align}\label{extrap:3d:3:div}
- 0&=\frac{v^{1}_{i+\frac{1}{2},j,k}-v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_1}+\frac{v^{2}_{i,j+\frac{1}{2},k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}+\frac{v^{3}_{i,j,k+\frac{1}{2}}-v^{3}_{i,j,k+\frac{1}{2}}}{\Delta x_3}
+ 0&=\frac{v^{1}_{i+\frac{1}{2},j,k}-v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_1}+\frac{v^{2}_{i,j+\frac{1}{2},k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}+\frac{v^{3}_{i,j,k+\frac{1}{2}}-v^{3}_{i,j,k+\frac{1}{2}}}{\Delta x_3}.
 \end{align}
 Contrary to the other case we have not a direct method to solve by substitution. We will rewrite the equation as:
 \begin{equation}
@@ -605,11 +605,11 @@ Contrary to the other case we have not a direct method to solve by substitution.
    v^{1}_{i+\frac{1}{2},j,k}\\
    v^2_{i,j+\frac{1}{2},k}\\
    v^{3}_{i,j,k+\frac{1}{2}}
-  \end{pmatrix}=b
+  \end{pmatrix}=b.
 \end{equation}
 $b_3$ is given by equation \ref{extrap:3d:3:div}:
 \begin{equation}
- b_3=\frac{v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_1}+\frac{v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}+\frac{v^{3}_{i,j,k-\frac{1}{2}}}{\Delta x_3}
+ b_3=\frac{v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_1}+\frac{v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}+\frac{v^{3}_{i,j,k-\frac{1}{2}}}{\Delta x_3}.
 \end{equation}
 $b_2$ is given by equation \ref{extrap:3d:3:eq2}:
 \begin{equation}
@@ -618,7 +618,7 @@ $b_2$ is given by equation \ref{extrap:3d:3:eq2}:
 	-\frac{v^{3}_{i,j,k-\frac{1}{2}}-v^{3}_{i-1,j,k+\frac{1}{2}}-v^{3}_{i-1,j,k-\frac{1}{2}}}{2\Delta x_1}\\
 	&\qquad -\frac{v^1_{i-\frac{1}{2},j,k}-v^{1}_{i+\frac{1}{2},j,k-1}-v^{1}_{i-\frac{1}{2},j,k-1}}{2\Delta x_3}
 	+\frac{v^{1}_{i-\frac{1}{2},j,k}-v^{1}_{i+\frac{1}{2},j-1,k}-v^{1}_{i-\frac{1}{2},j-1,k}}{2\Delta x_2}\\
-	&\qquad +\frac{v^2_{i,j-\frac{1}{2},k}-v^{2}_{i-1,j+\frac{1}{2},k}-v^{2}_{i-1,j-\frac{1}{2},k}}{2\Delta x_1}
+	&\qquad +\frac{v^2_{i,j-\frac{1}{2},k}-v^{2}_{i-1,j+\frac{1}{2},k}-v^{2}_{i-1,j-\frac{1}{2},k}}{2\Delta x_1}.
 \end{split}
 \end{equation}
 $b_1$ is given by equation \ref{extrap:3d:3:eq3}:
@@ -628,7 +628,7 @@ $b_1$ is given by equation \ref{extrap:3d:3:eq3}:
 	-\frac{v^{3}_{i,j,k+\frac{1}{2}}+v^{3}_{i,j,k-\frac{1}{2}}-v^{3}_{i-1,j,k+\frac{1}{2}}-v^{3}_{i-1,j,k-\frac{1}{2}}}{2\Delta x_1}\\
 	&\qquad -\frac{v^1_{i-\frac{1}{2},j,k}-v^{1}_{i+\frac{1}{2},j,k-1}-v^{1}_{i-\frac{1}{2},j,k-1}}{2\Delta x_3}
 	+\frac{v^{3}_{i,j,k-\frac{1}{2}}-v^{3}_{i,j-1,k+\frac{1}{2}}-v^{3}_{i,j-1,k-\frac{1}{2}}}{2\Delta x_2}\\
-	&\qquad +\frac{v^2_{i,j-\frac{1}{2},k}-v^{2}_{i,j+\frac{1}{2},k-1}-v^{2}_{i,j-\frac{1}{2},k-1}}{2\Delta x_3}
+	&\qquad +\frac{v^2_{i,j-\frac{1}{2},k}-v^{2}_{i,j+\frac{1}{2},k-1}-v^{2}_{i,j-\frac{1}{2},k-1}}{2\Delta x_3}.
 	\end{split}
 \end{equation}
 The matrix $A$ is then:
@@ -637,7 +637,7 @@ The matrix $A$ is then:
     \frac{2}{\Delta x_1}+\frac{1}{2\Delta x_3}&-\frac{2}{\Delta x_2}-\frac{1}{2\Delta x_3}&\frac{1}{2\Delta x_1}-\frac{1}{2\Delta x_2}\\
     \frac{1}{2\Delta x_3}-\frac{1}{2\Delta x_2}&-\frac{2}{\Delta x_2}-\frac{1}{2\Delta x_1}&\frac{2}{\Delta x_3}+\frac{1}{2\Delta x_1}\\
     \frac{1}{\Delta x_1}&\frac{1}{\Delta x_2}&\frac{1}{\Delta x_3}
-   \end{pmatrix}
+   \end{pmatrix}.
 \end{equation}
 This matrix only depends on the spacing so it can be calculated at initialization.
 
@@ -662,17 +662,17 @@ The general case is:
 The constraints are then:
 \begin{align}
 \intertext{For $\vect{t^{1}}$}
-	0&=\sum_{ij}\sigma_{ij}n_{i}t^{1}_{j}\\
-	0&=\frac{\sqrt{6}}{6}\left(-\sigma_{11}+\sigma_{12}s_1s_2-\sigma_{21}s_1s_2+\sigma_{22}-\sigma_{31}s_3s_1+\sigma_{32}s_3s_2\right)\\
-	0&=-\sigma_{11}+\sigma_{22}-\sigma_{31}s_3s_1+\sigma_{32}s_3s_2\\
-	0&=-2\frac{\partial u_{1}}{\partial x_{1}}+2\frac{\partial u_{2}}{\partial x_{2}}-s_3s_1\frac{\partial u_{3}}{\partial x_{1}}-s_3s_1\frac{\partial u_{1}}{\partial x_{3}}+s_3s_2\frac{\partial u_{3}}{\partial x_{2}}+s_3s_2\frac{\partial u_{2}}{\partial x_{3}}
+	0&=\sum_{ij}\sigma_{ij}n_{i}t^{1}_{j},\\
+	0&=\frac{\sqrt{6}}{6}\left(-\sigma_{11}+\sigma_{12}s_1s_2-\sigma_{21}s_1s_2+\sigma_{22}-\sigma_{31}s_3s_1+\sigma_{32}s_3s_2\right),\\
+	0&=-\sigma_{11}+\sigma_{22}-\sigma_{31}s_3s_1+\sigma_{32}s_3s_2,\\
+	0&=-2\frac{\partial u_{1}}{\partial x_{1}}+2\frac{\partial u_{2}}{\partial x_{2}}-s_3s_1\frac{\partial u_{3}}{\partial x_{1}}-s_3s_1\frac{\partial u_{1}}{\partial x_{3}}+s_3s_2\frac{\partial u_{3}}{\partial x_{2}}+s_3s_2\frac{\partial u_{2}}{\partial x_{3}}.
 	\label{topo:extrap:3d:diag:gen1}\displaybreak[0]\\
 	\intertext{For $\vect{t^{2}}$}
-	0&=\sum_{ij}\sigma_{ij}n_{i}t^{2}_{j}\\
-	0&=\frac{\sqrt{6}}{6}\left(-\sigma_{13}s_{1}s_{3}+\sigma_{12}s_{1}s_{2}-\sigma_{23}s_{2}s_{3}+\sigma_{22}-\sigma_{33}+\sigma_{32}s_{3}s_{2}\right)\\
-	0&=\frac{\sqrt{6}}{6}\left(-\sigma_{13}s_{1}s_{3}+\sigma_{12}s_{1}s_{2}+\sigma_{22}-\sigma_{33}\right)\\
-	0&=-\sigma_{13}s_{1}s_{3}+\sigma_{12}s_{1}s_{2}+\sigma_{22}-\sigma_{33}\\
-	0&=-2\frac{\partial u_{3}}{\partial x_{3}}+2\frac{\partial u_{2}}{\partial x_{2}}-s_1s_3\frac{\partial u_{1}}{\partial x_{3}}-s_1s_3\frac{\partial u_{3}}{\partial x_{1}}+s_1s_2\frac{\partial u_{1}}{\partial x_{2}}+s_2s_1\frac{\partial u_{2}}{\partial x_{1}}
+	0&=\sum_{ij}\sigma_{ij}n_{i}t^{2}_{j},\\
+	0&=\frac{\sqrt{6}}{6}\left(-\sigma_{13}s_{1}s_{3}+\sigma_{12}s_{1}s_{2}-\sigma_{23}s_{2}s_{3}+\sigma_{22}-\sigma_{33}+\sigma_{32}s_{3}s_{2}\right),\\
+	0&=\frac{\sqrt{6}}{6}\left(-\sigma_{13}s_{1}s_{3}+\sigma_{12}s_{1}s_{2}+\sigma_{22}-\sigma_{33}\right),\\
+	0&=-\sigma_{13}s_{1}s_{3}+\sigma_{12}s_{1}s_{2}+\sigma_{22}-\sigma_{33},\\
+	0&=-2\frac{\partial u_{3}}{\partial x_{3}}+2\frac{\partial u_{2}}{\partial x_{2}}-s_1s_3\frac{\partial u_{1}}{\partial x_{3}}-s_1s_3\frac{\partial u_{3}}{\partial x_{1}}+s_1s_2\frac{\partial u_{1}}{\partial x_{2}}+s_2s_1\frac{\partial u_{2}}{\partial x_{1}}.
 	\label{topo:extrap:3d:diag:gen2}
 \end{align}
 We discretize equation (\ref{topo:extrap:3d:diag:gen1}) at position $i,j,k$:
@@ -682,7 +682,7 @@ We discretize equation (\ref{topo:extrap:3d:diag:gen1}) at position $i,j,k$:
 	&\qquad -s_3\frac{v^{3}_{i,j,k+\frac{1}{2}}+v^{3}_{i,j,k-\frac{1}{2}}-v^{3}_{i-s_1,j,k+\frac{1}{2}}-v^{3}_{i-s_1,j,k-\frac{1}{2}}}{2\Delta x_1}\\
 	&\qquad -s_1\frac{v^{1}_{i+\frac{1}{2},j,k}+v^1_{i-\frac{1}{2},j,k}-v^{1}_{i+\frac{1}{2},j,k-s_3}-v^{1}_{i-\frac{1}{2},j,k-s_3}}{2\Delta x_3}\\
 	&\qquad +s_3\frac{v^{3}_{i,j,k+\frac{1}{2}}+v^{3}_{i,j,k-\frac{1}{2}}-v^{3}_{i,j-s_2,k+\frac{1}{2}}-v^{3}_{i,j-s_2,k-\frac{1}{2}}}{2\Delta x_2}\\
-	&\qquad +s_2\frac{v^{2}_{i,j+\frac{1}{2},k}+v^2_{i,j-\frac{1}{2},k}-v^{2}_{i,j+\frac{1}{2},k-s_3}-v^{2}_{i,j-\frac{1}{2},k-s_3}}{2\Delta x_3}
+	&\qquad +s_2\frac{v^{2}_{i,j+\frac{1}{2},k}+v^2_{i,j-\frac{1}{2},k}-v^{2}_{i,j+\frac{1}{2},k-s_3}-v^{2}_{i,j-\frac{1}{2},k-s_3}}{2\Delta x_3}.
 \end{split}
 	\end{equation}
 We discretize equation (\ref{topo:extrap:3d:diag:gen2}) at position $i,j,k$:
@@ -692,7 +692,7 @@ We discretize equation (\ref{topo:extrap:3d:diag:gen2}) at position $i,j,k$:
 	&\qquad -s_3\frac{v^{3}_{i,j,k+\frac{1}{2}}+v^{3}_{i,j,k-\frac{1}{2}}-v^{3}_{i-s_1,j,k+\frac{1}{2}}-v^{3}_{i-s_1,j,k-\frac{1}{2}}}{2\Delta x_1}\\
 	&\qquad -s_1\frac{v^{1}_{i+\frac{1}{2},j,k}+v^1_{i-\frac{1}{2},j,k}-v^{1}_{i+\frac{1}{2},j,k-s_3}-v^{1}_{i-\frac{1}{2},j,k-s_3}}{2\Delta x_3}\\
 	&\qquad +s_1\frac{v^{1}_{i+\frac{1}{2},j,k}+v^{1}_{i-\frac{1}{2},j,k}-v^{1}_{i+\frac{1}{2},j-s_2,k}-v^{1}_{i-\frac{1}{2},j-s_2,k}}{2\Delta x_2}\\
-	&\qquad +s_2\frac{v^{2}_{i,j+\frac{1}{2},k}+v^2_{i,j-\frac{1}{2},k}-v^{2}_{i-s_1,j+\frac{1}{2},k}-v^{2}_{i-s_1,j-\frac{1}{2},k}}{2\Delta x_1}
+	&\qquad +s_2\frac{v^{2}_{i,j+\frac{1}{2},k}+v^2_{i,j-\frac{1}{2},k}-v^{2}_{i-s_1,j+\frac{1}{2},k}-v^{2}_{i-s_1,j-\frac{1}{2},k}}{2\Delta x_1}.
 \end{split}
 	\end{equation}
 The unknowns are $v^{1}_{i+s_1\frac{1}{2},j,k}$, $v^2_{i,j+s_2\frac{1}{2},k}$ and $v^{3}_{i,j,k+s_3\frac{1}{2}}$.
@@ -703,18 +703,18 @@ We can write it by matrix form:
    v^{1}_{i+s_1\frac{1}{2},j,k}\\
    v^2_{i,j+s_2\frac{1}{2},k}\\
    v^{3}_{i,j,k+s_3\frac{1}{2}}
-  \end{pmatrix}=b
+  \end{pmatrix}=b.
 \end{equation}
 $b_3$ is given by equation \ref{extrap:3d:3:div}:
 \begin{equation}
- b_3=s_1\frac{v^{1}_{i-s_1\frac{1}{2},j,k}}{\Delta x_1}+s_2\frac{v^{2}_{i,j-s_2\frac{1}{2},k}}{\Delta x_2}+s_3\frac{v^{3}_{i,j,k-s_3\frac{1}{2}}}{\Delta x_3}
+ b_3=s_1\frac{v^{1}_{i-s_1\frac{1}{2},j,k}}{\Delta x_1}+s_2\frac{v^{2}_{i,j-s_2\frac{1}{2},k}}{\Delta x_2}+s_3\frac{v^{3}_{i,j,k-s_3\frac{1}{2}}}{\Delta x_3}.
 \end{equation}
 $b_2$ is given by:
 \begin{equation}
 \begin{split}
 	b_2&=-2s_3\frac{v^{3}_{i,j,k-s_3\frac{1}{2}}}{\Delta x_3}+2s_2\frac{v^{2}_{i,j-s_2\frac{1}{2}.k}}{\Delta x_2}+s_3\frac{v^{3}_{i,j,k-s_3\frac{1}{2}}-v^{3}_{i-s_1,j,k+\frac{1}{2}}-v^{3}_{i-s_1,j,k-\frac{1}{2}}}{2\Delta x_1}\\
 	&\qquad +s_1\frac{v^{1}_{i-s_1\frac{1}{2},j,k}-v^{1}_{i+\frac{1}{2},j,k-s_3}-v^{1}_{i-\frac{1}{2},j,k-s_3}}{2\Delta x_3}-s_1\frac{v^{1}_{i-s_1\frac{1}{2},j,k}-v^{1}_{i+\frac{1}{2},j-s_2,k}-v^{1}_{i-\frac{1}{2},j-s_2,k}}{2\Delta x_2}\\
-	&\qquad -s_2\frac{v^{2}_{i,j-s_2\frac{1}{2},k}-v^{2}_{i-s_1,j+\frac{1}{2},k}-v^{2}_{i-s_1,j-\frac{1}{2},k}}{2\Delta x_1}
+	&\qquad -s_2\frac{v^{2}_{i,j-s_2\frac{1}{2},k}-v^{2}_{i-s_1,j+\frac{1}{2},k}-v^{2}_{i-s_1,j-\frac{1}{2},k}}{2\Delta x_1}.
 \end{split}
 	\end{equation}
 $b_1$ is given by:
@@ -724,7 +724,7 @@ $b_1$ is given by:
 	+s_3\frac{v^{3}_{i,j,k-s_3\frac{1}{2}}-v^{3}_{i-s_1,j,k+\frac{1}{2}}-v^{3}_{i-s_1,j,k-\frac{1}{2}}}{2\Delta x_1}\\
 	&\qquad +s_1\frac{v^{1}_{i-s_1\frac{1}{2},j,k}-v^{1}_{i+\frac{1}{2},j,k-s_3}-v^{1}_{i-\frac{1}{2},j,k-s_3}}{2\Delta x_3}
 	-s_3\frac{v^{3}_{i,j,k-s_3\frac{1}{2}}-v^{3}_{i,j-s_2,k+\frac{1}{2}}-v^{3}_{i,j-s_2,k-\frac{1}{2}}}{2\Delta x_2}\\
-	&\qquad -s_2\frac{v^{2}_{i,j-s_2\frac{1}{2},k}-v^{2}_{i,j+\frac{1}{2},k-s_3}-v^{2}_{i,j-\frac{1}{2},k-s_3}}{2\Delta x_3}
+	&\qquad -s_2\frac{v^{2}_{i,j-s_2\frac{1}{2},k}-v^{2}_{i,j+\frac{1}{2},k-s_3}-v^{2}_{i,j-\frac{1}{2},k-s_3}}{2\Delta x_3}.
 	\end{split}
 \end{equation}
 The matrix $A$ is then:
@@ -733,7 +733,7 @@ The matrix $A$ is then:
     -s_1\frac{2}{\Delta x_1}-s_1\frac{1}{2\Delta x_3}&s_2\frac{2}{\Delta x_2}+s_2\frac{1}{2\Delta x_3}&-s_3\frac{1}{2\Delta x_1}+s_3\frac{1}{2\Delta x_2}\\
     -s_1\frac{1}{2\Delta x_3}+s_1\frac{1}{2\Delta x_2}&s_2\frac{2}{\Delta x_2}+s_2\frac{1}{2\Delta x_1}&-s_3\frac{2}{\Delta x_3}-s_3\frac{1}{2\Delta x_1}\\
     s_1\frac{1}{\Delta x_1}&s_2\frac{1}{\Delta x_2}&s_3\frac{1}{\Delta x_3}
-   \end{pmatrix}
+   \end{pmatrix}.
 \end{equation}
 
 \subsection{Other cases}
@@ -770,7 +770,7 @@ The equations are:
 \end{align}
 Which using the speed found from previous step gives:
 \begin{equation}
-	p=2\nu\frac{v^{1}_{i+\frac{1}{2},j}-v^{1}_{i,j}}{\Delta x_{1}}
+	p=2\nu\frac{v^{1}_{i+\frac{1}{2},j}-v^{1}_{i,j}}{\Delta x_{1}}.
 \end{equation}
 In general we can be neighbor of more than one of these cases.
 In this case we sum the given pressure.
@@ -2192,8 +2192,8 @@ We take as initial condition a single particle with 0 speed everywhere without v
 
 The analytical solution is for the continuous problem given by:
 \begin{align}
-v&=-gt\\
-x&=x_0-\frac{1}{2}gt^2
+v&=-gt,\\
+x&=x_0-\frac{1}{2}gt^2.
 \end{align}
 
 If we add viscosity the same is true.
@@ -2239,26 +2239,26 @@ A single particle with initial $x$ speed $v_{0}$ which go from $y$ position $y_0
 
 The speed is:
 \begin{align}
-	v_{x}&=v_{0}\\
-	v_{y}&=-\frac{g}{2}(t-t_0)^2
+	v_{x}&=v_{0},\\
+	v_{y}&=-\frac{g}{2}(t-t_0)^2.
 \end{align}
 
 The position of the particle is then:
 \begin{align}
-	x&=v_{0}(t-t_0)\\
-	y&=y_0-\frac{g}{2}(t-t_0)^2
+	x&=v_{0}(t-t_0),\\
+	y&=y_0-\frac{g}{2}(t-t_0)^2.
 \end{align}
 
 We will now try to define the speed in a particle manner.
 The time is given by:
 \begin{equation}
-	t-t_{0}=\frac{x}{v_{0}}
+	t-t_{0}=\frac{x}{v_{0}}.
 \end{equation}
 
 The speed is then given by:
 \begin{align}
-	v_{x}&=v_{0}\\
-	v_{y}&=-\frac{g}{2}\frac{x^2}{v_{0}}
+	v_{x}&=v_{0},\\
+	v_{y}&=-\frac{g}{2}\frac{x^2}{v_{0}}.
 \end{align}
 This is divergence free.
 So we are a solution of the Navier-Stokes equation.
@@ -2284,7 +2284,7 @@ Only the end of the fluid does not follow the analytical solution.
 This indicates that boundary layers are  correctly approximated.
 \begin{figure}
 	\includegraphics{topology/lateral_jet/plot_8__1_186.pdf}
-	\caption{Non split result with Runge-Kutta rk4 with $\nu=1.307e-6$, $\alpha=0.5$.
+	\caption{Non split result with Runge-Kutta rk4 with $\nu=\unit{1.307e-6}{\meter \squared \per \second}$, $\alpha=0.5$.
 	This is the $x$ speed.
 	The green line is the analytical solution boundary for the result without boundary condition.
 	The blue line is the calculate boundary.
@@ -2296,7 +2296,7 @@ This indicates that boundary layers are  correctly approximated.
 
 \begin{figure}
 	\includegraphics{topology/lateral_jet/plot_8__2_186.pdf}
-	\caption{Non split result with Runge-Kutta rk4 with $\nu=1.307e-6$, $\alpha=0.5$.
+	\caption{Non split result with Runge-Kutta rk4 with $\nu=\unit{1.307e-6}{\meter \squared \per \second}$, $\alpha=0.5$.
 	This is the $y$ speed.
 	The green line is the analytical solution boundary for the result without boundary condition.
 	The blue line is the calculate boundary.
@@ -2308,7 +2308,7 @@ This indicates that boundary layers are  correctly approximated.
 
 \begin{figure}
 	\includegraphics{topology/lateral_jet/plot_new__1.pdf}
-		\caption{Split result with Runge-Kutta rk4 with $\nu=1.307e-6$, $\alpha=0.5$.
+		\caption{Split result with Runge-Kutta rk4 with $\nu=\unit{1.307e-6}{\meter \squared \per \second}$, $\alpha=0.5$.
 	This is the $x$ speed.
 	The green line is the analytical solution boundary for the result without boundary condition.
 	The blue line is the calculate boundary.
@@ -2320,7 +2320,7 @@ This indicates that boundary layers are  correctly approximated.
 
 \begin{figure}
 	\includegraphics{topology/lateral_jet/plot_new__2.pdf}
-		\caption{Split result with Runge-Kutta rk4 with $\nu=1.307e-6$, $\alpha=0.5$.
+		\caption{Split result with Runge-Kutta rk4 with $\nu=\unit{1.307e-6}{\meter \squared \per \second}$, $\alpha=0.5$.
 	This is the $y$ speed.
 	The green line is the analytical solution boundary for the result without boundary condition.
 	The blue line is the calculate boundary.
@@ -2333,7 +2333,7 @@ This indicates that boundary layers are  correctly approximated.
 
 \begin{figure}
 	\includegraphics{topology/lateral_jet/plot_10__1_293.pdf}
-			\caption{Split result with Euler with $\nu=1.307e-6$, $\alpha=0.5$.
+			\caption{Split result with Euler with $\nu=\unit{1.307e-6}{\meter \squared \per \second}$, $\alpha=0.5$.
 	This is the $x$ speed.
 	The green line is the analytical solution boundary for the result without boundary condition.
 	The blue line is the calculate boundary.
@@ -2345,7 +2345,7 @@ This indicates that boundary layers are  correctly approximated.
 
 \begin{figure}
 	\includegraphics{topology/lateral_jet/plot_10__2_293.pdf}
-			\caption{Split result with Euler with $\nu=1.307e-6$, $\alpha=0.5$.
+			\caption{Split result with Euler with $\nu=\unit{1.307e-6}{\meter \squared \per \second}$, $\alpha=0.5$.
 	This is the $y$ speed.
 	The green line is the analytical solution boundary for the result without boundary condition.
 	The blue line is the calculate boundary.

@@ -27,8 +27,8 @@ We use the work of section \ref{analytical:fixe_eulerian} that Navier-Stokes equ
 $\eye-P$ projects a non divergence free vector to obtain a divergence free vector.
 The solution $\vect{v}$ is a divergence free vector as long that initial conditions are divergence free, because the integral of a divergence free vector is again a divergence free vector
 \begin{align*}
- \vect{v}(t)&=\int_{t_0}^{t}\partial_{\tilde{t}} \vect{v}(\vect{x} ,\tilde{t})=\int_{t_0}^{t} (\eye-P)f(\vect{v}(\vect{x},\tilde{t})) d\tilde{t}+\vect{v}_{0}\\
- \vect{\nabla}\cdot \vect{v}(t)&= \vect{\nabla}\cdot\int_{t_0}^{t} (\eye-P)f(\vect{v}(\vect{x},\tilde{t})) d\tilde{t}+\vect{\nabla}\cdot \vect{v}_{0}=\int_{t_0}^{t} \vect{\nabla}\cdot(\eye-P)f(\vect{v}(\vect{x},\tilde{t})) d\tilde{t}=\int_{t_0}^{t} 0 d\tilde{t}=0
+ \vect{v}(t)&=\int_{t_0}^{t}\partial_{\tilde{t}} \vect{v}(\vect{x} ,\tilde{t})=\int_{t_0}^{t} (\eye-P)f(\vect{v}(\vect{x},\tilde{t})) d\tilde{t}+\vect{v}_{0},\\
+ \vect{\nabla}\cdot \vect{v}(t)&= \vect{\nabla}\cdot\int_{t_0}^{t} (\eye-P)f(\vect{v}(\vect{x},\tilde{t})) d\tilde{t}+\vect{\nabla}\cdot \vect{v}_{0}=\int_{t_0}^{t} \vect{\nabla}\cdot(\eye-P)f(\vect{v}(\vect{x},\tilde{t})) d\tilde{t}=\int_{t_0}^{t} 0 d\tilde{t}=0.
 \end{align*}
 
 
@@ -100,32 +100,32 @@ We begin by proving the following lemma.
 By induction on $i$.
 We begin with $i=1$:
 \begin{align}
-  \vect{k}_{1}&=\Delta tf\left(\vect{v}_n\right)-\Delta tP\left(f\left(\vect{v}_n\right)\right)\\
-\vect{\tilde{k}}_{1}&=\Delta tf\left(\vect{v}_n\right)\\
-  \vect{k}_{1}&=\Delta t f\left(\vect{v}_n\right)-\Delta tP\left(f\left(\vect{v}_n\right)\right)=\vect{\tilde{k}}_1-P\left(\vect{\tilde{k}}_1\right)
+  \vect{k}_{1}&=\Delta tf\left(\vect{v}_n\right)-\Delta tP\left(f\left(\vect{v}_n\right)\right),\\
+\vect{\tilde{k}}_{1}&=\Delta tf\left(\vect{v}_n\right),\\
+  \vect{k}_{1}&=\Delta t f\left(\vect{v}_n\right)-\Delta tP\left(f\left(\vect{v}_n\right)\right)=\vect{\tilde{k}}_1-P\left(\vect{\tilde{k}}_1\right).
 \end{align}
 
 By induction hypothesis we are true for smaller $i$:
 \begin{align*}
-  \vect{k}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{n}a_{ij}k_{j}\right)-\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right)\right)\\
+  \vect{k}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{n}a_{ij}k_{j}\right)-\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right)\right).\\
   \intertext{Using the recurrence relation we have:}
-  \vect{k}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}-P\left(\vect{\tilde{k}}_{j}\right)\right)\right)-\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{k}}_{j}\right)\right)\right)\right)\\
-  \vect{\tilde{k}}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}-P\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}\right)\right)\\
+  \vect{k}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}-P\left(\vect{\tilde{k}}_{j}\right)\right)\right)-\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}+P\left(\vect{\tilde{k}}_{j}\right)\right)\right)\right),\\
+  \vect{\tilde{k}}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}-P\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}\right)\right).\\
   \intertext{Using the linearity of $P$ and that $P\vect{v}_{n}=0$:}
-  \vect{k}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}-P\left(\vect{\tilde{k}}_{j}\right)\right)\right)\\
-  \vect{k}_{i}&=\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{k}}_{i}\right)
+  \vect{k}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}-P\left(\vect{\tilde{k}}_{j}\right)\right)\right),\\
+  \vect{k}_{i}&=\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{k}}_{i}\right).
 \end{align*}
 \end{proof}
 
 We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ using the lemma:
 \begin{align*}
 \vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
-&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{k}}_{i}\right)\right)\\
-\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}\right)\\
+&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{k}}_{i}\right)\right),\\
+\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}\right).\\
 \intertext{Using the linearity of $P$ and that $P\vect{\tilde{v}}_{n}=0$}
-\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{k}}_{i}\right)\right)\\
+\vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{k}}_{i}\right)\right).\\
 \intertext{Using that $\vect{v}_{n}=\tilde{\vect{v}}_{n}$}
-\vect{v}_{n+1}&=\vect{\tilde{v}}_{n+1}
+\vect{v}_{n+1}&=\vect{\tilde{v}}_{n+1}.
 \end{align*}
 
 \end{proof}
@@ -259,11 +259,11 @@ To not overload the proof with notation, we drop the $j$ label to indicate which
 We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ using the lemma.
 \begin{align*}
 \vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
-&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{k}}_{i}\right)\right)\\
+&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{k}}_{i}\right)\right).\\
 \vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}\right)\\
-&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{k}}_{i}\right)\right)\\
+&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{k}}_{i}\right)\right).\\
 \intertext{Using that $\vect{v}_{n}=\tilde{\vect{v}_{n}}$}
-\vect{v}_{n+1}&=\vect{\tilde{v}}_{n+1}
+\vect{v}_{n+1}&=\vect{\tilde{v}}_{n+1}.
 \end{align*}
 
 \end{proof}
@@ -332,21 +332,21 @@ We begin to prove the following lemma.
 By induction on $i$.
 We begin with $i=1$:
 \begin{align}
-  \vect{k}_{1}&=\Delta tf\left(\vect{v}_n\right)-\Delta tP\left(f\left(\vect{v}_n\right),\vect{T}_{1}\right)\\
-\vect{\tilde{k}}_{1}&=\Delta tf\left(\vect{\vect{v}}_n\right)\\
-  \vect{k}_{1}&=\Delta t f\left(\vect{v}_n\right)-\Delta tP\left(f\left(\vect{v}_n\right),\vect{T}_{1}\right)=\vect{\tilde{k}}_1-P\left(\vect{\tilde{k}}_1,\Delta t \vect{T}_{1}\right)
+  \vect{k}_{1}&=\Delta tf\left(\vect{v}_n\right)-\Delta tP\left(f\left(\vect{v}_n\right),\vect{T}_{1}\right),\\
+\vect{\tilde{k}}_{1}&=\Delta tf\left(\vect{\vect{v}}_n\right),\\
+  \vect{k}_{1}&=\Delta t f\left(\vect{v}_n\right)-\Delta tP\left(f\left(\vect{v}_n\right),\vect{T}_{1}\right)=\vect{\tilde{k}}_1-P\left(\vect{\tilde{k}}_1,\Delta t \vect{T}_{1}\right).
 \end{align}
 
 By induction hypothesis we are true for smaller $i$:
 \begin{align*}
   \vect{k}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{n}a_{ij}\vect{k}_{j}\right)-\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{k}_{j}\right),\vect{T}_{i}\right)\\
-  &=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}-P\left(\vect{\tilde{k}}_{j},\Delta t \vect{T}_{j}\right)\right)\right)-\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}-P\left(\vect{\tilde{k}}_{j},\Delta t \vect{T}_{j}\right)\right)\right),\vect{T}_{i}\right)\\
-  \vect{\tilde{k}}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}-P\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j},\vect{\vect{\tilde{T}}}_{i}\right)\right)\\
+  &=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}-P\left(\vect{\tilde{k}}_{j},\Delta t \vect{T}_{j}\right)\right)\right)-\Delta tP\left(f\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}-P\left(\vect{\tilde{k}}_{j},\Delta t \vect{T}_{j}\right)\right)\right),\vect{T}_{i}\right),\\
+  \vect{\tilde{k}}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j}-P\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\vect{\tilde{k}}_{j},\vect{\vect{\tilde{T}}}_{i}\right)\right).\\
   \intertext{Using the linearity of $P$ and $P\vect{v}_n=0$ and defining $\vect{\hat{T}}_{j}^i$}
-  &=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}-P\left(\vect{\tilde{k}}_{j},\vect{\hat{T}}_{j}^{i}\right)\right)\right)\\
-  \vect{\tilde{T}}_i&=\sum_{j}^{i-1}a_{ij}\vect{\hat{T}}_{j}^{i}\\
-  \vect{\hat{T}}^{i}_{j}&=\Delta t \vect{T}_{j}\\
-  \vect{k}_{i}&=\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{k}}_{i},\Delta t\vect{T}_j\right)
+  \vect{\tilde{k}}_{i}&=\Delta tf\left(\vect{v}_n+\sum_{j=1}^{i-1}a_{ij}\left(\vect{\tilde{k}}_{j}-P\left(\vect{\tilde{k}}_{j},\vect{\hat{T}}_{j}^{i}\right)\right)\right),\\
+  \vect{\tilde{T}}_i&=\sum_{j}^{i-1}a_{ij}\vect{\hat{T}}_{j}^{i},\\
+  \vect{\hat{T}}^{i}_{j}&=\Delta t \vect{T}_{j},\\
+  \vect{k}_{i}&=\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{k}}_{i},\Delta t\vect{T}_j\right).
 \end{align*}
 This proves the relation and gives the relation
 \begin{equation}
@@ -357,13 +357,13 @@ This proves the relation and gives the relation
 We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ using the lemma.
 \begin{align*}
 \vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
-&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{k}}_{i},\Delta t\vect{T}_{i}\right)\right)\\
+&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{k}}_{i},\Delta t\vect{T}_{i}\right)\right),\\
 \vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i},\vect{\tilde{T}}_{0}\right)\\
-&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{k}}_{i},\vect{\hat{T}}_{i}^{0}\right)\right)\\
-\vect{\tilde{T}}_{0}&=\sum_{i=1}^{s}b_{i}\vect{\hat{T}}_{i}^{0}\\
-\vect{\tilde{T}}_{0}&=\sum_{i=1}^{s}b_{i}\Delta t \vect{T}_{i}\\
+&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\vect{\tilde{k}}_{i}-P\left(\vect{\tilde{k}}_{i},\vect{\hat{T}}_{i}^{0}\right)\right),\\
+\vect{\tilde{T}}_{0}&=\sum_{i=1}^{s}b_{i}\vect{\hat{T}}_{i}^{0},\\
+\vect{\tilde{T}}_{0}&=\sum_{i=1}^{s}b_{i}\Delta t \vect{T}_{i}.\\
 \intertext{Using that $\vect{v}_{n}=\tilde{\vect{v}}_{n}$}
-\vect{v}_{n+1}&=\vect{\tilde{v}}_{n+1}
+\vect{v}_{n+1}&=\vect{\tilde{v}}_{n+1}.
 \end{align*}
 
 \end{proof}
@@ -497,21 +497,21 @@ $k$ and $\tilde{k}$ are fixed points of function $g$ and $\tilde{g}$.
 We now calculate using that $L$ is linear and $L\hat{v}=0$:
 \begin{align}
 (1-\hat{L})\tilde{g}(x)&=(1-\hat{L})\Delta t \hat{f}((1-\hat{L})(\hat{v}_{n}+\hat{A}x)+\tilde{\tau})=(1-\hat{L})\Delta t \hat{f}(\hat{v}_{n}+\hat{A} (1-\hat{L})x+\tilde{\tau})\\
-&=(1-\hat{L})\Delta t \hat{f}(\hat{v}_{n}+\hat{A} ((1-\hat{L})x+\hat{A}^{-1}\tilde{\tau}))\\
+&=(1-\hat{L})\Delta t \hat{f}(\hat{v}_{n}+\hat{A} ((1-\hat{L})x+\hat{A}^{-1}\tilde{\tau})).\\
 \intertext{By definition of $g$ we have:}
-&=g((1-\hat{L})x+\hat{A}^{-1}\tilde{\tau})-\Delta t \tau
+&=g((1-\hat{L})x+\hat{A}^{-1}\tilde{\tau})-\Delta t \tau.
 \end{align}
 
 We now substitute $\tilde{k}$ in $x$
 \begin{align}
-(1-\hat{L})\tilde{g}(\tilde{k})&=g((1-\hat{L})\tilde{k}+\hat{A}^{-1}\tilde{\tau})-\Delta t \tau\\
+(1-\hat{L})\tilde{g}(\tilde{k})&=g((1-\hat{L})\tilde{k}+\hat{A}^{-1}\tilde{\tau})-\Delta t \tau.\\
 \intertext{$\tilde{k}$ is a fixed point of $\tilde{g}$}
-(1-\hat{L})\tilde{k}&=g((1-\hat{L})\tilde{k}+\hat{A}^{-1}\tilde{\tau})-\Delta t \tau\\
-(1-\hat{L})\tilde{k}+\Delta t \tau&=g((1-\hat{L})\tilde{k}+\hat{A}^{-1}\tilde{\tau})\\
+(1-\hat{L})\tilde{k}&=g((1-\hat{L})\tilde{k}+\hat{A}^{-1}\tilde{\tau})-\Delta t \tau,\\
+(1-\hat{L})\tilde{k}+\Delta t \tau&=g((1-\hat{L})\tilde{k}+\hat{A}^{-1}\tilde{\tau}).\\
 \intertext{If}
-\tilde{\tau}=\Delta t \hat{A}\tau
+\tilde{\tau}=\Delta t \hat{A}\tau.
 \intertext{Then}
-(1-\hat{L})\tilde{k}+\Delta t \tau&=g((1-\hat{L})\tilde{k}+\Delta t \tau)
+(1-\hat{L})\tilde{k}+\Delta t \tau&=g((1-\hat{L})\tilde{k}+\Delta t \tau).
 \end{align}
 $(1-\hat{L})\tilde{k}+\Delta t \tau$ is a fixed point of $g$.
 But fixed point of $g$ is $k$.
@@ -529,12 +529,12 @@ To not overload the proof with notation, we drop the $j$ label to indicate which
 We now write the expression for $\vect{v}_{n+1}$ and $\vect{\tilde{v}}_{n+1}$ using the lemma.
 \begin{align*}
 \vect{v}_{n+1}&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\vect{k}_{i}\\
-&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\left(\eye+L\right)\vect{\tilde{k}}_i+\Delta t \vect{T}_{i}\right)\\
+&=\vect{v}_{n}+\sum_{i=1}^{s}b_{i}\left(\left(\eye+L\right)\vect{\tilde{k}}_i+\Delta t \vect{T}_{i}\right),\\
 \vect{\tilde{v}}_{n+1}&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}-L\left(\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\vect{\tilde{k}}_{i}\right)+\vect{\tilde{T}}_0\\
-&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\eye-L\right)\vect{\tilde{k}}_{i}+\vect{\tilde{T}}_0\\
-\vect{\tilde{T}}_0&=\Delta t\sum_{i=1}^{s}b_{i}\vect{T}_{i}\\
+&=\vect{\tilde{v}}_{n}+\sum_{i=1}^{s}b_{i}\left(\eye-L\right)\vect{\tilde{k}}_{i}+\vect{\tilde{T}}_0,\\
+\vect{\tilde{T}}_0&=\Delta t\sum_{i=1}^{s}b_{i}\vect{T}_{i}.\\
 \intertext{Using that $\vect{v}_{n}=\tilde{\vect{v}}_{n}$}
-\vect{v}_{n+1}&=\vect{\tilde{v}}_{n+1}
+\vect{v}_{n+1}&=\vect{\tilde{v}}_{n+1}.
 \end{align*}
 
 \end{proof}
@@ -1251,8 +1251,8 @@ We consider no external force.
 We will consider as domain $x=[0,2L]$ with fixed speed at $x=0$ and $x=L$,  Neumann boundary conditions for pressure at $x=0$ and $x=L$.
 Analytically the domain in $y$ expand from $-\infty$ to $\infty$. Numerically, we use Dirichlet boundary conditions at $y=[0,2L]$ for pressure.
 \begin{align*}
-    v(x=0,t)&=1\\
-    v(x=2L,t)&=-1\\
+    v(x=0,t)&=1,\\
+    v(x=2L,t)&=-1,\\
     v(x,0)&=\begin{cases}
              1&\text{if $x<L$,}\\
              -1& \text{if $x\geq L$.}
