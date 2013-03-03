@@ -75,7 +75,7 @@
 \newcommand\Or{\mathbin{\textbf{or}}}
 \newcommand\True{\mathop{\textbf{true}}}
 \newcommand\False{\mathop{\textbf{false}}}
-\newcommand\Nan{\mathop{\textbf{NaN}}}
+\newcommand\Nan{\mathop{\textbf{nan}}}
 
 \newcommand\Step{\mathbin{\textbf{step}}}
 

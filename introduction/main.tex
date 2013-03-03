@@ -4,112 +4,122 @@
 
 \section{Vector}
 
-We denote vector with the dimension of physical space (2d or 3d) $\vect{v}$.
-We only use Cartesian coordinate system.
-We indicate a given component of a vector with indices. $\vect{v}_1$ indice the first component.
+We denote a vector with the dimension of physical space (2d or 3d) by $\vect{v}$.
+We only use Cartesian coordinate systems.
+We indicate a given component of a vector with indices, e.g. $\vect{v}_1$ for the first component.
 
 \section{Differential operator}
 
-We denote derivative  $\partial_i$ where $i$ is the spatial component with which we derivate.
+We denote derivatives by  $\partial_i$, where $i$ is the spatial component with respect to which we take the derivative,
 \begin{equation}
- \partial_i v(\vect{x})=\frac{\partial v(\vect{x})}{\partial \vect{x}_{i}}
+ \partial_i v(\vect{x})=\frac{\partial v(\vect{x})}{\partial \vect{x}_{i}}.
 \end{equation}
 
 \begin{definition}[Nabla]
- In Cartesian coordinate, the $\vect{\nabla}$ is a vector that cannot commute.
+ In Cartesian coordinates, the $\vect{\nabla}$ is a vector that cannot commute (e.g. $\nabla \cdot \vect{v}\neq \vect{v}\cdot \nabla$).
  Its expression is given by:
  \begin{equation}
- \vect{\nabla}_{i}=\partial_{i}
+ \vect{\nabla}_{i}=\partial_{i}.
  \end{equation}
 \end{definition}
 
 With the $\vect{\nabla}$ we can form the following expression.
 With $n$ the dimension of the vector:
 \begin{equation}
- \vect{\nabla}p=\begin{pmatrix}\partial_1 p\\ \vdots \\ \partial_n p\end{pmatrix}
+ \vect{\nabla}p=\begin{pmatrix}\partial_1 p\\ \vdots \\ \partial_n p\end{pmatrix},
 \end{equation}
 \begin{equation}
- \vect{\nabla}\cdot \vect{v}=\sum_{i=1}^{n}\partial_i \vect{v}_i
+ \vect{\nabla}\cdot \vect{v}=\sum_{i=1}^{n}\partial_i \vect{v}_i,
 \end{equation}
 \begin{equation}
- \left((\vect{v}\cdot\vect{\nabla})\vect{v}\right)_{i}=\sum_{j=1}^{n}v_{j}\partial_{j} v_{i}
+ \left((\vect{v}\cdot\vect{\nabla})\vect{v}\right)_{i}=\sum_{j=1}^{n}v_{j}\partial_{j} v_{i}.
 \end{equation}
 
 
 \begin{definition}[Laplacian]
 The Laplacian $\Delta$ consists of a scalar operator:
 \begin{equation}
-\Delta p=\vect{\nabla}\cdot \vect{\nabla}p=\sum_{i=1}^{n} \partial_{i}\partial_{i}p
+\Delta p=\vect{\nabla}\cdot \vect{\nabla}p=\sum_{i=1}^{n} \partial_{i}\partial_{i}p.
 \end{equation}
 \end{definition}
 
 \begin{definition}[Vector Laplacian]
-A vector version of the Laplacian consists to apply the Laplacian to all component of the vector.
+A vector version of the Laplacian consists of applying the Laplacian to all components of the vector.
 \begin{equation}
  \Delta \vect{v}=\begin{pmatrix} \Delta v_{1}\\
                   \vdots\\ \Delta v_{n}
-                 \end{pmatrix}
+                 \end{pmatrix}.
 \end{equation}
 \end{definition}
 \section{Divergence free and rotational free space}
 
 \begin{definition}[Divergence]
- The divergence of a vector consists of:
+ The divergence of a vector consists of
  \begin{equation}
-  \vect{\nabla} \cdot \vect{v}
+  \vect{\nabla} \cdot \vect{v}.
   \end{equation}
 \end{definition}
 
-\begin{definition}[Rotational]
- The rotational of a vector consists of:
+\begin{definition}[Curl]
+ The curl of vector consists of
  \begin{equation}
-  \vect{\nabla} \times \vect{v}
+  \vect{\nabla} \times \vect{v}.
  \end{equation}
 \end{definition}
 
 \begin{definition}[Gradient]
- The gradient of a scalar consists of:
+ The gradient of a scalar consists of
  \begin{equation}
-  \vect{\nabla} p
+  \vect{\nabla} p.
  \end{equation}
 \end{definition}
 
 \begin{property}
- The gradient is rotational free.
+ The gradient is curl free:
  \begin{equation}
-  \vect{\nabla}\times \vect{\nabla} p=\vect{0}
+  \vect{\nabla}\times \vect{\nabla} p=\vect{0}.
  \end{equation}
 \end{property}
 
 \begin{property}
-The rotational is divergence free.
+The curl is divergence free:
  \begin{equation}
-  \vect{\nabla}\cdot \vect{\nabla} \times \vect{v}=0
+  \vect{\nabla}\cdot \vect{\nabla} \times \vect{v}=0.
  \end{equation}
 \end{property}
 
 \section{Projection}
 \label{introduction:projection}
 \begin{property}[Projection of a divergence free space]
- Every vector can be projected to a divergence free space without changing its rotational with the following change:
+ Every vector field can be projected onto a divergence free space without changing its curl with the following change:
 \begin{align}
- \vect{v_{new}}&=v-\vect{\nabla}p \label{introduction:ProjectionA}\\
- \Delta p&=\vect{\nabla} \cdot \vect{v} \label{introduction:ProjectionB}
+ \vect{\nabla}\vect{v_{new}}&=\vect{v}-\vect{\nabla}p \label{introduction:ProjectionA},\\
+ \Delta p&=\vect{\nabla} \cdot \vect{v} \label{introduction:ProjectionB}.
 \end{align}
 \end{property}
 \begin{proof}
-  Taking the divergence of equation \ref{introduction:ProjectionA} and using \ref{introduction:ProjectionB}
+  Taking the divergence of equation (\ref{introduction:ProjectionA}) and using (\ref{introduction:ProjectionB})
   \begin{equation}
-   \vect{v_{new}}=\vect{\nabla}\cdot\vect{v}-\Delta p=\vect{\nabla}\cdot\vect{v}-\vect{\nabla}\cdot\vect{v}=0
+   \vect{\nabla}\cdot\vect{v_{new}}=\vect{\nabla}\cdot\vect{v}-\Delta p=\vect{\nabla}\cdot\vect{v}-\vect{\nabla}\cdot\vect{v}=0.
+  \end{equation}
+  Taking the curl of equation (\ref{introduction:ProjectionA}) and using (\ref{introduction:ProjectionB})
+  \begin{equation}
+   \vect{\nabla}\times\vect{v_{new}}=\vect{\nabla}\times\vect{v}-\vect{\nabla}\times\vect{\nabla} p=\vect{\nabla}\times\vect{v}.
   \end{equation}
   \end{proof}
   
+   \begin{remark}
+    We have a Poisson's equation to solve. With Dirichlet and Neumann boundary condition we have a unique solution (if we are not
+    Neumann everywhere).	
+   \end{remark}
+
+  
   \begin{remark}
- This work as long as:
+ This works as long as
  \begin{equation}
-  \Delta=\vect{\nabla}\cdot \vect{\nabla}\label{introduction:ProjectionDelta}
+  \Delta=\vect{\nabla}\cdot \vect{\nabla}.\label{introduction:ProjectionDelta}
  \end{equation}
- So this can be used in discretized case and will be exact as long as \ref{introduction:ProjectionDelta} is respected.
+ So this can also be used in the discretized case and will be exact as long as (\ref{introduction:ProjectionDelta}) is respected.
  \end{remark}
 
 
@@ -117,50 +127,48 @@ The rotational is divergence free.
 \label{introduction:projectiondef}
 We define the projection operator $P(\vect{v})$
   \begin{equation}
-    P(\vect{v})=-\vect{\nabla}\Delta^{-1}\vect{\nabla}\cdot \vect{v}
+    P(\vect{v})=\vect{\nabla}\Delta^{-1}\vect{\nabla}\cdot \vect{v}.
   \end{equation}
-  The projection of section \ref{introduction:projection} is then written:
+  The projection of section \ref{introduction:projection} is then
   \begin{equation}
-    \vect{v}_{new}=\vect{v}+P(\vect{v})
+    \vect{v}_{new}=\vect{v}-P(\vect{v}).
   \end{equation}
 \end{definition}
-
-  In case where we use boundary conditions that are not 0 Dirichlet or Neumann boundary condition.
-  The projection operator is no more linear, but affine.
+  In case we use boundary conditions that are not homogeneous Dirichlet or Neumann boundary condition,
+  the projection operator is no longer linear, but affine.
 
   \begin{definition}[Affine projection operator]
-  We denote affine projection by $P(v,T)=Av+T$.
+  We denote the affine projection by $P(\vect{v},\vect{T})=A\vect{v}+\vect{T}$, where $A$ is a matrice and $\vect{T}$ a vector.
   
-  The Poisson's equation is given by:
+  The Poisson equation is given by
   \begin{equation}
-   \Delta p=\nabla \cdot v
+   \Delta p=\vect{\nabla} \cdot \vect{v}.
   \end{equation}
-This can be rewritten for Dirchlet or Neumann boundary conditions:
+This can be rewritten for Dirchlet or Neumann boundary conditions by
 \begin{equation}
- B p=\nabla \cdot v-c
+ B p=\vect{\nabla} \cdot \vect{v}-\vect{c},
 \end{equation}
-Where $B$ is a matrix form of $\Delta$ which depend only on quantity of the domain.
-Where $c$ is given by the boundary conditions.
-$p$ is then given by:
+where $B$ is a matrix form of $\Delta$ and $\vect{c}$ is given by the boundary conditions.
+$p$ is then given by
 \begin{equation}
- p=B^{-1} \nabla \cdot v-B^{-1}c
+ p=B^{-1} \vect{\nabla} \cdot \vect{v}-B^{-1}\vect{c},
 \end{equation}
-And the projection is:
+and the projection is
 \begin{equation}
- P(v,T)=-\nabla p=-\nabla B^{-1}\nabla \cdot v+\nabla B^{-1}c
+ P(\vect{v},\vect{T})=-\vect{\nabla} p=-\vect{\nabla} B^{-1}\vect{\nabla} \cdot \vect{v}+\vect{\nabla} B^{-1}\vect{c}.
 \end{equation}
-Which can be rewritten:
+This can be rewritten as
 \begin{align}
-P(v,T)&=Av+T\\
-A&=\nabla B^{-1}\nabla \cdot\\
-T&=\nabla B^{-1}c
+P(\vect{v},\vect{T})&=A\vect{v}+\vect{T},\\
+A&=\vect{\nabla} B^{-1}\vect{\nabla} \cdot,\\
+\vect{T}&=\vect{\nabla} B^{-1}\vect{c}.
 \end{align}
   
   \end{definition}
   
-  The important change is that the projection of a divergence free vector field is no more 0.
+  The important change is that the projection of a divergence free vector field is no more 0,
   \begin{equation}
-  P(v,T)=Av+T=0+T=T
+  P(\vect{v},\vect{T})=A\vect{v}+\vect{T}=0+\vect{T}=\vect{T}.
   \end{equation}
 
 

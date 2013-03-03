@@ -1,6 +1,6 @@
 \documentclass[a4paper]{master}
 
-
+\addbibresource{main.bib}
 
 %Information as title and author
 \title{Simulation of Jet D'Eau from A to Y:\\ Numerical algorithm to solve incompressible Navier-Stokes equations
@@ -31,14 +31,14 @@ with \textcolor{blue}{m}arker \textcolor{blue}{a}nd \textcolor{blue}{c}ell based
 
 \mtcaddchapter[Abstract]
 
-We will in this work present how to solve Navier-Stokes equations with a marker and cell method.
-We use direct Navier-Stokes approach without other model than the Navier-Stokes equations.
-We emphasy the mathematical modularity which allow to work separatly on every piece of this work.
-Our method work for every Runge-Kutta method (explicit or implicit), if we note $k$ the order of the choosen Runge-Kutta method,
-our method is of order $k$ if we ignore boundary conditions, of order $k$ at the better case and of order $1$ for specific complicated case.
-Our method is exactly divergence free (at numerical precision).
+We will in this work present how to solve the Navier-Stokes equations with a marker and cell method.
+We use the direct the Navier-Stokes approach without other models than the Navier-Stokes equations.
+We emphasize the mathematical modularity which allows to work separately on every piece of this work.
+Our method works for every Runge-Kutta method (explicit or implicit). If we denote by $k$ the order of the chosen Runge-Kutta method,
+our method is of order $k$ if we ignore boundary conditions, of order $k$ in the better case and of order $1$ for specific complicated case.
+Our method is exactly divergence free (up to roundoff error).
 
-We will specially be interested in free surface boundary conditions. The final goal is to solve a Jet d'Eau.
+We will specifically be interested in free surface boundary conditions. The final goal is to simulate a Jet d'Eau.
 This goal was only partially achieved, but the needed basics are there. 
 
 
@@ -51,25 +51,25 @@ This goal was only partially achieved, but the needed basics are there.
 This work consists of the following chapters:
 \begin{enumerate}
  \item A notation and basic math property chapter.
- \item A chapter that describe the problem analytically. In this chapter no discretization is done, but equations are written in the good form to motivate discretization.
- \item A chapter that is interested on the solution of Navier-Stokes equations if the domain of computation is fixed.
- \item A chapter that indicate the change needed to allow domain change.
- \item To end, a conclusion chapter which will contain pist to upgrade the scheme used.
+ \item A chapter that describes the problem analytically. In this chapter no discretization is done, but equations are written in the good form to motivate discretization.
+ \item A chapter that focuses on the solution of Navier-Stokes equations if the domain of computation is fixed.
+ \item A chapter that indicates the change needed to allow domain change.
+ \item To end, a conclusion chapter which will contain hint and discussion to how to upgrade the scheme used.
 \end{enumerate}
 
 The two numerical chapters contain pseudo code that implement the described algorithm.
 
-The original \textbf{C++11} code can be found on \url{https://github.com/Strasser-Pablo/Mac}
+The original \textbf{C++11} (c++ code respecting the 2011 norm ISO/IEC 14882:2011) code can be found on \url{https://github.com/Strasser-Pablo/Mac}
 but is not needed to understand this work, the pseudo code is sufficient.
 
 All the chapters are self contained,
 but further information and inspiration come from:
 \begin{itemize}
- \item Algorithmic idea like the layer variable and the first scheme come from \cite{fluidforrestofus}.
+ \item Algorithmic ideas like the layer variable and the first scheme come from \cite{fluidforrestofus}.
  \item Analytical comprehension and better formulation come from \cite{citeulike:11163809}.
  \item Extrapolation for boundary conditions come from \cite{FLD:FLD148}.
- \item Analytical solution are taken from \cite{Batchelor} and \cite{Kampanis:2006:SGH:1148052.1148065}.
- \item A review of marker and cell based method can be found in \cite{citeulike:3055787}.
+ \item Analytical solutions are taken from \cite{Batchelor} and \cite{Kampanis:2006:SGH:1148052.1148065}.
+ \item A review of marker and cell based methods can be found in \cite{citeulike:3055787}.
 \end{itemize}
 
 
@@ -79,7 +79,5 @@ but further information and inspiration come from:
 \include{fixed/main}
 \include{topology/main}
 \include{Conclusion/main}
-\bibliographystyle{plain}
-\nocite{*}
-\bibliography{main}
+\printbibliography[heading=bibintoc]
 \end{document}

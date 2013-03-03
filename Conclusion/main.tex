@@ -4,38 +4,38 @@ In conclusion we were able to have a ``simple'' scheme to solve free surface inc
 Navier-Stokes equations.
 For this we have used the following elements:
 \begin{itemize}
- \item A spatial discretization on a staggered grid and definition of differential operator on it.
+ \item A spatial discretization on a staggered grid and the definition of a discretized differential operator on it.
  \item The reduction of the original problem to an ODE with a projected function.
- This need to solve a linear system at every time step.
+ This needs to solve a linear system at every time step.
  \item A topological marker particle and interpolation method on the marker.
- \item An extrapolation operator that need to ensure boundary conditions.
+ \item An extrapolation operator that needs to ensure boundary conditions.
 \end{itemize}
 
-We were not able to launch 3d run and are aware of the high numerical cost of direct Navier-Stokes
-methods for small viscosity problem, but juged that it was the better method to begin with.
+We were not able to launch 3d runs and are aware of the high numerical cost of direct Navier-Stokes
+methods for small viscosity problems, but judged that it was the better method to begin with.
 
 \section{Possible improvement}
 
-The following theoretical improvement are possible:
+The following theoretical improvements are possible:
 \begin{itemize}
  \item Use higher order spatial discretization.
- \item Use other topological marker instead of particle like level set or boundary surface representation.
- \item Have better discretization at free surface boundary.
- \item Have a variant of Runge-Kutta method that are correct if we have Dirac delta in the function 
+ \item Use other topological markers instead of particles like level sets or boundary surface representations.
+ \item Have better discretization at the free surface boundary.
+ \item Have a variant of the Runge-Kutta method that is correct if we have a Dirac delta in the function 
  or use smooth topological change.
 \end{itemize}
 
-The following code improvement are possible:
+The following code improvements are possible:
 \begin{itemize}
- \item Have a linear solver which can use the fact that topology doesn't change much between iteration
- to be faster in average.
- \item Make the code run on parallel on cpu and gpu.
+ \item Have a linear solver which can use the fact that topology does not change much between iterations
+ to be faster on average.
+ \item Make the code run in parallel on cpus and gpus.
 \end{itemize}
 
 \section{Software used}
 
 The code was written primary in \textbf{C++11}.
-The final version use the following library:
+The final version uses the following libraries:
 \begin{itemize}
  \item Umfpack as linear solver.
  \item VTK for output in the vtk format used in the visualization software Paraview.
@@ -67,7 +67,7 @@ related error and memory leak.
 I am very thankfull to:
 \begin{description}
  \item[Prof. Martin Gander:] for the supervising of the work and all my numerical analysis knowledge.
- \item[Dr. Félix Kwok:] for the supervising of the work and contact in pratical numerical analysis.
+ \item[Dr. Félix Kwok:] for the supervising of the work and contact in practical numerical analysis.
  \item[Prof. Peter Wittwer:] for the Mathematics and Physics courses in my Physics studies.
  \item[My family: Reto, Norma, Roland, Tamara:] for supporting me and all the fun together.
  And for proof reading.

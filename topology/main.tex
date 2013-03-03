@@ -1,100 +1,103 @@
 \chapter{Numerical treatment of the non fixed case }
 \minitoc
 \section{Introduction}
-In the previous chapter all numericals schemes were done on the same domain.
-We will here see the changes that we need to make if we want to have variable topology.
+In the previous chapter all numerical schemes were done on the same domain.
+We will see here the changes that we need to make if we want to have a variable topology.
 We will need to take care of two additional things:
 \begin{enumerate}
-\item Know the speed in cell that weren't in the domain but are in the new time step.
-\item Know the position of the different boundary.
+\item Knowing the speed in cell that were not in the domain but are in the new time step.
+\item Knowing the position of the different boundary.
 \end{enumerate}
 
-We are mainly interested in mobile boundary consisting in free surface boundary because it will be the only
-boundary that move depending on the solution.
+We are mainly interested in a mobile boundary consisting of a free surface boundary because it will be the only
+boundary that moves depending on the solution.
 
 The motion of the domain and the boundary are given by:
 \begin{equation}
-\dot{\vect{x}}=\vect{v}
+\dot{\vect{x}}=\vect{v},
 \end{equation}
-Where $\vect{v}$ is the speed at the given position.
+where $\vect{v}$ is the speed at the given position.
 
+The spatial space is discretized into a set of cells. Cells coincide with cells in the staggered grid discretization.
+The domain is a union of cells.
 To discretize this equation, we will use particles  placed in every cell. A cell where a particle lies is in the domain.
-A cell without particle is out of the domain.
-But particles moves with the speed given at there position, which is not on a grid point.
+A cell without particle is outside of the domain.
+But particles move with the speed given at their position, which is not on a grid point.
 Because of this, we need to interpolate the speed at the given point.
 When a particle moves to a new cell, we need to know the initial speed at this position.
-We analytically have boundary condition for speed at boundary.
+We analytically have boundary conditions for speed at boundary.
 We need to extrapolate this boundary condition one cell away.
 
 \section{Method to obtain an ODE}
 
-We can write a non discretized particles method equation as:
-
+We can write a non discretized particle method equation as:
 \begin{align*}
-	\dot{v}&=\left(\eye + P(D(\vect{x}))\right)f(\vect{v},\vect{x})\\
-	\dot{x}&=v
+	\dot{v}&=\left(\eye - P(D(\vect{x}))\right)f(\vect{v},\vect{x}),\\
+	\dot{x}&=v,\\
+	x&=x_{0},
 \end{align*}
+where $x$ is a continuous representation of the space with particle.
+$D(\vect{x})$ is the domain with particle in it.
+The notation $P(D(\vect{x}))$ says that we consider the projection operator with boundary conditions in the domain given by $D(\vect{x})$.
 
-Where $x$ are a continuous representation of the space with particle.
-The notation $P(D(\vect{x}))$ says that we consider the projection operator with boundary conditions given by $D(\vect{x})$.
-
-We need to add to this boundary conditions, boundary conditions for free surface, that are given by a linear differential operator $A$.
+We need to add to this boundary conditions, boundary conditions for free surface, that are given by a linear differential operator $A$,
 \begin{equation}
-	A\vect{v}=0
+	A\vect{v}=0.
 \end{equation}
-$A$ contains derivative with respect to space but not respect to time.
+$A$ contains derivatives with respect to space but not with respect to time.
 
-When we discretize, we will need to interpolate because we need speed at position we don't know (for a staggered grid we have):
+When we discretize, we will need to interpolate because we need the speed at position not on the grid (for a staggered grid we have):
 \begin{align*}
-	\left.\dot{\vect{v}}\right|_{\in D_{v}(D(\vect{x}))}&=\left(\eye+P(D(\vect{x}))\right)\left.f(E(\vect{v},D_v(D(\vect{x}))),D_{v}(D(\vect{x})))\right|_{\in D_{v}(D(\vect{x}))}\\
-	\dot{x}&=I\left(\vect{x},E(\vect{v},D_v(D(\vect{x})))\right)\\
-	\left.\vect{v}\right|_{\notin D_{v}(D(\vect{x}))}&=\left.E(\vect{v},D_v(D(\vect{x})))\right|_{\notin D_{v}(D(\vect{x}))}
+	\left.\dot{\vect{v}}\right|_{\in D_{v}(D(\vect{x}))}&=\left(\eye+P(D(\vect{x}))\right)\left.f(E(\vect{v},D_v(D(\vect{x}))),D_{v}(D(\vect{x})))\right|_{\in D_{v}(D(\vect{x}))},\\
+	\dot{x}&=I\left(\vect{x},E(\vect{v},D_v(D(\vect{x})))\right),\\
+	\left.\vect{v}\right|_{\notin D_{v}(D(\vect{x}))}&=\left.E(\vect{v},D_v(D(\vect{x})))\right|_{\notin D_{v}(D(\vect{x}))}.
 \end{align*}
-For mathematical simplicity we will take that $\vect{v}$ consists of a speed defined everywhere, 
-but in the computation only speed that are accessed in the time step is needed (only speed in the domain and in it's neighbour).
-We can model this by considering non used cell with a special value like nan that propagate in every operation.
+For mathematical simplicity we will assume that $\vect{v}$ consists of a speed defined everywhere, 
+but in the computation only the speeds that are accessed in the time step are needed (only the speed in the domain and in its neighbour).
+We can model this by considering non used cells with a special value like NaN that propagates in every operation.
 \begin{description}
-\item[$D(\vect{x})$] indicates the domain in which at least a particle is found. This consist at the same time to the topology for pressure (Pressure is cell centered).
-\item[$D_{v}$] is a function depending on the topology given in general by $D(\vect{x})$ and indicate which speed component are in the domain.
+\item[$D(\vect{x})$] indicates the domain in which at least one particle is found. This corresponds at the same time to the topology for pressure (Pressure is cell centered).
+\item[$D_{v}$] is a function depending on the topology given in general by $D(\vect{x})$ and indicates which speed components are in the domain.
 \item[$f$] is a function that takes as argument the topology for pressure given by $D(\vect{x})$ and the topology for speed given by $D_v(D(\vect{x}))$ and the speed everywhere.
-\item[$E$] is the extrapolation operator which takes as argument the speed everywhere and returns a speed everywhere,
-but where the speed in the speed domain is not changed. This speed is the speed that the fluid had if it where there.
-The distance to which this extrapolation operator needs to give value depend on the choice of the time step.
-The extrapolation operator needs to take account of two things:
+\item[$E$] extends the velocity field defined in the domain to the total spatial space.
+This is implemented by a extrapolation operator which takes as argument the speed everywhere and returns a speed everywhere,
+but where the speed in the speed domain is not changed. This speed is the speed that the fluid had if it were there.
+The distance to which this extrapolation operator needs to give values depends on the choice of the time step.
+The extrapolation operator needs to take into account two things:
 \begin{enumerate}
 	\item The correct boundary conditions.
 	\item Extrapolate speed farther away than the boundary conditions if a particle moves more than one cell.
 \end{enumerate}
-\item[$I$] is an interpolation operator which from the speed at discrete position find the speed at a given position.
+\item[$I$] is an interpolation operator which from the speed at discrete position finds the speed at a given position.
 \end{description}
-The use of two topologies is needed because in a staggered grid the position of speed and pressure is not the same.
+The use of two topologies is needed because on a staggered grid the position of speed and pressure is not the same.
 
 \begin{remark}
-$D_{v}$ needs to be good chosen to avoid pathological cases.
-For example for a cell with only one cell. We will normally consider all speed as boundary. But with only boundary we have no speed data.
-For this reason in this case, we consider all boundary cell as in the domain.
+$D_{v}$ needs to be well chosen to avoid pathological cases.
+For example for a domain with only one cell. We will normally consider all speed as boundary. But with only boundary we have no speed data.
+For this reason in this case, we consider all boundary cell as being in the domain.
 \end{remark}
 
 
 \subsection{Splitting}
 \label{splitting}
 
-A simple but of only order $1$ (in general) mean to solve this equations, is to consider two different problem:
+A simple, but only of order $1$ (in general) method to solve these equations, is to consider two different problems:
 \begin{enumerate}
 	\item Advance speed for a given topology.
 	\item Advance the particle from the given speed.
 \end{enumerate}
 The first step is to solve:
 \begin{align}
-\left.\dot{\vect{v}}\right|_{\in D_{v}(D(\vect{x}))}&=\left(\eye+P(D(\vect{x}))\right)\left.f(E(\vect{v},D_v(D(\vect{x}))),D_{v}(D(\vect{x})))\right|_{\in D_{v}(D(\vect{x}))}\\
-	\left.\vect{v_{t_0}}\right|_{\notin D_{v_{t_0}}(D(\vect{x}))}&=\left.E(\vect{v_{t_0}},D_v(D(\vect{x})))\right|_{\notin D_{v}(D(\vect{x}))}
+\left.\dot{\vect{v}}\right|_{\in D_{v}(D(\vect{x}))}&=\left(\eye+P(D(\vect{x}))\right)\left.f(E(\vect{v},D_v(D(\vect{x}))),D_{v}(D(\vect{x})))\right|_{\in D_{v}(D(\vect{x}))},\\
+	\left.\vect{v_{t_0}}\right|_{\notin D_{v_{t_0}}(D(\vect{x}))}&=\left.E(\vect{v_{t_0}},D_v(D(\vect{x})))\right|_{\notin D_{v}(D(\vect{x}))},
 \end{align}
-Which can be done like in the fixed topology case with a Runge-Kutta method. The second equation indicates the boundary conditions.
-Numerically we can calculate the speed at boundary at every evaluation of $f$.
+which can be done like in the fixed topology case with a Runge-Kutta method. The second equation indicates the boundary conditions.
+Numerically we can calculate the speed at the boundary at every evaluation of $f$.
 
-We then move the particles with the calculated speed.
+We then move the particles with the calculated speed,
 \begin{equation}
-	\dot{x}=I\left(\vect{x},E(\vect{v},D_v(D(\vect{x})))\right)\\
+	\dot{x}=I\left(\vect{x},E(\vect{v},D_v(D(\vect{x})))\right).\\
 \end{equation}
 This method is only of order 1.
 
@@ -104,11 +107,15 @@ Consider only one particle. With as initial condition $0$ speed without viscosit
 The extrapolation operator in this case will copy the speed vertically,
 the speed will be constant and the only non zero component is in the $y$ direction.
 The speed will be given by the integration of the gravity force, the convective term is $0$ because speed is constant.
-The speed will be calculated with an accuracy of order of the Runge-Kutta method used (4 for rk4).
-But the position will be calculated from the advance of a constant speed for every time step. This is then equivalent to the euler
+The speed will be calculated with an accuracy of the order of the Runge-Kutta method used (4 for rk4).
+The exact solution for speed (which is constant in space) is:
+\begin{equation}
+ v_y(t)=-gt^2.
+\end{equation}
+But the position will be calculated from the advance of a constant speed for every time step. This is then equivalent to the Euler
 method of order 1.
 
-In final, our speed will be correct at order $k$ for a given time step but position will be wrong.
+In conclusion, our speed will be correct to order $k$ for a given time step but the position will be inacurate.
 
 This error doesn't depend on the precision of integration for the speed or position problem.
 It comes from the splitting.
@@ -124,54 +131,55 @@ When we have it, we only have to use a Runge-Kutta method.
 We will now only be interested in the case where $E$ is a linear operator with the two following constraints:
 \begin{itemize}
 	\item Its effect for speed in the domain (for speed) is the identity.
-	\item Its effect for speed out of the domain (for speed) depends only on speed of the domain (for speed).
+	\item Its effect for speed outside of the domain (for speed) depends only on the speed of the domain (for speed).
 \end{itemize}
-The domain for speed for $E$ is noted $E(D_v(D(\vect{x})))$.
+The domain for speed for $E$ is denoted by $E(D_v(D(\vect{x})))$.
 
 In matrix notation it tells us that some blocks need to be $0$ or $\eye$.
-If we consider that indice from $1$ to $n_d$ are in the domain (for speed) and $n_d+1$ to $n$ are out of the domain (for speed), the constraint for a line of the matrix is,
-using as notation the : as in matlab in indicating by an indice it's position in the vector:
+If we consider that indices from $1$ to $n_d$ are in the domain (for speed) and $n_d+1$ to $n$ are outside of the domain (for speed), the constraint for a line of the matrix is,
+using as notation the : as in matlab in indicating by an indice its position in the vector:
 \begin{align}
 	\intertext{For $i<n_d+1$}
-	E_{i :}&=\left( 0 \ldots 1_{i} \ldots 0\right)\\
+	E_{i :}&=\left( 0 \ldots 1_{i} \ldots 0\right).\\
 	\intertext{For $i>n_d$}
-	E_{i :}&=\left( e^i_{1}\ldots e^i_{n_d} 0\ldots 0\right)\\
+	E_{i :}&=\left( e^i_{1}\ldots e^i_{n_d} 0\ldots 0\right).\\
 \end{align}
 
 Taking the derivative of $E(D_v(D(\vect{x})))\vect{v}$ has two terms, the first gives:
 \begin{equation}
-	E(D_v(D(\vect{x})))\dot{\vect{v}}
+	E(D_v(D(\vect{x})))\dot{\vect{v}},
 \end{equation}
-Which uses $\dot{\vect{v}}$ but needs it only for the domain because outside the given column of the $E$ matrix is zero.
+which uses $\dot{\vect{v}}$ but needs it only for the domain because outside the given column of the $E$ matrix is zero.
 
-The second term is the derivative of the matrix $E$ with respect of change of time. Which will lead to the derivative with respect of change of topology.
-This will give a delta of dirac.
+The second term is the derivative of the matrix $E$ with respect to change of time, which will lead to the derivative with respect to the change of topology.
+This will give a delta of Dirac.
 The reason of this is because of the discontinuity in time of the boundary speed, when we change topology.
-We will neglect this dirac delta. 
+We will neglect this Dirac delta. Neglecting this Dirac delta is a dangerous steps but the problem is not as big at it could seem at first.
+It will be explained in details after.
 
 The equation is then:
 \begin{align}
-	\left.\dot{\vect{v}}\right|_{\in D_{v}(D(\vect{x}))}&=\left(\eye+P(D(\vect{x}))\right)\left.f(E(D_v(D(\vect{x})))\vect{v},D_{v}(D(\vect{x})))\right|_{\in D_{v}(D(\vect{x}))}\\
-	\left.\dot{\vect{v}}\right|_{\notin D_{v}(D(\vect{x}))}&=E(D_v(D(\vect{x})))\left(\eye+P(D(\vect{x}))\right)\left.f(E(D_v(D(\vect{x})))\vect{v},D_{v}(D(\vect{x})))\right|_{\in D_{v}(D(\vect{x}))}\\
-	\left.\vect{v_{t_0}}\right|_{\notin D_{v_{t_0}}(D(\vect{x}))}&=\left.\left(E(D_v(D(\vect{x})))\left.\vect{v_{t_0}}\right|_{\in D_{v}(D(\vect{x}))}\right)\right|_{\notin D_{v}(D(\vect{x}))}\\
-	\dot{x}&=I\left(\vect{x},E(D_v(D(\vect{x})))\vect{v}\right)\\
+	\left.\dot{\vect{v}}\right|_{\in D_{v}(D(\vect{x}))}&=\left(\eye+P(D(\vect{x}))\right)\left.f(E(D_v(D(\vect{x})))\vect{v},D_{v}(D(\vect{x})))\right|_{\in D_{v}(D(\vect{x}))},\\
+	\left.\dot{\vect{v}}\right|_{\notin D_{v}(D(\vect{x}))}&=E(D_v(D(\vect{x})))\left(\eye+P(D(\vect{x}))\right)\left.f(E(D_v(D(\vect{x})))\vect{v},D_{v}(D(\vect{x})))\right|_{\in D_{v}(D(\vect{x}))},\\
+	\left.\vect{v_{t_0}}\right|_{\notin D_{v_{t_0}}(D(\vect{x}))}&=\left.\left(E(D_v(D(\vect{x})))\left.\vect{v_{t_0}}\right|_{\in D_{v}(D(\vect{x}))}\right)\right|_{\notin D_{v}(D(\vect{x}))},\\
+	\dot{x}&=I\left(\vect{x},E(D_v(D(\vect{x})))\vect{v}\right),\\
 \end{align}
-Where we have used the notation that vector can be extended with 0 when needed because the extension is not needed because the good columns are zero.
-Which can be rewritten as:
+where we have used the notation that vector can be extended with 0 when needed because the extension is not needed because the good columns are zero,
+which can be rewritten as:
 \begin{align}\label{topo:equ:onediff}
-	\dot{\vect{v}}&=E(D_v(D(\vect{x})))\left(\eye+P(D(\vect{x}))\right)\left.f(E(D_v(D(\vect{x})))\vect{v},D_{v}(D(\vect{x})))\right|_{\in D_{v}(D(\vect{x}))}\\
-	\left.\vect{v_{t_0}}\right|_{\notin D_{v_{t_0}}(D(\vect{x}))}&=\left.\left(E(D_v(D(\vect{x})))\left.\vect{v_{t_0}}\right|_{\in D_{v}(D(\vect{x}))}\right)\right|_{\notin D_{v}(D(\vect{x}))}\\
-	\dot{x}&=I\left(\vect{x},E(D_v(D(\vect{x})))\vect{v}\right)\\
+	\dot{\vect{v}}&=E(D_v(D(\vect{x})))\left(\eye+P(D(\vect{x}))\right)\left.f(E(D_v(D(\vect{x})))\vect{v},D_{v}(D(\vect{x})))\right|_{\in D_{v}(D(\vect{x}))},\\
+	\left.\vect{v_{t_0}}\right|_{\notin D_{v_{t_0}}(D(\vect{x}))}&=\left.\left(E(D_v(D(\vect{x})))\left.\vect{v_{t_0}}\right|_{\in D_{v}(D(\vect{x}))}\right)\right|_{\notin D_{v}(D(\vect{x}))},\\
+	\dot{x}&=I\left(\vect{x},E(D_v(D(\vect{x})))\vect{v}\right),\\
 \end{align}
-Where we have used that $E$ is the identity in the domain.
+where we have used that $E$ is the identity in the domain.
 This equation can be integrated with a Runge-Kutta method.
-For having a maximal precision, the boundary speed is taken from the extrapolation at every complete Runge-Kutta step.
-In the argument of $f$ we have used an extrapolation of speed which doesn't depends of the input in boundary speed (because the $E$ matrix has zero columns where needed).
-The integrated boundary speed is only used in the case where a cell become in the domain in a time step.
+For maximal precision, the boundary speed is taken from the extrapolation at every complete Runge-Kutta step.
+In the argument of $f$ we have used an extrapolation of speed which does not depend on the input in boundary speed (because the $E$ matrix has zero columns where needed).
+The integrated boundary speed is only used in the case where a cell becomes a domain cell in a time step.
 
 The neglected Dirac delta will only have an effect on a boundary speed component in the case where in a Runge-Kutta step the following happens:
 \begin{enumerate}
-	\item A neighbor cell (cell which $E$ matrix has component with) fills.
+	\item A neighboring cell (cell which $E$ matrix has component with) fills.
 	This will change the value of boundary speed with a jump (this jump will be neglected).
 	\item The given speed is used because a particle fills the domain.
 	This is needed because in the contrary the speed calculated will not be used.
@@ -181,15 +189,16 @@ This effect will change the precision when it happens from order $k$ to order $1
 And this error will only be on the boundary conditions being not exactly respected for a short time.
 The force will be integrated correctly.
 
-The direct filling of a cell doesn't pose problem because we don't have discontinuity in speed, because in the first region we force speed,
+The direct filling of a cell does not pose a problem because we do not have a discontinuity in speed, because in the first region we force speed,
 in the second the derivative.
-The jump is only caused because we force speed differently for the two region which give a discontinuity.
+The jump is only caused because we force speed differently for the two regions which give a discontinuity.
 
 \begin{example}
 One particle with 0 initial speed, without viscosity.
 The speed will be constant. So only the gravity force acts and the extrapolation operator will copy speed vertically.
-The result will then be equivalent to the integration of the purely particle problem where the speed change is calculated at particle position.
+The result will then be equivalent to the integration of the pure particle problem where the speed change is calculated at particle position.
 The order of the method is then $k$.
+The calculation of this example is done in section \ref{top:exp:one}.
 \end{example}
 
 \tikzsetnextfilename{multiple_part_error_1}
@@ -221,7 +230,7 @@ The order of the method is then $k$.
 \subcaptionbox{$t_0$, the red speed vector is not in the domain and is obtained by extrapolation.\label{topo:mult_part_error:1}}{%
 \IfFileExists{figures/multiple_part_error_1.pdf}{\includegraphics{figures/multiple_part_error_1}}{}%
  }
-\subcaptionbox{$t_1$, because the first particle has moved the domain have changed, the speed extrapolation have changed at red point.\label{topo:mult_part_error:2}}{%
+\subcaptionbox{$t_1$, because the first particle has moved the domain haves changed, the speed extrapolation haves changed at the red point.\label{topo:mult_part_error:2}}{%
 \IfFileExists{figures/multiple_part_error_2.pdf}{\includegraphics{figures/multiple_part_error_2}}{}%
  }
 \subcaptionbox{$t_2$, because the red point is now in the domain, the speed is given by the acceleration from the Navier-Stokes equations.\label{topo:mult_part_error:3}}{%
@@ -256,24 +265,24 @@ ylabel={$v$}
 \section{Extrapolation}
 
 We will now discuss how to define the extrapolation operator.
-We have seen that the extrapolation operator need to do two things:
+We have seen that the extrapolation operator needs to do two things:
 \begin{enumerate}
 	\item Ensure correct boundary conditions.
 	\item Extrapolate the rest of speed.
 \end{enumerate}
 
-We now are interested in the ensuring of boundary condition.
-Numerically this will be done in extrapolating the value at exterior from the boundary conditions on the derivative.
-One important point is how we enforce the boundary conditions in discretized grid.
+We now are interested in enforcing the boundary condition.
+Numerically this will be done by extrapolating the value at exterior from the boundary conditions on the derivative.
+One important point is how we enforce the boundary conditions on the discrete grid.
 We recall our equation of section \ref{ana:free:surface}:
 \begin{align}
-	\sum_{i,j}\sigma_{ij}n_{i}n_{j}&=0\\
-	\sum_{i,j}\sigma_{ij}t^{1}_{i}n_{j}&=0\\
-	\sum_{i,j}\sigma_{ij}t^{2}_{i}n_{j}&=0\\
+	\sum_{i,j}\sigma_{ij}n_{i}n_{j}&=0,\\
+	\sum_{i,j}\sigma_{ij}t^{1}_{i}n_{j}&=0,\\
+	\sum_{i,j}\sigma_{ij}t^{2}_{i}n_{j}&=0.\\
 \end{align}
-Because the constraints are linear, with sufficiently equation and know value we can find an unique solution.
+Because the constraints are linear, with sufficiently additional equation (divergence free) and know value we can find an unique solution.
 
-We now will treat the different possible cases in 2d. This will then be generalized in 3d.
+We now will treat the different possible cases in 2d. This will then be generalized to 3d.
 We will use different discretisation points for pressure and speed.
 We begin with the discretisation for speed.
 
@@ -281,98 +290,96 @@ We begin with the discretisation for speed.
 \label{topo:extrap:2d}
 \subsubsection{Plane}
 
-The first case is a surface which is a plane following one of the cell boundary.
-Without loss of generality we consider the plane in the $x$ direction(the other case are isometrie of this case).
+The first case is a surface which is a plane following one of the cell boundaries.
+Without loss of generality we consider the plane in the $x$ direction (the other case are just rotations of this case).
 The normal and tangent vectors are then given by:
 \begin{align}
 	\vect{n}&=\begin{pmatrix}
 			0\\
 			1
-		\end{pmatrix}\\
+		\end{pmatrix},\\
 	\vect{t}&=\begin{pmatrix}
 			1\\
 			0
-		\end{pmatrix}
+		\end{pmatrix}.
 \end{align}
-
 The equation is then given by:
 \begin{align}
-	\sum_{i,j}\sigma_{ij}t_{i}n_{j}&=0\\
-	\sigma_{12}&=0\\
-	-p \delta_{12}+\nu\left(\frac{\partial v_{1}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{1}}\right)&=0\\
-	\frac{\partial v_{1}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{1}}&=0\\
+	\sum_{i,j}\sigma_{ij}t_{i}n_{j}&=0,\\
+	\sigma_{12}&=0,\\
+	-p \delta_{12}+\nu\left(\frac{\partial v_{1}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{1}}\right)&=0,\\
+	\frac{\partial v_{1}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{1}}&=0.\\
 \end{align}
 
 We discretize this equation at point $i+\frac{1}{2},j+\frac{1}{2}$:
 \begin{equation}
 \label{var:extr:droitCont}
-	\frac{v^{1}_{i+\frac{1}{2},j+1}-v^{1}_{i+\frac{1}{2},j}}{\Delta x_{2}}+\frac{v^{2}_{i+1,j+\frac{1}{2}}-v^{2}_{i,j+\frac{1}{2}}}{\Delta x_{1}}=0
+	\frac{v^{1}_{i+\frac{1}{2},j+1}-v^{1}_{i+\frac{1}{2},j}}{\Delta x_{2}}+\frac{v^{2}_{i+1,j+\frac{1}{2}}-v^{2}_{i,j+\frac{1}{2}}}{\Delta x_{1}}=0,
 \end{equation}
-Where $\Delta x_{1}$ and $\Delta x_{2}$ are the spacing in $x$ and $y$.
+where $\Delta x_{1}$ and $\Delta x_{2}$ are the spacings in $x$ and $y$.
 We have one equation for 3 unknowns, only $v^{1}_{i+\frac{1}{2},j}$ are known.
 But we can add two equations using the divergence free condition in the fluid for cell $i,j$ and $i+1,j$.
 This gives us:
 \begin{align}
 \label{var:extr:droitContA}
-	0&=\frac{v^{1}_{i+\frac{1}{2},j}-v^{1}_{i-\frac{1}{2}},j}{\Delta x_{1}}+\frac{v^{2}_{i,j+\frac{1}{2}}-v^{2}_{i,j-\frac{1}{2}}}{\Delta x_2}\\
+	0&=\frac{v^{1}_{i+\frac{1}{2},j}-v^{1}_{i-\frac{1}{2}},j}{\Delta x_{1}}+\frac{v^{2}_{i,j+\frac{1}{2}}-v^{2}_{i,j-\frac{1}{2}}}{\Delta x_2},\\
 \label{var:extr:droitContB}
-	v^{2}_{i,j+\frac{1}{2}}&=v^{2}_{i,j-\frac{1}{2}}-\frac{v^{1}_{i+\frac{1}{2},j}-v^{1}_{i-\frac{1}{2},j}}{\Delta x_{1}}\Delta x_{2}\\
+	v^{2}_{i,j+\frac{1}{2}}&=v^{2}_{i,j-\frac{1}{2}}-\frac{v^{1}_{i+\frac{1}{2},j}-v^{1}_{i-\frac{1}{2},j}}{\Delta x_{1}}\Delta x_{2},\\
 \label{var:extr:droitContC}
-	0&=\frac{v^{1}_{i+\frac{3}{2},j}-v^{1}_{i+\frac{1}{2}},j}{\Delta x_{1}}+\frac{v^{2}_{i+1,j+\frac{1}{2}}-v^{2}_{i,j-\frac{1}{2}}}{\Delta x_2}\\
+	0&=\frac{v^{1}_{i+\frac{3}{2},j}-v^{1}_{i+\frac{1}{2}},j}{\Delta x_{1}}+\frac{v^{2}_{i+1,j+\frac{1}{2}}-v^{2}_{i,j-\frac{1}{2}}}{\Delta x_2},\\
 \label{var:extr:droitContD}
-	v^{2}_{i+1,j+\frac{1}{2}}&=v^{2}_{i+1,j-\frac{1}{2}}-\frac{v^{1}_{i+\frac{3}{2},j}-v^{1}_{i+\frac{1}{2},j}}{\Delta x_{1}}\Delta x_{2}
+	v^{2}_{i+1,j+\frac{1}{2}}&=v^{2}_{i+1,j-\frac{1}{2}}-\frac{v^{1}_{i+\frac{3}{2},j}-v^{1}_{i+\frac{1}{2},j}}{\Delta x_{1}}\Delta x_{2}.
 \end{align}
-We substitute the two equations \ref{var:extr:droitContB} and \ref{var:extr:droitContD} in equation \ref{var:extr:droitCont}.
-Which will now only depend on one unknown $v^{1}_{i+\frac{1}{2},j+1}$ which depends on quantity that can be found using the speed in the domain.
-Figure \ref{topology:extrap:plane} shows the variables used and which are substitute from other.
+We substitute the two equations (\ref{var:extr:droitContB}) and (\ref{var:extr:droitContD}) in equation (\ref{var:extr:droitCont}),
+which will now only depend on one unknown $v^{1}_{i+\frac{1}{2},j+1}$ which depends on a quantity that can be found using the speed in the domain.
+Figure \ref{topology:extrap:plane} shows the variables used and the unknowns.
 
-We can only do the things that we have done only if we have a depth of minimal two cells.
+We can do the things that we have done only if we have a depth of minimal two cells.
 If we have only one cell, we have no $y$ speed in the domain of calculation.
-For this case, consider the speed $y$ at boundary as in the domain and let it evolve without constraint.
+For this case, consider the speed $y$ at the boundary as in the domain and let it evolve without constraint.
 
 \begin{figure}
 \directlua{dofile('topology/plane_extrapolation.lua')}
-\caption{The red point is the place where the boundary conditions is discretized.
-The green dots are cells where the divergence free rule is enforced. Red vector are calculated with respect of the blue one.}
+\caption{The red point is the place where the boundary condition is discretized.
+The green dots are cells where the divergence free rule is enforced. Red vectors are calculated with respect to the blue one.}
 \label{topology:extrap:plane}
 \end{figure}
 
 \subsubsection{\unit{45}{\degree} plane}
 
-If we have a cell in domain with two adjacent cells which are not in the domain.
-We take as normal a \unit{45}{\degree} plane.
+If we have a cell in the domain with two adjacent cells which are not in the domain,
+we take as normal a \unit{45}{\degree} plane.
 
 The normal and tangent vectors are then:
 \begin{align}
 	\vect{n}&=\begin{pmatrix}
 	\frac{\sqrt{2}}{2}\\
 	\frac{\sqrt{2}}{2}
-	\end{pmatrix}\\
+	\end{pmatrix},\\
 	\vect{t}&=\begin{pmatrix}
 			\frac{\sqrt{2}}{2}\\
 			-\frac{\sqrt{2}}{2}
-		\end{pmatrix}
+		\end{pmatrix}.
 \end{align}
-
 The constraint is given by:
 \begin{align}
-	\sum_{ij}\sigma_{ij}n_{i}t_{j}&=0\\
-	\sigma_{11}n_{1}t_{1}+\sigma_{22}n_{2}t_{2}+\sigma_{12}(n_{1}t_{2}+n_{2}t_{1})&=0\\
-	2\frac{\partial v_{1}}{\partial x_{1}}\frac{1}{2}-2\frac{\partial v_{2}}{\partial x_{2}}\frac{1}{2}&=0\\
-	\frac{\partial v_{1}}{\partial x_{1}}-\frac{\partial v_{2}}{\partial x_{2}}&=0
+	\sum_{ij}\sigma_{ij}n_{i}t_{j}&=0,\\
+	\sigma_{11}n_{1}t_{1}+\sigma_{22}n_{2}t_{2}+\sigma_{12}(n_{1}t_{2}+n_{2}t_{1})&=0,\\
+	2\frac{\partial v_{1}}{\partial x_{1}}\frac{1}{2}-2\frac{\partial v_{2}}{\partial x_{2}}\frac{1}{2}&=0,\\
+	\frac{\partial v_{1}}{\partial x_{1}}-\frac{\partial v_{2}}{\partial x_{2}}&=0.
 \end{align}
 We discretize at cell center $i,j$ which gives:
 \begin{equation}
-	\frac{v^{1}_{i+\frac{1}{2},j}-v^{1}_{i-\frac{1}{2},j}}{\Delta x_{1}}-\frac{v^{2}_{i,j+\frac{1}{2}}-v^{2}_{i,j-\frac{1}{2}}}{\Delta x_{2}}=0
+	\frac{v^{1}_{i+\frac{1}{2},j}-v^{1}_{i-\frac{1}{2},j}}{\Delta x_{1}}-\frac{v^{2}_{i,j+\frac{1}{2}}-v^{2}_{i,j-\frac{1}{2}}}{\Delta x_{2}}=0.
 \end{equation}
 We have two unknowns $v^{1}_{i+\frac{1}{2},j}$ and $v^{2}_{i,j+\frac{1}{2}}$.
 We add an additional equation using the divergence free condition at cell $i,j$:
 \begin{equation}
-	\frac{v^{1}_{i+\frac{1}{2},j}-v^{1}_{i-\frac{1}{2}},j}{\Delta x_{1}}+\frac{v^{2}_{i,j+\frac{1}{2}}-v^{2}_{i,j-\frac{1}{2}}}{\Delta x_2}=0
+	\frac{v^{1}_{i+\frac{1}{2},j}-v^{1}_{i-\frac{1}{2}},j}{\Delta x_{1}}+\frac{v^{2}_{i,j+\frac{1}{2}}-v^{2}_{i,j-\frac{1}{2}}}{\Delta x_2}=0.
 \end{equation}
 Figure \ref{topology:extrap:plane_45} shows the position of variables and  their elimination.
 
-For this to work, we need to have the left and below boundary speed to be known.
+For this to work, we need to have the left and bottom boundary speed to be known.
 The boundary needs to be like that because in the contrary we will have no data in the $x$ or $y$ directions.
 
 \begin{figure}
@@ -383,12 +390,12 @@ Red vector are expressed with respect of blue one.}
 \end{figure}
 
 \subsection{3d}
-The method used in 2d is generalized to 3d. The only change will be that the expressions are more complicate, and that we have more variables.
+The method used in 2d is generalized to 3d. The only change will be that the expressions are more complicated, and that we have more variables.
 The two cases that we have seen in 2d will be similar for the 2d variable but with added dependency in the $z$ variable.
 
 \subsubsection{Plane}
 
-The first case is a surface which is a plane following one of the cell boundary.
+The first case is a surface which is a plane following one of the cell boundaries.
 Without loss of generality we consider the plane in the $x$ and $z$ directions.
 The normal and tangent vectors are then given by:
 \begin{align}
@@ -396,120 +403,115 @@ The normal and tangent vectors are then given by:
 			0\\
 			1\\
 			0
-		\end{pmatrix}\\
+		\end{pmatrix},\\
 	\vect{t^1}&=\begin{pmatrix}
 			1\\
 			0\\
 			0
-		\end{pmatrix}\\
+		\end{pmatrix},\\
 		\vect{t^2}&=\begin{pmatrix}
 			0\\
 			0\\
 			1
-		\end{pmatrix}
+		\end{pmatrix}.
 \end{align}
 
 The equations are then given by:
 \begin{align}
 \intertext{For $\vect{t^1}$}
-	\sum_{i,j}\sigma_{ij}t^{1}_{i}n_{j}&=0\\
-	\sigma_{12}&=0\\
-	-p \delta_{12}+\nu\left(\frac{\partial v_{1}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{1}}\right)&=0\\
-	\frac{\partial v_{1}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{1}}&=0\label{topo:extrap:3d:plane:eq1}
+	\sum_{i,j}\sigma_{ij}t^{1}_{i}n_{j}&=0,\\
+	\sigma_{12}&=0,\\
+	-p \delta_{12}+\nu\left(\frac{\partial v_{1}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{1}}\right)&=0,\\
+	\frac{\partial v_{1}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{1}}&=0.\label{topo:extrap:3d:plane:eq1}
 	\displaybreak[0]\\
 	\intertext{For $\vect{t^2}$}
-	\sum_{i,j}\sigma_{ij}t^{2}_{i}n_{j}&=0\\
-	\sigma_{32}&=0\\
-	-p \delta_{32}+\nu\left(\frac{\partial v_{3}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{3}}\right)&=0\\
-	\frac{\partial v_{3}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{3}}&=0\label{topo:extrap:3d:plane:eq2}
+	\sum_{i,j}\sigma_{ij}t^{2}_{i}n_{j}&=0,\\
+	\sigma_{32}&=0,\\
+	-p \delta_{32}+\nu\left(\frac{\partial v_{3}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{3}}\right)&=0,\\
+	\frac{\partial v_{3}}{\partial x_{2}}+\frac{\partial v_{2}}{\partial x_{3}}&=0.\label{topo:extrap:3d:plane:eq2}
 \end{align}
-We discretize equation \ref{topo:extrap:3d:plane:eq1} at point $i+\frac{1}{2},j+\frac{1}{2},k$:
+We discretize equation (\ref{topo:extrap:3d:plane:eq1}) at point $i+\frac{1}{2},j+\frac{1}{2},k$:
 \begin{equation}
 \label{var:extr:3d:droitCont1}
-	\frac{v^{1}_{i+\frac{1}{2},j+1,k}-v^{1}_{i+\frac{1}{2},j,k+\frac{1}{2}}}{\Delta x_{2}}+\frac{v^{2}_{i+1,j+\frac{1}{2},k}-v^{2}_{i,j+\frac{1}{2},k}}{\Delta x_{1}}=0
+	\frac{v^{1}_{i+\frac{1}{2},j+1,k}-v^{1}_{i+\frac{1}{2},j,k+\frac{1}{2}}}{\Delta x_{2}}+\frac{v^{2}_{i+1,j+\frac{1}{2},k}-v^{2}_{i,j+\frac{1}{2},k}}{\Delta x_{1}}=0.
 \end{equation}
-We discretize equation \ref{topo:extrap:3d:plane:eq2} at point $i,j+\frac{1}{2},k+\frac{1}{2}$:
+We discretize equation (\ref{topo:extrap:3d:plane:eq2}) at point $i,j+\frac{1}{2},k+\frac{1}{2}$:
 \begin{equation}
 \label{var:extr:3d:droitCont2}
-	\frac{v^{3}_{i,j+1,k+\frac{1}{2}}-v^{3}_{i,j,k+\frac{1}{2}}}{\Delta x_{2}}+\frac{v^{2}_{i,j+\frac{1}{2},k+1}-v^{2}_{i,j+\frac{1}{2},k}}{\Delta x_{3}}=0
+	\frac{v^{3}_{i,j+1,k+\frac{1}{2}}-v^{3}_{i,j,k+\frac{1}{2}}}{\Delta x_{2}}+\frac{v^{2}_{i,j+\frac{1}{2},k+1}-v^{2}_{i,j+\frac{1}{2},k}}{\Delta x_{3}}=0,
 \end{equation}
-Where $\Delta x_{1}$, $\Delta x_{2}$ and $\Delta x_{3}$ are the spacing in $x$, $y$ and $z$.
+where $\Delta x_{1}$, $\Delta x_{2}$ and $\Delta x_{3}$ are the spacing in $x$, $y$ and $z$.
 We have 2 equations for 5 unknowns, only $v^{1}_{i+\frac{1}{2},j,k}$ and $v^{3}_{i,j,k+\frac{1}{2}}$ are known.
 But we can add 3 equations using the divergence free condition in the fluid for cell $i,j,k$, $i+1,j,k$ and $i,j,k+1$.
 This gives us:
 \begin{align}
 \label{var:extr:3:droitContA}
-	0&=\frac{v^{1}_{i+\frac{1}{2},j,k}-v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_{1}}+\frac{v^{2}_{i,j+\frac{1}{2},k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}+\frac{v^{3}_{i,j,k+\frac{1}{2}}-v^{3}_{i,j,k-\frac{1}{2}}}{\Delta x_{3}}\\
+	0&=\frac{v^{1}_{i+\frac{1}{2},j,k}-v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_{1}}+\frac{v^{2}_{i,j+\frac{1}{2},k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}+\frac{v^{3}_{i,j,k+\frac{1}{2}}-v^{3}_{i,j,k-\frac{1}{2}}}{\Delta x_{3}},\\
 \label{var:extr:3:droitContB}
-	v^{2}_{i,j+\frac{1}{2},k}&=v^{2}_{i,j-\frac{1}{2},k}+\Delta x_{2}\left(-\frac{v^{1}_{i+\frac{1}{2},j,k}-v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_{1}}-\frac{v^{3}_{i,j,k+\frac{1}{2}}-v^{3}_{i,j,k-\frac{1}{2}}}{\Delta x_{3}}\right)\\
+	v^{2}_{i,j+\frac{1}{2},k}&=v^{2}_{i,j-\frac{1}{2},k}+\Delta x_{2}\left(-\frac{v^{1}_{i+\frac{1}{2},j,k}-v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_{1}}-\frac{v^{3}_{i,j,k+\frac{1}{2}}-v^{3}_{i,j,k-\frac{1}{2}}}{\Delta x_{3}}\right),\\
 \label{var:extr:3:droitContC}
-	0&=\frac{v^{1}_{i+\frac{3}{2},j,k}-v^{1}_{i+\frac{1}{2},j,k}}{\Delta x_{1}}+\frac{v^{2}_{i+1,j+\frac{1}{2},k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}+\frac{v^{3}_{i+\frac{1}{2},j,k+\frac{1}{2}}-v^{3}_{i+\frac{1}{2},j,k-\frac{1}{2}}}{\Delta x_{3}}\\
+	0&=\frac{v^{1}_{i+\frac{3}{2},j,k}-v^{1}_{i+\frac{1}{2},j,k}}{\Delta x_{1}}+\frac{v^{2}_{i+1,j+\frac{1}{2},k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}+\frac{v^{3}_{i+\frac{1}{2},j,k+\frac{1}{2}}-v^{3}_{i+\frac{1}{2},j,k-\frac{1}{2}}}{\Delta x_{3}},\\
 \label{var:extr:3:droitContD}
-	v^{2}_{i+1,j+\frac{1}{2},k}&=v^{2}_{i+1,j-\frac{1}{2},k}+\Delta x_{2}\left(-\frac{v^{1}_{i+\frac{3}{2},j,k}-v^{1}_{i+\frac{1}{2},j,k}}{\Delta x_{1}}-\frac{v^{3}_{i+\frac{1}{2},j,k+\frac{1}{2}}-v^{3}_{i+\frac{1}{2},j,k-\frac{1}{2}}}{\Delta x_{3}}\right)\\
+	v^{2}_{i+1,j+\frac{1}{2},k}&=v^{2}_{i+1,j-\frac{1}{2},k}+\Delta x_{2}\left(-\frac{v^{1}_{i+\frac{3}{2},j,k}-v^{1}_{i+\frac{1}{2},j,k}}{\Delta x_{1}}-\frac{v^{3}_{i+\frac{1}{2},j,k+\frac{1}{2}}-v^{3}_{i+\frac{1}{2},j,k-\frac{1}{2}}}{\Delta x_{3}}\right),\\
 	\label{var:extr:3:droitContE}
-	0&=\frac{v^{1}_{i+\frac{1}{2},j,k+1}-v^{1}_{i-\frac{1}{2},j,k+1}}{\Delta x_{1}}+\frac{v^{2}_{i,j+\frac{1}{2},k+1}-v^{2}_{i,j-\frac{1}{2},k+1}}{\Delta x_2}+\frac{v^{3}_{i,j,k+\frac{3}{2}}-v^{3}_{i,j,k+\frac{1}{2}}}{\Delta x_{3}}\\
+	0&=\frac{v^{1}_{i+\frac{1}{2},j,k+1}-v^{1}_{i-\frac{1}{2},j,k+1}}{\Delta x_{1}}+\frac{v^{2}_{i,j+\frac{1}{2},k+1}-v^{2}_{i,j-\frac{1}{2},k+1}}{\Delta x_2}+\frac{v^{3}_{i,j,k+\frac{3}{2}}-v^{3}_{i,j,k+\frac{1}{2}}}{\Delta x_{3}},\\
 \label{var:extr:3:droitContF}
-	v^{2}_{i,j+\frac{1}{2},k+1}&=v^{2}_{i,j-\frac{1}{2},k+1}+\Delta x_{2}\left(-\frac{v^{1}_{i+\frac{1}{2},j,k+1}-v^{1}_{i-\frac{1}{2},j,k+1}}{\Delta x_{1}}-\frac{v^{3}_{i,j,k+\frac{3}{2}}-v^{3}_{i,j,k+\frac{1}{2}}}{\Delta x_{3}}\right)\\
+	v^{2}_{i,j+\frac{1}{2},k+1}&=v^{2}_{i,j-\frac{1}{2},k+1}+\Delta x_{2}\left(-\frac{v^{1}_{i+\frac{1}{2},j,k+1}-v^{1}_{i-\frac{1}{2},j,k+1}}{\Delta x_{1}}-\frac{v^{3}_{i,j,k+\frac{3}{2}}-v^{3}_{i,j,k+\frac{1}{2}}}{\Delta x_{3}}\right).\\
 \end{align}
-We substitute the  equations \ref{var:extr:3:droitContB}, \ref{var:extr:3:droitContD} and \ref{var:extr:3:droitContF}  in equations \ref{var:extr:3d:droitCont1} and \ref{var:extr:3d:droitCont2}.
-Which will now only depend on two unknowns $v^{1}_{i+\frac{1}{2},j+1,k}$ and $v^{3}_{i,j+1,k+\frac{1}{2}}$ which depends on quantity that can be found using the speed in the domain.
-
-We can only do what we have done only if we have a depth of minimal two cells.
-If we have only one cell, we have no $y$ speed in the domain in calculation.
-For this case, consider the speed $y$ at boundary as in the domain.
+We substitute the  equations (\ref{var:extr:3:droitContB}), (\ref{var:extr:3:droitContD}) and (\ref{var:extr:3:droitContF})  in equations (\ref{var:extr:3d:droitCont1}) and (\ref{var:extr:3d:droitCont2}),
+Which will now only depend on two unknowns $v^{1}_{i+\frac{1}{2},j+1,k}$ and $v^{3}_{i,j+1,k+\frac{1}{2}}$ which depend on quantities that can be found using the speed in the domain.
 
 \subsubsection{\unit{45}{\degree} plane}
 
-If we have a cell in domain with two adjacent cells which are not in the domain.
-We take as normal a \unit{45}{\degree} plane.
+If we have a cell in domain with two adjacent cells which are not in the domain,
+we take as normal a \unit{45}{\degree} plane.
 The normal and tangent vectors are then:
 \begin{align}
 	\vect{n}&=\begin{pmatrix}
 	\frac{\sqrt{2}}{2}\\
 	\frac{\sqrt{2}}{2}\\
 	0
-	\end{pmatrix}\\
+	\end{pmatrix},\\
 	\vect{t^1}&=\begin{pmatrix}
 			\frac{\sqrt{2}}{2}\\
 			-\frac{\sqrt{2}}{2}\\
 			0
-		\end{pmatrix}\\
+		\end{pmatrix},\\
 		\vect{t^2}&=\begin{pmatrix}
 			0\\
 			0\\
 			1
-		\end{pmatrix}
+		\end{pmatrix}.
 \end{align}
-
 The constraints are given by:
 \begin{align}
 \intertext{For $\vect{t^1}$}
-	\sum_{ij}\sigma_{ij}n_{i}t^{1}_{j}&=0\\
-	\sigma_{11}n_{1}t^{1}_{1}+\sigma_{22}n_{2}t^{1}_{2}+\sigma_{12}(n_{1}t^{1}_{2}+n_{2}t^{1}_{1})&=0\\
-	2\frac{\partial v_{1}}{\partial x_{1}}\frac{1}{2}-2\frac{\partial v_{2}}{\partial x_{2}}\frac{1}{2}&=0\\
-	\label{topo:extrap:3d:plane_45:first}\frac{\partial v_{1}}{\partial x_{1}}-\frac{\partial v_{2}}{\partial x_{2}}&=0
+	\sum_{ij}\sigma_{ij}n_{i}t^{1}_{j}&=0,\\
+	\sigma_{11}n_{1}t^{1}_{1}+\sigma_{22}n_{2}t^{1}_{2}+\sigma_{12}(n_{1}t^{1}_{2}+n_{2}t^{1}_{1})&=0,\\
+	2\frac{\partial v_{1}}{\partial x_{1}}\frac{1}{2}-2\frac{\partial v_{2}}{\partial x_{2}}\frac{1}{2}&=0,\\
+	\label{topo:extrap:3d:plane_45:first}\frac{\partial v_{1}}{\partial x_{1}}-\frac{\partial v_{2}}{\partial x_{2}}&=0.
 	\displaybreak[0]\\
 	\intertext{For $\vect{t^2}$}
-	\sum_{ij}\sigma_{ij}n_{i}t^{2}_{j}&=0\\
-	\sigma_{13}n_{1}t^{2}_{3}+\sigma_{23}n_{2}t^{2}_{3}&=0\\
-	\label{topo:extrap:3d:plane_45:second}\frac{\partial v_{1}}{\partial x_{3}}+\frac{\partial v_{3}}{\partial x_{1}}+\frac{\partial v_{2}}{\partial x_{3}}+\frac{\partial v_{3}}{\partial x_{2}}&=0
+	\sum_{ij}\sigma_{ij}n_{i}t^{2}_{j}&=0,\\
+	\sigma_{13}n_{1}t^{2}_{3}+\sigma_{23}n_{2}t^{2}_{3}&=0,\\
+	\label{topo:extrap:3d:plane_45:second}\frac{\partial v_{1}}{\partial x_{3}}+\frac{\partial v_{3}}{\partial x_{1}}+\frac{\partial v_{2}}{\partial x_{3}}+\frac{\partial v_{3}}{\partial x_{2}}&=0.
 \end{align}
-In this case, we are able to solve equation \ref{topo:extrap:3d:plane_45:first}.
+In this case, we are able to solve equation (\ref{topo:extrap:3d:plane_45:first}).
 We discretize at cell center $i,j,k$ which gives:
 \begin{equation}
-	\frac{v^{1}_{i+\frac{1}{2},j,k}-v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_{1}}-\frac{v^{2}_{i,j+\frac{1}{2},k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_{2}}=0
+	\frac{v^{1}_{i+\frac{1}{2},j,k}-v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_{1}}-\frac{v^{2}_{i,j+\frac{1}{2},k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_{2}}=0.
 \end{equation}
 We have two unknowns $v^{1}_{i+\frac{1}{2},j}$ and $v^{2}_{i,j+\frac{1}{2}}$.
 We add an additional equation using the divergence free condition at cell $i,j,k$:
 \begin{equation}
-	\frac{v^{1}_{i+\frac{1}{2},j,k}-v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_{1}}+\frac{v^{2}_{i,j+\frac{1}{2},k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}+\frac{v^{3}_{i,j,k+\frac{1}{2}}-v^{3}_{i,j,k-\frac{1}{2}}}{\Delta x_{3}}=0
+	\frac{v^{1}_{i+\frac{1}{2},j,k}-v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_{1}}+\frac{v^{2}_{i,j+\frac{1}{2},k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}+\frac{v^{3}_{i,j,k+\frac{1}{2}}-v^{3}_{i,j,k-\frac{1}{2}}}{\Delta x_{3}}=0.
 \end{equation}
 
 If we want to be exact, we will need to consider in this equation  $v^{3}_{i,j,k+\frac{1}{2}}$ and $v^{3}_{i,j,k-\frac{1}{2}}$
-as unknown and try to determine them from equation \ref{topo:extrap:3d:plane_45:second}.
-But a good discretisation will need to use speed outside of the cell. Which will lead to a recursif solving.
+as unknown and try to determine them from equation (\ref{topo:extrap:3d:plane_45:second}).
+But a good discretisation will need to use speed outside of the cell. Which will lead to a recursive solving.
 
-A first approximation is to ignore equation \ref{topo:extrap:3d:plane_45:second} and consider $v^{3}_{i,j,k+\frac{1}{2}}$ and $v^{3}_{i,j,k-\frac{1}{2}}$ as known.
+A first approximation is to ignore equation (\ref{topo:extrap:3d:plane_45:second}) and consider $v^{3}_{i,j,k+\frac{1}{2}}$ and $v^{3}_{i,j,k-\frac{1}{2}}$ as known.
 
 % But for this equation we need $v^{3}_{i,j,k+\frac{1}{2}}$ and $v^{3}_{i,j,k-\frac{1}{2}}$ which are on the boundary.
 % They can be determined in discretizing the second equation at point $i,j,k-\frac{1}{2}$ and $i,j,k-\frac{1}{2}$,
@@ -529,58 +531,57 @@ For this to work, we need to have the left and below boundary speed to be known.
 The boundary needs to be like that because in the contrary we will have no data in the $x$ or $y$ directions.
 
 
-\subsubsection{Diagonal slopped plane}
+\subsubsection{Diagonal sloped plane}
 
-We now look a really 3d case, where the plane is diagonal on the 3 axis.
+We now look at a really 3d case, where the plane is diagonal on the 3 axes.
 The normal and tangent vectors are:
 \begin{align}
 	\vect{n}&=\begin{pmatrix}
 		\frac{\sqrt{3}}{3}\\
 		\frac{\sqrt{3}}{3}\\
 		\frac{\sqrt{3}}{3}
-	\end{pmatrix}\\
+	\end{pmatrix},\\
 	\vect{t}^1&=\begin{pmatrix}
 			-\frac{\sqrt{2}}{2}\\
 			\frac{\sqrt{2}}{2}\\
 			0
-		\end{pmatrix}\\
+		\end{pmatrix},\\
 		\vect{t}^2&=\begin{pmatrix}
 			0\\
 			\frac{\sqrt{2}}{2}\\
 			-\frac{\sqrt{2}}{2}
-		\end{pmatrix}
+		\end{pmatrix}.
 \end{align}
-
 The constraints are then:
 \begin{align}
 \intertext{For $\vect{t^{1}}$}
-	0&=\sum_{ij}\sigma_{ij}n_{i}t^{1}_{j}\\
-	0&=\sigma_{11}n_{1}t^{1}_{1}+\sigma_{12}n_{1}t^{1}_{2}+\sigma_{21}n_{2}t^{1}_{1}+\sigma_{22}n_{2}t^{1}_{2}+\sigma_{31}n_{3}t^{1}_{1}+\sigma_{32}n_{3}t^{1}_{2}\\
+	0&=\sum_{ij}\sigma_{ij}n_{i}t^{1}_{j},\\
+	0&=\sigma_{11}n_{1}t^{1}_{1}+\sigma_{12}n_{1}t^{1}_{2}+\sigma_{21}n_{2}t^{1}_{1}+\sigma_{22}n_{2}t^{1}_{2}+\sigma_{31}n_{3}t^{1}_{1}+\sigma_{32}n_{3}t^{1}_{2},\\
 	\intertext{using that $t^{1}_1=-t^{1}_2$ and $\sigma_{ij}=\sigma_{ji}$}
-	0&=n_{1}t^{1}_{1}\left(\sigma_{11}-\sigma_{12}\right)+n_{2}t^{1}_1\left(\sigma_{21}-\sigma_{22}\right)+n_{3}t^{1}_1\left(\sigma_{31}-\sigma_{32}\right)\\
+	0&=n_{1}t^{1}_{1}\left(\sigma_{11}-\sigma_{12}\right)+n_{2}t^{1}_1\left(\sigma_{21}-\sigma_{22}\right)+n_{3}t^{1}_1\left(\sigma_{31}-\sigma_{32}\right),\\
 	\intertext{using that $n_1=n_2=n_3$}
-	0&=\sigma_{11}-\sigma_{12}+\sigma_{21}-\sigma_{22}+\sigma_{31}-\sigma_{32}\\
-	0&=2\frac{\partial u_{1}}{\partial x_{1}}-2\frac{\partial u_{2}}{\partial x_{2}}+\frac{\partial u_{3}}{\partial x_{1}}+\frac{\partial u_{1}}{\partial x_{3}}-\frac{\partial u_{3}}{\partial x_{2}}-\frac{\partial u_{2}}{\partial x_{3}}
+	0&=\sigma_{11}-\sigma_{12}+\sigma_{21}-\sigma_{22}+\sigma_{31}-\sigma_{32},\\
+	0&=2\frac{\partial u_{1}}{\partial x_{1}}-2\frac{\partial u_{2}}{\partial x_{2}}+\frac{\partial u_{3}}{\partial x_{1}}+\frac{\partial u_{1}}{\partial x_{3}}-\frac{\partial u_{3}}{\partial x_{2}}-\frac{\partial u_{2}}{\partial x_{3}}.
 	\label{topo:extrap:3d:diag:eq1}
 	\displaybreak[0]\\
 	\intertext{For $\vect{t^{2}}$}
-		0&=\sum_{ij}\sigma_{ij}n_{i}t^{2}_{j}\\
-	0&=\sigma_{13}n_{1}t^{2}_{3}+\sigma_{12}n_{1}t^{2}_{2}+\sigma_{23}n_{2}t^{2}_{3}+\sigma_{22}n_{2}t^{2}_{2}+\sigma_{33}n_{3}t^{2}_{3}+\sigma_{32}n_{3}t^{2}_{2}\\
+		0&=\sum_{ij}\sigma_{ij}n_{i}t^{2}_{j},\\
+	0&=\sigma_{13}n_{1}t^{2}_{3}+\sigma_{12}n_{1}t^{2}_{2}+\sigma_{23}n_{2}t^{2}_{3}+\sigma_{22}n_{2}t^{2}_{2}+\sigma_{33}n_{3}t^{2}_{3}+\sigma_{32}n_{3}t^{2}_{2},\\
 	\intertext{using that $t^{2}_2=-t^{2}_3$ and $\sigma_{ij}=\sigma_{ji}$}
-	0&=n_{1}t^{2}_{3}\left(\sigma_{13}-\sigma_{12}\right)+n_{2}t^{2}_3\left(\sigma_{23}-\sigma_{22}\right)+n_{3}t^{2}_3\left(\sigma_{33}-\sigma_{32}\right)\\
+	0&=n_{1}t^{2}_{3}\left(\sigma_{13}-\sigma_{12}\right)+n_{2}t^{2}_3\left(\sigma_{23}-\sigma_{22}\right)+n_{3}t^{2}_3\left(\sigma_{33}-\sigma_{32}\right),\\
 	\intertext{using that $n_1=n_2=n_3$}
-	0&=\sigma_{13}-\sigma_{12}+\sigma_{23}-\sigma_{22}+\sigma_{33}-\sigma_{32}\\
-	0&=2\frac{\partial u_{3}}{\partial x_{3}}-2\frac{\partial u_{2}}{\partial x_{2}}+\frac{\partial u_{1}}{\partial x_{3}}+	\frac{\partial u_{3}}{\partial x_{1}}-\frac{\partial u_{1}}{\partial x_{2}}-\frac{\partial u_{2}}{\partial x_{1}}
+	0&=\sigma_{13}-\sigma_{12}+\sigma_{23}-\sigma_{22}+\sigma_{33}-\sigma_{32},\\
+	0&=2\frac{\partial u_{3}}{\partial x_{3}}-2\frac{\partial u_{2}}{\partial x_{2}}+\frac{\partial u_{1}}{\partial x_{3}}+	\frac{\partial u_{3}}{\partial x_{1}}-\frac{\partial u_{1}}{\partial x_{2}}-\frac{\partial u_{2}}{\partial x_{1}}.
 	\label{topo:extrap:3d:diag:eq2}
 	\end{align}
-We discretize equation \ref{topo:extrap:3d:diag:eq1} at position $i,j,k$:
+We discretize equation (\ref{topo:extrap:3d:diag:eq1}) at position $i,j,k$:
 \begin{equation}\label{extrap:3d:3:eq3}
  \begin{split}
 	0&=2\frac{v^{1}_{i+\frac{1}{2},j,k}-v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_1}-2\frac{v^{2}_{i,j+\frac{1}{2}.k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}\\
 	&\qquad +\frac{v^{3}_{i,j,k+\frac{1}{2}}+v^{3}_{i,j,k-\frac{1}{2}}-v^{3}_{i-1,j,k+\frac{1}{2}}-v^{3}_{i-1,j,k-\frac{1}{2}}}{2\Delta x_1}\\
 	&\qquad +\frac{v^{1}_{i+\frac{1}{2},j,k}+v^1_{i-\frac{1}{2},j,k}-v^{1}_{i+\frac{1}{2},j,k-1}-v^{1}_{i-\frac{1}{2},j,k-1}}{2\Delta x_3}\\
 	&\qquad -\frac{v^{3}_{i,j,k+\frac{1}{2}}+v^{3}_{i,j,k-\frac{1}{2}}-v^{3}_{i,j-1,k+\frac{1}{2}}-v^{3}_{i,j-1,k-\frac{1}{2}}}{2\Delta x_2}\\
-	&\qquad -\frac{v^{2}_{i,j+\frac{1}{2},k}+v^2_{i,j-\frac{1}{2},k}-v^{2}_{i,j+\frac{1}{2},k-1}-v^{2}_{i,j-\frac{1}{2},k-1}}{2\Delta x_3}
+	&\qquad -\frac{v^{2}_{i,j+\frac{1}{2},k}+v^2_{i,j-\frac{1}{2},k}-v^{2}_{i,j+\frac{1}{2},k-1}-v^{2}_{i,j-\frac{1}{2},k-1}}{2\Delta x_3}.
 \end{split}
 	\end{equation}
 We discretize equation \ref{topo:extrap:3d:diag:eq2} at position $i,j,k$:
@@ -590,13 +591,13 @@ We discretize equation \ref{topo:extrap:3d:diag:eq2} at position $i,j,k$:
 	&\qquad +\frac{v^{3}_{i,j,k+\frac{1}{2}}+v^{3}_{i,j,k-\frac{1}{2}}-v^{3}_{i-1,j,k+\frac{1}{2}}-v^{3}_{i-1,j,k-\frac{1}{2}}}{2\Delta x_1}\\
 	&\qquad +\frac{v^{1}_{i+\frac{1}{2},j,k}+v^1_{i-\frac{1}{2},j,k}-v^{1}_{i+\frac{1}{2},j,k-1}-v^{1}_{i-\frac{1}{2},j,k-1}}{2\Delta x_3}\\
 	&\qquad -\frac{v^{1}_{i+\frac{1}{2},j,k}+v^{1}_{i-\frac{1}{2},j,k}-v^{1}_{i+\frac{1}{2},j-1,k}-v^{1}_{i-\frac{1}{2},j-1,k}}{2\Delta x_2}\\
-	&\qquad -\frac{v^{2}_{i,j+\frac{1}{2},k}+v^2_{i,j-\frac{1}{2},k}-v^{2}_{i-1,j+\frac{1}{2},k}-v^{2}_{i-1,j-\frac{1}{2},k}}{2\Delta x_1}
+	&\qquad -\frac{v^{2}_{i,j+\frac{1}{2},k}+v^2_{i,j-\frac{1}{2},k}-v^{2}_{i-1,j+\frac{1}{2},k}-v^{2}_{i-1,j-\frac{1}{2},k}}{2\Delta x_1}.
 \end{split}
 	\end{equation}
 The unknowns are $v^{1}_{i+\frac{1}{2},j,k}$, $v^2_{i,j+\frac{1}{2},k}$ and $v^{3}_{i,j,k+\frac{1}{2}}$.
 The last equation is given by the divergence free condition at cell $i,j,k$:
 \begin{align}\label{extrap:3d:3:div}
- 0&=\frac{v^{1}_{i+\frac{1}{2},j,k}-v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_1}+\frac{v^{2}_{i,j+\frac{1}{2},k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}+\frac{v^{3}_{i,j,k+\frac{1}{2}}-v^{3}_{i,j,k+\frac{1}{2}}}{\Delta x_3}
+ 0&=\frac{v^{1}_{i+\frac{1}{2},j,k}-v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_1}+\frac{v^{2}_{i,j+\frac{1}{2},k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}+\frac{v^{3}_{i,j,k+\frac{1}{2}}-v^{3}_{i,j,k+\frac{1}{2}}}{\Delta x_3}.
 \end{align}
 Contrary to the other case we have not a direct method to solve by substitution. We will rewrite the equation as:
 \begin{equation}
@@ -604,12 +605,11 @@ Contrary to the other case we have not a direct method to solve by substitution.
    v^{1}_{i+\frac{1}{2},j,k}\\
    v^2_{i,j+\frac{1}{2},k}\\
    v^{3}_{i,j,k+\frac{1}{2}}
-  \end{pmatrix}=b
+  \end{pmatrix}=b.
 \end{equation}
-
 $b_3$ is given by equation \ref{extrap:3d:3:div}:
 \begin{equation}
- b_3=\frac{v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_1}+\frac{v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}+\frac{v^{3}_{i,j,k-\frac{1}{2}}}{\Delta x_3}
+ b_3=\frac{v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_1}+\frac{v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}+\frac{v^{3}_{i,j,k-\frac{1}{2}}}{\Delta x_3}.
 \end{equation}
 $b_2$ is given by equation \ref{extrap:3d:3:eq2}:
 \begin{equation}
@@ -618,7 +618,7 @@ $b_2$ is given by equation \ref{extrap:3d:3:eq2}:
 	-\frac{v^{3}_{i,j,k-\frac{1}{2}}-v^{3}_{i-1,j,k+\frac{1}{2}}-v^{3}_{i-1,j,k-\frac{1}{2}}}{2\Delta x_1}\\
 	&\qquad -\frac{v^1_{i-\frac{1}{2},j,k}-v^{1}_{i+\frac{1}{2},j,k-1}-v^{1}_{i-\frac{1}{2},j,k-1}}{2\Delta x_3}
 	+\frac{v^{1}_{i-\frac{1}{2},j,k}-v^{1}_{i+\frac{1}{2},j-1,k}-v^{1}_{i-\frac{1}{2},j-1,k}}{2\Delta x_2}\\
-	&\qquad +\frac{v^2_{i,j-\frac{1}{2},k}-v^{2}_{i-1,j+\frac{1}{2},k}-v^{2}_{i-1,j-\frac{1}{2},k}}{2\Delta x_1}
+	&\qquad +\frac{v^2_{i,j-\frac{1}{2},k}-v^{2}_{i-1,j+\frac{1}{2},k}-v^{2}_{i-1,j-\frac{1}{2},k}}{2\Delta x_1}.
 \end{split}
 \end{equation}
 $b_1$ is given by equation \ref{extrap:3d:3:eq3}:
@@ -628,7 +628,7 @@ $b_1$ is given by equation \ref{extrap:3d:3:eq3}:
 	-\frac{v^{3}_{i,j,k+\frac{1}{2}}+v^{3}_{i,j,k-\frac{1}{2}}-v^{3}_{i-1,j,k+\frac{1}{2}}-v^{3}_{i-1,j,k-\frac{1}{2}}}{2\Delta x_1}\\
 	&\qquad -\frac{v^1_{i-\frac{1}{2},j,k}-v^{1}_{i+\frac{1}{2},j,k-1}-v^{1}_{i-\frac{1}{2},j,k-1}}{2\Delta x_3}
 	+\frac{v^{3}_{i,j,k-\frac{1}{2}}-v^{3}_{i,j-1,k+\frac{1}{2}}-v^{3}_{i,j-1,k-\frac{1}{2}}}{2\Delta x_2}\\
-	&\qquad +\frac{v^2_{i,j-\frac{1}{2},k}-v^{2}_{i,j+\frac{1}{2},k-1}-v^{2}_{i,j-\frac{1}{2},k-1}}{2\Delta x_3}
+	&\qquad +\frac{v^2_{i,j-\frac{1}{2},k}-v^{2}_{i,j+\frac{1}{2},k-1}-v^{2}_{i,j-\frac{1}{2},k-1}}{2\Delta x_3}.
 	\end{split}
 \end{equation}
 The matrix $A$ is then:
@@ -637,9 +637,9 @@ The matrix $A$ is then:
     \frac{2}{\Delta x_1}+\frac{1}{2\Delta x_3}&-\frac{2}{\Delta x_2}-\frac{1}{2\Delta x_3}&\frac{1}{2\Delta x_1}-\frac{1}{2\Delta x_2}\\
     \frac{1}{2\Delta x_3}-\frac{1}{2\Delta x_2}&-\frac{2}{\Delta x_2}-\frac{1}{2\Delta x_1}&\frac{2}{\Delta x_3}+\frac{1}{2\Delta x_1}\\
     \frac{1}{\Delta x_1}&\frac{1}{\Delta x_2}&\frac{1}{\Delta x_3}
-   \end{pmatrix}
+   \end{pmatrix}.
 \end{equation}
-This matrix only depend on the spacing so it can be calculated at initialization.
+This matrix only depends on the spacing so it can be calculated at initialization.
 
 The general case is:
 \begin{align}
@@ -647,53 +647,52 @@ The general case is:
 		\frac{s_1\sqrt{3}}{3}\\
 		\frac{s_2\sqrt{3}}{3}\\
 		\frac{s_3\sqrt{3}}{3}
-	\end{pmatrix}\\
+	\end{pmatrix},\\
 	\vect{t}^1&=\begin{pmatrix}
 			-s_1\frac{\sqrt{2}}{2}\\
 			s_2\frac{\sqrt{2}}{2}\\
 			0
-		\end{pmatrix}\\
+		\end{pmatrix},\\
 		\vect{t}^2&=\begin{pmatrix}
 			0\\
 			s_2\frac{\sqrt{2}}{2}\\
 			-s_3\frac{\sqrt{2}}{2}
-		\end{pmatrix}
+		\end{pmatrix}.
 \end{align}
-
 The constraints are then:
 \begin{align}
 \intertext{For $\vect{t^{1}}$}
-	0&=\sum_{ij}\sigma_{ij}n_{i}t^{1}_{j}\\
-	0&=\frac{\sqrt{6}}{6}\left(-\sigma_{11}+\sigma_{12}s_1s_2-\sigma_{21}s_1s_2+\sigma_{22}-\sigma_{31}s_3s_1+\sigma_{32}s_3s_2\right)\\
-	0&=-\sigma_{11}+\sigma_{22}-\sigma_{31}s_3s_1+\sigma_{32}s_3s_2\\
-	0&=-2\frac{\partial u_{1}}{\partial x_{1}}+2\frac{\partial u_{2}}{\partial x_{2}}-s_3s_1\frac{\partial u_{3}}{\partial x_{1}}-s_3s_1\frac{\partial u_{1}}{\partial x_{3}}+s_3s_2\frac{\partial u_{3}}{\partial x_{2}}+s_3s_2\frac{\partial u_{2}}{\partial x_{3}}
+	0&=\sum_{ij}\sigma_{ij}n_{i}t^{1}_{j},\\
+	0&=\frac{\sqrt{6}}{6}\left(-\sigma_{11}+\sigma_{12}s_1s_2-\sigma_{21}s_1s_2+\sigma_{22}-\sigma_{31}s_3s_1+\sigma_{32}s_3s_2\right),\\
+	0&=-\sigma_{11}+\sigma_{22}-\sigma_{31}s_3s_1+\sigma_{32}s_3s_2,\\
+	0&=-2\frac{\partial u_{1}}{\partial x_{1}}+2\frac{\partial u_{2}}{\partial x_{2}}-s_3s_1\frac{\partial u_{3}}{\partial x_{1}}-s_3s_1\frac{\partial u_{1}}{\partial x_{3}}+s_3s_2\frac{\partial u_{3}}{\partial x_{2}}+s_3s_2\frac{\partial u_{2}}{\partial x_{3}}.
 	\label{topo:extrap:3d:diag:gen1}\displaybreak[0]\\
 	\intertext{For $\vect{t^{2}}$}
-	0&=\sum_{ij}\sigma_{ij}n_{i}t^{2}_{j}\\
-	0&=\frac{\sqrt{6}}{6}\left(-\sigma_{13}s_{1}s_{3}+\sigma_{12}s_{1}s_{2}-\sigma_{23}s_{2}s_{3}+\sigma_{22}-\sigma_{33}+\sigma_{32}s_{3}s_{2}\right)\\
-	0&=\frac{\sqrt{6}}{6}\left(-\sigma_{13}s_{1}s_{3}+\sigma_{12}s_{1}s_{2}+\sigma_{22}-\sigma_{33}\right)\\
-	0&=-\sigma_{13}s_{1}s_{3}+\sigma_{12}s_{1}s_{2}+\sigma_{22}-\sigma_{33}\\
-	0&=-2\frac{\partial u_{3}}{\partial x_{3}}+2\frac{\partial u_{2}}{\partial x_{2}}-s_1s_3\frac{\partial u_{1}}{\partial x_{3}}-s_1s_3\frac{\partial u_{3}}{\partial x_{1}}+s_1s_2\frac{\partial u_{1}}{\partial x_{2}}+s_2s_1\frac{\partial u_{2}}{\partial x_{1}}
+	0&=\sum_{ij}\sigma_{ij}n_{i}t^{2}_{j},\\
+	0&=\frac{\sqrt{6}}{6}\left(-\sigma_{13}s_{1}s_{3}+\sigma_{12}s_{1}s_{2}-\sigma_{23}s_{2}s_{3}+\sigma_{22}-\sigma_{33}+\sigma_{32}s_{3}s_{2}\right),\\
+	0&=\frac{\sqrt{6}}{6}\left(-\sigma_{13}s_{1}s_{3}+\sigma_{12}s_{1}s_{2}+\sigma_{22}-\sigma_{33}\right),\\
+	0&=-\sigma_{13}s_{1}s_{3}+\sigma_{12}s_{1}s_{2}+\sigma_{22}-\sigma_{33},\\
+	0&=-2\frac{\partial u_{3}}{\partial x_{3}}+2\frac{\partial u_{2}}{\partial x_{2}}-s_1s_3\frac{\partial u_{1}}{\partial x_{3}}-s_1s_3\frac{\partial u_{3}}{\partial x_{1}}+s_1s_2\frac{\partial u_{1}}{\partial x_{2}}+s_2s_1\frac{\partial u_{2}}{\partial x_{1}}.
 	\label{topo:extrap:3d:diag:gen2}
 \end{align}
-We discretize equation \ref{topo:extrap:3d:diag:gen1} at position $i,j,k$:
+We discretize equation (\ref{topo:extrap:3d:diag:gen1}) at position $i,j,k$:
 \begin{equation}\label{extrap:3d:3:eq3}
  \begin{split}
 	0&=-2\frac{v^{1}_{i+\frac{1}{2},j,k}-v^{1}_{i-\frac{1}{2},j,k}}{\Delta x_1}+2\frac{v^{2}_{i,j+\frac{1}{2}.k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}\\
 	&\qquad -s_3\frac{v^{3}_{i,j,k+\frac{1}{2}}+v^{3}_{i,j,k-\frac{1}{2}}-v^{3}_{i-s_1,j,k+\frac{1}{2}}-v^{3}_{i-s_1,j,k-\frac{1}{2}}}{2\Delta x_1}\\
 	&\qquad -s_1\frac{v^{1}_{i+\frac{1}{2},j,k}+v^1_{i-\frac{1}{2},j,k}-v^{1}_{i+\frac{1}{2},j,k-s_3}-v^{1}_{i-\frac{1}{2},j,k-s_3}}{2\Delta x_3}\\
 	&\qquad +s_3\frac{v^{3}_{i,j,k+\frac{1}{2}}+v^{3}_{i,j,k-\frac{1}{2}}-v^{3}_{i,j-s_2,k+\frac{1}{2}}-v^{3}_{i,j-s_2,k-\frac{1}{2}}}{2\Delta x_2}\\
-	&\qquad +s_2\frac{v^{2}_{i,j+\frac{1}{2},k}+v^2_{i,j-\frac{1}{2},k}-v^{2}_{i,j+\frac{1}{2},k-s_3}-v^{2}_{i,j-\frac{1}{2},k-s_3}}{2\Delta x_3}
+	&\qquad +s_2\frac{v^{2}_{i,j+\frac{1}{2},k}+v^2_{i,j-\frac{1}{2},k}-v^{2}_{i,j+\frac{1}{2},k-s_3}-v^{2}_{i,j-\frac{1}{2},k-s_3}}{2\Delta x_3}.
 \end{split}
 	\end{equation}
-We discretize equation \ref{topo:extrap:3d:diag:gen2} at position $i,j,k$:
+We discretize equation (\ref{topo:extrap:3d:diag:gen2}) at position $i,j,k$:
 \begin{equation}\label{extrap:3d:3:eq2}
 \begin{split}
 	0&=-2\frac{v^{3}_{i,j,k+\frac{1}{2}}-v^{3}_{i,j,k-\frac{1}{2}}}{\Delta x_3}+2\frac{v^{2}_{i,j+\frac{1}{2}.k}-v^{2}_{i,j-\frac{1}{2},k}}{\Delta x_2}\\
 	&\qquad -s_3\frac{v^{3}_{i,j,k+\frac{1}{2}}+v^{3}_{i,j,k-\frac{1}{2}}-v^{3}_{i-s_1,j,k+\frac{1}{2}}-v^{3}_{i-s_1,j,k-\frac{1}{2}}}{2\Delta x_1}\\
 	&\qquad -s_1\frac{v^{1}_{i+\frac{1}{2},j,k}+v^1_{i-\frac{1}{2},j,k}-v^{1}_{i+\frac{1}{2},j,k-s_3}-v^{1}_{i-\frac{1}{2},j,k-s_3}}{2\Delta x_3}\\
 	&\qquad +s_1\frac{v^{1}_{i+\frac{1}{2},j,k}+v^{1}_{i-\frac{1}{2},j,k}-v^{1}_{i+\frac{1}{2},j-s_2,k}-v^{1}_{i-\frac{1}{2},j-s_2,k}}{2\Delta x_2}\\
-	&\qquad +s_2\frac{v^{2}_{i,j+\frac{1}{2},k}+v^2_{i,j-\frac{1}{2},k}-v^{2}_{i-s_1,j+\frac{1}{2},k}-v^{2}_{i-s_1,j-\frac{1}{2},k}}{2\Delta x_1}
+	&\qquad +s_2\frac{v^{2}_{i,j+\frac{1}{2},k}+v^2_{i,j-\frac{1}{2},k}-v^{2}_{i-s_1,j+\frac{1}{2},k}-v^{2}_{i-s_1,j-\frac{1}{2},k}}{2\Delta x_1}.
 \end{split}
 	\end{equation}
 The unknowns are $v^{1}_{i+s_1\frac{1}{2},j,k}$, $v^2_{i,j+s_2\frac{1}{2},k}$ and $v^{3}_{i,j,k+s_3\frac{1}{2}}$.
@@ -704,19 +703,18 @@ We can write it by matrix form:
    v^{1}_{i+s_1\frac{1}{2},j,k}\\
    v^2_{i,j+s_2\frac{1}{2},k}\\
    v^{3}_{i,j,k+s_3\frac{1}{2}}
-  \end{pmatrix}=b
+  \end{pmatrix}=b.
 \end{equation}
-
 $b_3$ is given by equation \ref{extrap:3d:3:div}:
 \begin{equation}
- b_3=s_1\frac{v^{1}_{i-s_1\frac{1}{2},j,k}}{\Delta x_1}+s_2\frac{v^{2}_{i,j-s_2\frac{1}{2},k}}{\Delta x_2}+s_3\frac{v^{3}_{i,j,k-s_3\frac{1}{2}}}{\Delta x_3}
+ b_3=s_1\frac{v^{1}_{i-s_1\frac{1}{2},j,k}}{\Delta x_1}+s_2\frac{v^{2}_{i,j-s_2\frac{1}{2},k}}{\Delta x_2}+s_3\frac{v^{3}_{i,j,k-s_3\frac{1}{2}}}{\Delta x_3}.
 \end{equation}
 $b_2$ is given by:
 \begin{equation}
 \begin{split}
 	b_2&=-2s_3\frac{v^{3}_{i,j,k-s_3\frac{1}{2}}}{\Delta x_3}+2s_2\frac{v^{2}_{i,j-s_2\frac{1}{2}.k}}{\Delta x_2}+s_3\frac{v^{3}_{i,j,k-s_3\frac{1}{2}}-v^{3}_{i-s_1,j,k+\frac{1}{2}}-v^{3}_{i-s_1,j,k-\frac{1}{2}}}{2\Delta x_1}\\
 	&\qquad +s_1\frac{v^{1}_{i-s_1\frac{1}{2},j,k}-v^{1}_{i+\frac{1}{2},j,k-s_3}-v^{1}_{i-\frac{1}{2},j,k-s_3}}{2\Delta x_3}-s_1\frac{v^{1}_{i-s_1\frac{1}{2},j,k}-v^{1}_{i+\frac{1}{2},j-s_2,k}-v^{1}_{i-\frac{1}{2},j-s_2,k}}{2\Delta x_2}\\
-	&\qquad -s_2\frac{v^{2}_{i,j-s_2\frac{1}{2},k}-v^{2}_{i-s_1,j+\frac{1}{2},k}-v^{2}_{i-s_1,j-\frac{1}{2},k}}{2\Delta x_1}
+	&\qquad -s_2\frac{v^{2}_{i,j-s_2\frac{1}{2},k}-v^{2}_{i-s_1,j+\frac{1}{2},k}-v^{2}_{i-s_1,j-\frac{1}{2},k}}{2\Delta x_1}.
 \end{split}
 	\end{equation}
 $b_1$ is given by:
@@ -726,7 +724,7 @@ $b_1$ is given by:
 	+s_3\frac{v^{3}_{i,j,k-s_3\frac{1}{2}}-v^{3}_{i-s_1,j,k+\frac{1}{2}}-v^{3}_{i-s_1,j,k-\frac{1}{2}}}{2\Delta x_1}\\
 	&\qquad +s_1\frac{v^{1}_{i-s_1\frac{1}{2},j,k}-v^{1}_{i+\frac{1}{2},j,k-s_3}-v^{1}_{i-\frac{1}{2},j,k-s_3}}{2\Delta x_3}
 	-s_3\frac{v^{3}_{i,j,k-s_3\frac{1}{2}}-v^{3}_{i,j-s_2,k+\frac{1}{2}}-v^{3}_{i,j-s_2,k-\frac{1}{2}}}{2\Delta x_2}\\
-	&\qquad -s_2\frac{v^{2}_{i,j-s_2\frac{1}{2},k}-v^{2}_{i,j+\frac{1}{2},k-s_3}-v^{2}_{i,j-\frac{1}{2},k-s_3}}{2\Delta x_3}
+	&\qquad -s_2\frac{v^{2}_{i,j-s_2\frac{1}{2},k}-v^{2}_{i,j+\frac{1}{2},k-s_3}-v^{2}_{i,j-\frac{1}{2},k-s_3}}{2\Delta x_3}.
 	\end{split}
 \end{equation}
 The matrix $A$ is then:
@@ -735,62 +733,60 @@ The matrix $A$ is then:
     -s_1\frac{2}{\Delta x_1}-s_1\frac{1}{2\Delta x_3}&s_2\frac{2}{\Delta x_2}+s_2\frac{1}{2\Delta x_3}&-s_3\frac{1}{2\Delta x_1}+s_3\frac{1}{2\Delta x_2}\\
     -s_1\frac{1}{2\Delta x_3}+s_1\frac{1}{2\Delta x_2}&s_2\frac{2}{\Delta x_2}+s_2\frac{1}{2\Delta x_1}&-s_3\frac{2}{\Delta x_3}-s_3\frac{1}{2\Delta x_1}\\
     s_1\frac{1}{\Delta x_1}&s_2\frac{1}{\Delta x_2}&s_3\frac{1}{\Delta x_3}
-   \end{pmatrix}
+   \end{pmatrix}.
 \end{equation}
 
-\subsection{Other case}
+\subsection{Other cases}
 With the different cases seen above, we cannot treat all cases. Two things can happen.
 \begin{enumerate}
-	\item We are too thin (only one cell), in this case we consider the boundary speed as in the domain,
-	because we need at least 2 speeds of same component in a given direction to be able to make calculation.
-	\item We have a succession of plane and diagonal cells. But the plane cells are not sufficiently long to use the above case.
-	Or other case that cannot be decomposed in the above case.
+	\item The domain is too thin (only one cell), in this case we consider the boundary speed as in the domain,
+	because we need at least 2 speeds of the same component in a given direction to be able to do calculations.
+	\item We have a succession of plane and diagonal cells, but the plane cells are not sufficiently long to use the above case.
+	 Or other cases that cannot be decomposed into the above case.
 	In this case we extrapolate unknown speed from the mean of the neighboring speed in the same speed component.
 	We then evenly distribute the divergence to the unknown speed to be divergence free.
 \end{enumerate}
-This technique allows to define a speed to every bound of a cell in the domain.
+This technique allows us to define a speed to every boundary of a cell in the domain.
 
 We will then need to extrapolate it further away with a technique shown in the next section.
 If a speed that is not directly at boundary is defined it will be protected from erasure for the next stage (an implementation technique for this
-is to put a nan value in unknown).
+is to put a NaN value into unknown).
 
 \subsection{Pressure boundary conditions}
 
-The pressure boundary conditions are applied in cell outside of the domain.
+The pressure boundary conditions are applied to the cells outside of the domain.
 The condition comes from the study from a plane of only one cell.
-For example for normal of:
+For example for a normal of:
 \begin{equation}
 	\vect{n}=\begin{pmatrix}
 			1\\
 			0
-		\end{pmatrix}
+		\end{pmatrix}.
 \end{equation}
 The equations are:
 \begin{align}
-	0&=\sigma_{11}n_{1}=-p+2\nu\frac{\partial v_{1}}{\partial x_{1}}\\
-	p&=2\nu\frac{\partial v_{1}}{\partial x_{1}}
+	0&=\sigma_{11}n_{1}=-p+2\nu\frac{\partial v_{1}}{\partial x_{1}},\\
+	p&=2\nu\frac{\partial v_{1}}{\partial x_{1}}.
 \end{align}
-
-Which in using the boundary speed found from the extrapolation and boundary conditions gives:
+Which using the speed found from previous step gives:
 \begin{equation}
-	p=2\nu\frac{v^{1}_{i+\frac{1}{2},j}-v^{1}_{i,j}}{\Delta x_{1}}
+	p=2\nu\frac{v^{1}_{i+\frac{1}{2},j}-v^{1}_{i,j}}{\Delta x_{1}}.
 \end{equation}
 In general we can be neighbor of more than one of these cases.
 In this case we sum the given pressure.
 
 \subsection{Extrapolate further away}
 
-We now need to extrapolate further away to be able to use bigger time steps.
-And for some pathological case motion where the boundary conditions need speed that  where not in the boundary condition at step before.
-The following method can be used:
+We now need to extrapolate further away to be able to use bigger time step,
+and for corner case to have speed defined if a particle visit a new corner:
 \begin{quote}
-For every not known speed, average from known speeds that are nearer from a surface of fluid.
+For every unknown speed, average from known speeds that are nearer from a surface of the fluid.
 \end{quote}
 This is done by implementing first a notion of ``Layer'' which indicates the distance from the fluid for a given cell.
-The extrapolation is then done layer by layer using only value of layer before.
+The extrapolation is then done layer by layer using only values of the layer before.
 
-The exact code is a little complicated because of the staggered grid which brings a little asymmetry in choosing which cell layer need to be used
-(a speed component is between 2 cell).
+The exact code is a little complicated because of the staggered grid which brings a little asymmetry in choosing which cell layer needs to be used
+(a speed component is between 2 cells).
 
 %\begin{figure}
 %\directlua{dofile('topology/one_cell_extrapolation.lua')}
@@ -800,58 +796,58 @@ The exact code is a little complicated because of the staggered grid which bring
 
 \section{Interpolation}
 
-For interpolation, we don't have constraint on the scheme. A simple one can for example be $n$-linear interpolation.
+For interpolation, we do not have constraints on the scheme. A simple one can for example be $n$-linear interpolation.
 The only thing to take care is that we are in a staggered grid so that known speeds are not at the same place
 for all components.
 
 \subsection{$n$-linear}
 
-A $n$ linear interpolation is a non linear interpolation but a product of linear interpolation so that in every direction the interpolation is linear.
+A $n$ linear interpolation is a non linear interpolation but a product of linear interpolations so that in every direction the interpolation is linear.
 
-For 1d it's given for $c_1$ and $c_2$ the value at $x_1$ and $x_2$ by:
+For 1d it is given for $c_1$ and $c_2$ the value at $x_1$ and $x_2$ by:
 \begin{equation}
-	f(x,y)=c_2\frac{x-x_{1}}{x_{2}-x_{1}}+c_1\frac{x-x_{2}}{x_{1}-x_{2}}
+	f(x,y)=c_2\frac{x-x_{1}}{x_{2}-x_{1}}+c_1\frac{x-x_{2}}{x_{1}-x_{2}}.
 \end{equation}
 
-For 2d it's given by:
+For 2d it is given by:
 \begin{equation}
-	f(x,y)=c_{11}\frac{x-x_{2}}{x_{1}-x_{2}}\frac{y-y_{2}}{y_{1}-y_{2}}+c_{12}\frac{x-x_(2)}{x_{1}-x_{2}}\frac{y-y_{1}}{y_{2}-y_{1}}
-	+c_{21}\frac{x-x_{1}}{x_{2}-x_{1}}\frac{y-y_{2}}{y_{1}-y_{2}}+c_{22}\frac{x-x_{2}}{x_{1}-x_{2}}\frac{y-y_{2}}{y_{1}-y_{2}}
+	f(x,y)=c_{11}\frac{x-x_{2}}{x_{1}-x_{2}}\frac{y-y_{2}}{y_{1}-y_{2}}+c_{12}\frac{x-x_{2}}{x_{1}-x_{2}}\frac{y-y_{1}}{y_{2}-y_{1}}
+	+c_{21}\frac{x-x_{1}}{x_{2}-x_{1}}\frac{y-y_{2}}{y_{1}-y_{2}}+c_{22}\frac{x-x_{2}}{x_{1}-x_{2}}\frac{y-y_{2}}{y_{1}-y_{2}}.
 \end{equation}
 
-For 3d it's calculated similarly.
+For 3d it is calculated similarly.
 
 \section{Pseudo code}
 
 We will now give pseudo code to augment the program seen in the previous chapter.
 
-\subsection{Data type}
+\subsection{Data types}
 
-In addition to data type that we have seen in the previous chapter. We add the following data type.
+In addition to the data types that we have seen in the previous chapter, we add the following data types:
 
 \begin{description}
 \item[Layer:]
-layers are integer stored in the cell which indicates the distance from the fluid.
+layers are integers stored in the cell which indicates the distance from the fluid.
 Two methods are defined. A method to set ($\FuncCall{LayerSet}$) and a method to get ($\FuncCall{LayerGet}$).
-A special value of $-1$ is used for indicating empty cells. This is used in the initialization algorithm before considerating
+A special value of $-1$ is used for indicating empty cells. This is used in the initialization algorithm before considering
 which values the layer have.
 \item[Depth:]
-Depths are integer stored in the cell which indicates the depth in the fluid.
-This is used for optimization of the number of particle. Particles are only used near the surface.
+Depths are integers stored in the cell which indicate the depth in the fluid.
+This is used for optimization of the number of particles. Particles are only used near the surface.
 Not deep inside the fluid.
 Two methods are defined. A method to set ($\FuncCall{DepthSet}$) and a method to get ($\FuncCall{DepthGet}$).
-A special value of $-1$ is used for indicating empty cell
+A special value of $-1$ is used for indicating an empty cell
 \item[Particle:]
-We need a list of particle which consist only of list of position.
+We need a list of particles which consist only of a list of position.
 A method ($\FuncCall{CellGet}()$) that transforms a particle in the cell which it lays in is needed.
-This method can be written in term of rounding after a scaling so that cell spacing are $1$.
-Method to add and remove particle of the list are needed.
-The order in the list is not relevant we only need to be able to remove a particle in an arbitrary position in the list.
+This method can be written in terms of rounding after a scaling so that cell spacings are $1$.
+Methods to add and remove particles in the list are needed.
+The order in the list is not relevant, we only need to be able to remove a particle in an arbitrary position in the list.
 \item[Interior:]
 A special cell type, interior cell is used.
-Interior cells are considered as cell fluid, but where the method $\FuncCall{GetIsInterior}$ return true.
-Interior cells are cell which don't need to have fluid particle in there.
-The only mean to remove an interior cell is to ``Remove'' the fluid cell around it.
+Interior cells are considered as cell fluid, but where the method $\FuncCall{GetIsInterior}$ returns true.
+Interior cells are cells which do not need to have fluid particle in there.
+The only mean to remove an interior cell is to ``Remove'' the fluid cells around it.
 \end{description}
 
 \subsection{Initialisation}
@@ -860,43 +856,43 @@ The only mean to remove an interior cell is to ``Remove'' the fluid cell around 
 In this part we need to do the following:
 \begin{itemize}
  \item From the position of the particle determine which cell is fluid.
- \item Add particle in inflow cell.
+ \item Add particles in inflow cell.
  \item Create air cell around the fluid to store extrapolation data.
- \item Create a variable named layer which has value $0$ in the fluid and the distance from the fluid in air cell.
- This is used in extrapolation method.
+ \item Create a variable named layer which has value $0$ in the fluid and the distance from the fluid in air cells.
+ This is used in the the extrapolation method.
 \end{itemize}
 This part is the only part that creates cells or creates particles.
-The difficulty of this part is that we have value that are not updated or do not exist.
-Order of the algorithm are very important.
+The difficulty of this part is that we have values that are not updated or do not exist.
+The order of the algorithm is very important.
 
-To do this we use the following step:
+To do this we use the following steps:
 \begin{enumerate}
  \item We initialize a variable called layer on every cell to a value of $-1$.
- \item We put layer to $0$ for cell with a particle in it and set the cell type to fluid.
- \item We create particle in inflow if needed.
- \item We iteratively set layer away from surface and set air cell.
- \item We delete cell with layer of $-1$.
+ \item We put layer to $0$ for cells with a particle in it and set the cell type to fluid.
+ \item We create particles in inflow if needed.
+ \item We iteratively set layers away from surface and set air cells.
+ \item We delete cells with layer of $-1$.
 \end{enumerate}
 
-Because of compression and for optimization of number of particle we use another variable called depth.
-This variable indicate the depth in fluid from the surface.
-Cell which are bigger than a certain depth are interior cell.
-Interior cells are considered as fluid cells but which don't need particle in there.
-Particles are created from  a certain depth in cell to allow compression effect which will deform the sampling of particle.
-To have only particles at the surface allows to have more particles at the surface with the same performance. This is important in 3d flow
-where the number of particle increase with $h^3$ if we put particle everywhere.
-We can do this mathematically because an oppening in the fluid can only happen when we have a discontinuity in speed.
+Because of compression and for optimization of the number of particles we use another variable called depth.
+This variable indicates the depth in fluid from the surface.
+Cells which are bigger than a certain depth are interior cells.
+Interior cells are considered as fluid cells but which do not need particles in there.
+Particles are created from  a certain depth in cell to allow a compression effect which will deform the sampling of particles.
+To have only particles at the surface allows us to have more particles at the surface with the same performance. This is important in 3d flows
+where the number of particles increases with $h^3$ if we put particles everywhere.
+We can do this mathematically because an opening in the fluid can only happen when we have a discontinuity in speed.
 This discontinuity can be detected in the speed on the grid.
 
 \subsubsection{Initialize layer and depth}
 
-This algorithm initialize the layer of every cell to -1 so that we can set the layer to 0 of cells which have particle in it.
-For depth we only consider celld which are in the exterior fluid cells and don't touch interior cell so that they have the maximal depth
+This algorithm initializes the layer of every cell to -1 so that we can set the layer to 0 of cells which have a particle in it.
+For depth we only consider cell which are in the exterior fluid cells and do not touch interior cells so that they have the maximal depth
 of the preceding iteration.
 This is shown in algorithm \ref{code:Algorithm:InitializeLayerAndDepth}
 
 \begin{algorithm}
-\caption{Algorithm which Initialize the layer and depth.}
+\caption{Algorithm which initializes the layer and depth.}
 \label{code:Algorithm:InitializeLayerAndDepth}
 \begin{algorithmic}[1]
 \Procedure{InitializeLayerAndDepth}{}
@@ -913,7 +909,7 @@ This is shown in algorithm \ref{code:Algorithm:InitializeLayerAndDepth}
 \subsubsection{Initialize layer with particle and depth}
 
 This algorithm will use the position of the particles to set the layer where the particles are to $0$.
-It will also delete particles that are at interior more than a given depth because particle are not needed there.
+It will also delete particles that are in the interior more than a given depth because particles are not needed there.
 This can be seen in algorithm \ref{code:Algorithm:LayerInitialWithParticleDepth}
 
 \begin{algorithm}
@@ -939,19 +935,19 @@ This can be seen in algorithm \ref{code:Algorithm:LayerInitialWithParticleDepth}
 
 \subsubsection{Create fluid particle depth}
 
-This algorithm creates particle if needed and force that interior cells are filled.
+This algorithm creates particles if needed and forces that interior cells are filled.
 New particles are needed if:
 \begin{enumerate}
-\item It's a inbound cell which has no particle in it (has layer $-1$) which represent a source of fluid of the physical problem.
-\item It's a interior cell which has depth smaller than the limit to remove particle.
+\item It is a inbound cell which has no particles in it (has layer $-1$) which represent a source of fluid of the physical problem.
+\item It is an interior cell which has depth smaller than the limit to remove particles.
 \end{enumerate}
 
-The need of interior cell are for two reasons:
+The needs of interior cells are for two reasons:
 \begin{enumerate}
- \item Performance optimization because at interior the only mean to not be fluid is by a discontinuity on the speed.
- This discontinuity can be found on the speed on grid. So we don't need particle at interior.
- \item By deformation of the fluid the sampling of fluid can be insufficient and air cell can manifest because we have no sufficient particle.
- It allow to have a bigger number of particle by cell to be more resistant to deformation effect only where it's needed,
+ \item Performance optimization because with interior the only means to not be fluid is by a discontinuity on the speed.
+ This discontinuity can be found on the speed on the grid. So we do not need particles at interior.
+ \item By deformation of the fluid the sampling of fluid can be insufficient and air cells can manifest because we have not sufficient particles.
+ It allow to have a bigger number of particle by cell to be more resistant to deformation effect only where it is needed,
  at the surface. Particle are created in the interior region if needed to go in the surface region to add sampling.
 \end{enumerate}
 
@@ -959,8 +955,8 @@ The algorithm is shown in algorithm \ref{code:LayerInitialWithParticleDepth}.
 The method $\FuncCall{InboundNeedFilling}$ and $\FuncCall{AddParticle}$ need to be defined.
 The first tests if we are an empty inbound cell. The second will create one or more particles in the cell.
 
-An identique algorithm without creation of particle named $\FuncCall{CreateInteriorDepth}$
-is used (cf. algorithm \ref{code:CreateInteriorDepth}) when we are in a Runge-Kutta step and don't want
+An identical algorithm without creation of particles named $\FuncCall{CreateInteriorDepth}$
+is used (cf. algorithm \ref{code:CreateInteriorDepth}) when we are in a Runge-Kutta step and do not want
 to create new particles because vectors will no more have the same length which is problematic for a Runge-Kutta method.
 
 \begin{algorithm}
@@ -1008,9 +1004,9 @@ to create new particles because vectors will no more have the same length which 
 We now need to create the layer variable and depth variable and create air cell around the fluid.
 We do this recursively beginning from the fluid and avancing neighbour by neighbour.
 
-This is done in 3 parts. First algorithm \ref{code:CreateInteriorDepth1} create the first list with boundary cell.
+This is done in 3 parts. First algorithm \ref{code:CreateInteriorDepth1} create the first list with boundary cells.
 Then algorithm \ref{code:CreateInteriorDepth2} create the layer moving away from the fluid.
-At the contrary algorithm \ref{code:CreateInteriorDepth3} create the depth moving in the fluid from the surface.
+In contrary algorithm \ref{code:CreateInteriorDepth3} creates the depth moving into the fluid from the surface.
 
 \begin{algorithm}
 \caption{Algorithm which creates the first layer list with cells at the boundary.}
@@ -1123,8 +1119,8 @@ At the contrary algorithm \ref{code:CreateInteriorDepth3} create the depth movin
 
 \subsubsection{Delete macCell}
 
-We delete cells that have layer of $-1$ because they are cells that are not fluid and not in the air layer around fluid.
-Retain cell with layer of $-1$ will not change the mathematics. They will only be dead weight.
+We delete cells that have layerw of $-1$ because they are cells that are not fluid and not in the air layer around the fluid.
+Retaining cell with layer of $-1$ will not change the mathematics. They will only be dead weight.
 This is shown in algorithm \ref{code:DeleteMacCell}.
 \begin{algorithm}
 \caption{Algorithm to delete cell if layer is $-1$.}
@@ -1143,7 +1139,7 @@ This is shown in algorithm \ref{code:DeleteMacCell}.
 \subsubsection{Calculate time step}
 
 We calculate the optimun time step.
-The optimun time step is given so that a particle move a maximun of a given fraction of a cell.
+The optimun time step is given so that a particle moves a maximun of a given fraction of a cell.
 This is shown in algorithm \ref{code:CalculateTimeStep}
 \begin{algorithm}
 \caption{Calculates the optimum time step.}
@@ -1168,16 +1164,16 @@ max=0;
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{conclusion}
+\subsubsection{Conclusion}
 
 We now have all the algorithms to initialize the topology.
-We note that all these steps only involve integer calculation, this allows the compiler to do extensive optimization
-to simplify calculation.
+We note that all these steps only involve integer calculations, this allows the compiler to do extensive optimization
+to simplify calculations.
 
 We have two different initialization cases:
 \begin{enumerate}
- \item Complete initialization done before a Runge-Kutta step. We create particle and calculate the optimum time step.
- \item Partial initialization done in a Runge-Kutta step. We don't create particle and don't change time step.
+ \item Complete initialization done before a Runge-Kutta step. We create particles and calculate the optimum time step.
+ \item Partial initialization done in a Runge-Kutta step. We do not create particle and do not change the time step.
  But the rest is the same as a complete initialization step.
 \end{enumerate}
 The two algorithms are shown in algorithms \ref{code:initialization} and \ref{code:initialization2}.
@@ -1209,25 +1205,25 @@ The two algorithms are shown in algorithms \ref{code:initialization} and \ref{co
 \end{algorithmic}
 \end{algorithm}
 
-We will now consider extrapolation method.
+We will now consider extrapolation methods.
 
 \subsection{Boundary conditions extrapolation}
 \subsubsection{Overview}
 
 The following steps are needed to determine boundary conditions in 2d:
 \begin{enumerate}
-\item  Mark all speed between air cell to $\Nan$.
- \item Find boundary cell: Fluid cells that are neighbor of air cell.
+\item  Mark all speeds between air cells to $\Nan$.
+ \item Find boundary cells: Fluid cells that are neighbor of air cells.
  \item Choose which case of section \ref{topo:extrap:2d} and apply it. 
  If we cannot use a case we mark the speed with $\Nan$.
  \item Extrapolate boundary speeds which are $\Nan$ and correct divergence.
 \end{enumerate}
-Extreme care need to be taken to only use known speed. Topology is very important for this part.
+Extreme care needs to be taken to only use known speeds. Topology is very important for this part.
 
 \subsubsection{Speed in domain}
 
 A speed component is in the domain if its two neighbor cells are in the domain or we are too thin.
-The function take 2 arguments, a cell and a direction and return a boolean.
+The function takes 2 arguments, a cell and a direction and returns a boolean.
 This pseudo code assumes that all cells exist and are fluid or not fluid.
 In the real code the existence of the cell muss be checked.
 
@@ -1261,7 +1257,7 @@ In the real code the existence of the cell muss be checked.
 We now need to know when a fluid cell is a boundary between fluid and air, and extract information of which direction is the boundary.
 As input, we take the cell which we are interested in.
 As output a boolean if we are a boundary, and 2 arrays where we return every direction and sign of the interface.
-The value $n$ indicates how many interface we have.
+The value $n$ indicates how many interfaces we have.
 This is shown in algorithm \ref{code:IsBoundary}.
 
 \begin{algorithm}
@@ -1297,14 +1293,14 @@ $n$ is the number of interface and the number of element filled in the array.  }
 
 
 \subsubsection{Choose boundary case}
-We are now able to detect boundary cell. We now need to recognize the different cases.
-For this we use the information on the number of neighbor and which neighbor:
+We are now able to detect the boundary cells. We now need to recognize the different cases.
+For this we use the information on the number of neighbors and which neighbors:
 \begin{itemize}
 \item If we have one neighbour we are candidate for a plane case. We need then to try every neighbor along the surface to
-see if it has the same interface with same direction.
+see if it has the same interface with the same direction.
 \item  If we have two neighbor interfaces of different components, we are in a diagonal plane case.
-This case is the more easy because we don't need to verify other thing.
-\item If it's not possible we put $\Nan$ in the given component to know for the rest of the algorithm that this speed is not known.
+This case is the more easy because we do not need to verify other things.
+\item If it is not possible we put $\Nan$ in the given component to know for the rest of the algorithm that this speed is not known.
 \end{itemize}
 The application of plane rules is given in section \ref{topo:extrap:2d}.
 This is shown in algorithm \ref{code:ChooseBoundaryCase2d}.
@@ -1370,10 +1366,10 @@ $dir$, $sign$ and $n$ are the same as $\FuncCall{IsBoundary}(cell,dir,sign,n)$}
 \subsubsection{Apply 2D plane}
 
 
-To Apply the 2d plane rule we do the following thing:
+To Apply the 2d plane rule we do the following things:
 \begin{enumerate}
 \item We use the divergence free condition 2 times for 3 known speeds and one unknown.
-\item We use the last equation \ref{var:extr:droitCont} to find the last unknown.
+\item We use the last equation (\ref{var:extr:droitCont}) to find the last unknown.
 \end{enumerate}
 The divergence part equation is shown in algorithm \ref{code:ApplyDiv2d}.
 The plane part is shown in algorithm \ref{code:Apply2dPlane}.
@@ -1454,7 +1450,7 @@ This is shown in algorithm \ref{code:Apply2dPlane45}.
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Apply set nan}
+\subsubsection{Apply set NaN}
 
 We need to set to $\Nan$ all speed component that are not boundary with a fluid cell.
 This are speed component between two air cells.
@@ -1488,9 +1484,9 @@ This is shown in algorithm \ref{code:ApplySetNan}.
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Nan extrapolation}
+\subsubsection{NaN extrapolation}
 
-We have cells with $\Nan$ at booundary, and need to extrapolate a speed in the $\Nan$ in respecting the divergence free condition.
+We have cells with $\Nan$ at boundary, and need to extrapolate a speed in the $\Nan$ in respecting the divergence free condition.
 For this, we to do the following for every cell.
 \begin{enumerate}
 \item We remember the position of $\Nan$ value.
@@ -1499,7 +1495,7 @@ For this, we to do the following for every cell.
 \item We distribute the divergence to all $\Nan$ value.
 \end{enumerate}
 
-The important point that makes that we have existence and unicity of a solution.
+The important point that makes that we have existence and uniqueness of a solution.
 Is that we cannot have a $\Nan$ value which has no non $\Nan$ neighbour.
 This is the case because if this happens we consider the given speed component as in the domain.
 For example the single fluid cell case. Could make this case if we consider the 4 speeds as out of the domain.
@@ -1598,7 +1594,7 @@ We need to do each step in a separate foreach because we have dependance on the 
 But we have no dependance between the same foreach.
 A foreach can be called in parallel, if we ensure that concurent write at the same speed component of the same value
 give the given value and not garbage.
-And if we ensure that we can get and set speed concurently on different speed component without problem.
+And if we ensure that we can get and set speed concurently on different speeds component without problem.
 
 Note that in all this foreach loop we do not change the speed component number, only their value.
 A simple fixed matrix implementation will respect all this condition.
@@ -1632,17 +1628,17 @@ This is shown in algorithm \ref{code:Do2d}.
 \end{algorithm}
 
 \subsubsection{Conclusion}
-In conclusion, we have an algorithm of linear complexity (only one level of nested for each) which can be possibly parallelizable.
+In conclusion, we have an algorithm of linear complexity (only one level of nested for each) which is parallelizable.
 
-This algorithm is specialized for boundary condition in straight plane and in corner. For the other case an extrapolation scheme is used.
+This algorithm is specialized for boundary conditions in straight plane and in corners. For the other case an extrapolation scheme is used.
 If more accurate boundary conditions are needed, the given case can be added in the choose section.
 
 \subsection{Extrapolation}
 
-We now need to extrapolate $\Nan$ value from known value which is nearer from the surface.
+We now need to extrapolate $\Nan$ values from known values which are nearer to the surface.
 This is done iteratively layer by layer.
-Exact pseudo code is a little complicate because of the staggered grid. For details look the algorithm  \ref{code:AlgorithmsExtrapolateNan1}
-, \ref{code:AlgorithmsExtrapolateNan2} and \ref{code:AlgorithmsExtrapolateNan3}. And the figure given in comment.
+Exact pseudo code is a little complicated because of the staggered grid. For details look at the algorithms  \ref{code:AlgorithmsExtrapolateNan1}
+, \ref{code:AlgorithmsExtrapolateNan2} and \ref{code:AlgorithmsExtrapolateNan3}. And the figure given in the comment.
 
 \begin{algorithm}
 \caption{Algorithm which calculates the extrapolation given by boundary conditions. First Part, with the header and the first big loop.}
@@ -1861,7 +1857,7 @@ Exact pseudo code is a little complicate because of the staggered grid. For deta
 \node[align=center] at (1.5,0.5){$cell2$\\$lay2\geq lay$};
 \end{tikzpicture}
 }
-\caption{This are the case used in algorithm \ref{code:AlgorithmsExtrapolateNan1}. This are case where the speed component
+\caption{These are the cases used in algorithm \ref{code:AlgorithmsExtrapolateNan1}. These are cases where the speed component
 is right the considered cell. In black is the speed component to set, in red is the speed component to read from.}
 \end{center}
 \end{figure}
@@ -1925,7 +1921,7 @@ is right the considered cell. In black is the speed component to set, in red is 
 \end{tikzpicture}
 }
 \end{center}
-\caption{These are the case used in algorithm \ref{code:AlgorithmsExtrapolateNan2}. These are case where the speed component
+\caption{These are the cases used in algorithm \ref{code:AlgorithmsExtrapolateNan2}. These are cases where the speed component
 is left the considered cell. In black is the speed component to set, in red is the speed component to read from.}
 \end{figure}
 
@@ -1988,13 +1984,13 @@ is left the considered cell. In black is the speed component to set, in red is t
 \end{tikzpicture}
 }
 \end{center}
-\caption{These are the case used in algorithm \ref{code:AlgorithmsExtrapolateNan3}. These are case where the speed component
+\caption{These are the cases used in algorithm \ref{code:AlgorithmsExtrapolateNan3}. These are the cases where the speed component
 is left the considered cell but where the left cell doesn't exist. In black is the speed component to set, in red is the speed component to read from. The cell marked in red doesn't exist, we cannot access left and below speed of them.}
 \end{figure}
 \subsection{Interpolation}
 
 We will now show the pseudo code for interpolation for $N$ dimension with $N$-linear interpolation.
-The principal difficulty is that on a staggered grid the position of know speed vary for all component.
+The principal difficulty is that on a staggered grid the position of known speed varie for all components.
 The algorithm needed to do the translation is shown in algorithm \ref{code:GetSpeed}.
 The interpolation is shown in algorithm \ref{code:GetSpeedImpl}.
 
@@ -2060,19 +2056,19 @@ $i$ is the recursif parameter it's first value should be 1.}
 
 \subsection{Integration}
 
-For the non splitted case the acceleration is given by \ref{topo:equ:onediff}.
-We use to avoid to rewrite a extrapolation fonction a method $\FuncCall{SetSpeedToAcceleration}(bool)$
-which toggle that the method to set the speed and get the speed act on acceleration instead.
+For the non split case the acceleration is given by (\ref{topo:equ:onediff}).
+We use to avoid to rewrite an extrapolation fonction a method $\FuncCall{SetSpeedToAcceleration}(bool)$
+which toggles that the method to set the speed and get the speed act on acceleration instead.
 This is shown in algorithm \ref{code:CalculateAcceleration2}
 
 We now integrate with the Runge-Kutta method, the difference with respect to the case in section \ref{fixed:sec:rungekutta}
-is that we now have particle. We need to do the same that we have done having a copy of all particle position.
+is that we now have particles. We need to do the same that we have done having a copy of all particle positions.
 This is shown in algorithm \ref{code:RungeKutta2p1} and \ref{code:RungeKutta2p2}.
 
-A complete iteration consist of Algorithm \ref{code:RungeKutta3}
+A complete iteration consists of Algorithm \ref{code:RungeKutta3}
 
 \begin{algorithm}
-\caption{Calculate the acceleration for the non splitted method equation \ref{topo:equ:onediff}.}
+\caption{Calculate the acceleration for the non split method equation (\ref{topo:equ:onediff}).}
 \label{code:CalculateAcceleration2}
 \begin{algorithmic}[1]
 \Procedure{CalculateAcceleration2}{}
@@ -2186,95 +2182,88 @@ A complete iteration consist of Algorithm \ref{code:RungeKutta3}
 \end{algorithm}
 
 \FloatBarrier
-\section{Numerical experiment}
+\section{Numerical experiments}
 
 \subsection{One particle fall}
-
-We have discussed this case qualitatively we will now simulated it numerically.
+\label{top:exp:one}
+We have discussed this case qualitatively, we will now simulate it numerically.
 
 We take as initial condition a single particle with 0 speed everywhere without viscosity falling from gravity.
 
 The analytical solution is for the continuous problem given by:
 \begin{align}
-v&=-gt\\
-x&=x_0-\frac{1}{2}gt^2
+v&=-gt,\\
+x&=x_0-\frac{1}{2}gt^2.
 \end{align}
 
 If we add viscosity the same is true.
 
 \subsubsection{Result}
 
-We see in figure \ref{topo:singl_part:fig1} that the non splitted method coincide with the analytical solution for as
+We see in figure \ref{topo:singl_part:fig1} and \ref{topo:singl_part:fig2} that the non split method coincides with the analytical solution for the
 integration method Runge-Kutta of order 4. The reason is that the analytical solution is a polynomial of order 2.
 
-At the contrary because of the splitting a splitting method will incorrectly approximate the result, because it's of order 1 at general.
+In contrast, because of the splitting, a splitting method will incorrectly approximate the result, because it is of order 1 at general.
 
-When we have big time step like $\alpha=2$ non splitted method behave better. But it's important to recall the result on fixed grid,
+When we have big time steps like $\alpha=2$ the non split method behaves better. But it is important to recall the results on fixed grid,
 that having a too big time step make diverge.
 
 \begin{figure}
-\begin{tikzpicture}
-	\begin{axis}[width=\textwidth,use units,x unit=\second,y unit=\meter,xlabel=$t$ Position,ylabel=$y$ Position,no markers]
-		\addplot table[col sep=comma,x=t,y=y]{topology/single_part/traj1.csv};
-		\addlegendentry{Splitted $\alpha=0.1$}
-		\label{top:single_part:traj1}
-		\addplot table[col sep=comma,x=t,y=y]{topology/single_part/traj2.csv};
-		\label{top:single_part:traj2}
-		\addlegendentry{None Splitted $\alpha=0.1$}
-		\addplot[green] table[col sep=comma,x=t,y=y]{topology/single_part/traj3.csv};
-		\addlegendentry{Splitted $\alpha=2$}
-		\label{top:single_part:traj3}
-		\addplot[purple] table[col sep=comma,x=t,y=y]{topology/single_part/traj4.csv};
-		\label{top:single_part:traj4}
-		\addlegendentry{None Splitted $\alpha=2$}
-		\addplot[domain=0:2,dotted] gnuplot{-x*x*9.81/2};
-		\label{top:single_part:anal1}
-		\addlegendentry{Analytical}
-	\end{axis}
-\end{tikzpicture}
+\includegraphics{topology/single_part/tab2.pdf}
 \caption{Comparison between splitting and not splitting for a single particle problem. 
 The integration method is Runge-Kutta of order 4 for the two case.
-We see that the none splitting method (\ref{top:single_part:traj2} and \ref{top:single_part:traj4}) is a very good approximation to the analytical solution (\ref{top:single_part:anal1}).
-Instead the splitting method (\ref{top:single_part:traj1} and \ref{top:single_part:traj3}) is different than the analytical solution (\ref{top:single_part:anal1}).
+We see that the non split method is a very good approximation to the analytical solution.
+Instead the split method  and is different than the analytical solution.
 For the two methods, we have used $\Delta x=0.01$. The time step limiter was a maximal time step $dt_{max}=0.01$.
 }
 \label{topo:singl_part:fig1}
 \end{figure}
 
+\begin{figure}
+\includegraphics{topology/single_part/tab.pdf}
+\caption{Comparison between splitting and not splitting for a single particle problem. 
+The integration method is Runge-Kutta of order 4 for the two case.
+We see that the non split method is a very good approximation to the analytical solution.
+Instead the split method  and is different than the analytical solution.
+For the two methods, we have used $\Delta x=0.01$. The time step limiter was a maximal time step $dt_{max}=0.01$.
+We do not know why we have small jump in precision for split method.}
+\label{topo:singl_part:fig2}
+\end{figure}
+
 \subsection{Lateral jet}
 
-We consider a continuous source of speed in the $x$ direction. With gravity at the $y$ direction.
+We consider a continuous source of speed in the $x$ direction, with gravity in the $y$ direction.
 The analytical solution can be found without consideration of the boundary condition.
 
 A single particle with initial $x$ speed $v_{0}$ which go from $y$ position $y_0$ and with initial time $t_0$.
 
 The speed is:
 \begin{align}
-	v_{x}&=v_{0}\\
-	v_{y}&=-\frac{g}{2}(t-t_0)^2
+	v_{x}&=v_{0},\\
+	v_{y}&=-\frac{g}{2}(t-t_0)^2.
 \end{align}
 
 The position of the particle is then:
 \begin{align}
-	x&=v_{0}(t-t_0)\\
-	y&=y_0-\frac{g}{2}(t-t_0)^2
+	x&=v_{0}(t-t_0),\\
+	y&=y_0-\frac{g}{2}(t-t_0)^2.
 \end{align}
 
 We will now try to define the speed in a particle manner.
 The time is given by:
 \begin{equation}
-	t-t_{0}=\frac{x}{v_{0}}
+	t-t_{0}=\frac{x}{v_{0}}.
 \end{equation}
 
 The speed is then given by:
 \begin{align}
-	v_{x}&=v_{0}\\
-	v_{y}&=-\frac{g}{2}\frac{x^2}{v_{0}}
+	v_{x}&=v_{0},\\
+	v_{y}&=-\frac{g}{2}\frac{x^2}{v_{0}}.
 \end{align}
 This is divergence free.
 So we are a solution of the Navier-Stokes equation.
 
-But we doesn't respect the boundary condition.
+But we does not respect the boundary condition.
 
 We cannot know apriori if the numerical solution with correct boundary condition will respect this solution.
 But we can expect that a perturbation at boundary that will respect the boundary condition,
@@ -2282,20 +2271,20 @@ will rest in the boundary and not enter in the fluid.
 This approximation is called Boundary Layer.
 
 
-\subsubsection{Result}
+\subsubsection{Results}
 
 
 For the numerical method, we have added a small perturbation in the initial $x$ speed.
 
 We see in figure \ref{topo:extrap:lateral:8_1}, \ref{topo:extrap:lateral:9_1} and \ref{topo:extrap:lateral:10_1} that lateral
-speed are smirred by the viscosity and is quasi constant which is the analytical solution.
+speed are smoothed by the viscosity and is quasi constant which is the analytical solution.
 
 The boundary of the analytical solution is near to the numerical solution.
-Only the end of the fluid don't follow the analytical solution.
-This indicate that boundary layer is a correct approximation.
+Only the end of the fluid does not follow the analytical solution.
+This indicates that boundary layers are  correctly approximated.
 \begin{figure}
 	\includegraphics{topology/lateral_jet/plot_8__1_186.pdf}
-	\caption{Non splitted result with Runge-Kutta rk4 with $\nu=1.307e-6$, $\alpha=0.5$.
+	\caption{Non split result with Runge-Kutta rk4 with $\nu=\unit{1.307e-6}{\meter \squared \per \second}$, $\alpha=0.5$.
 	This is the $x$ speed.
 	The green line is the analytical solution boundary for the result without boundary condition.
 	The blue line is the calculate boundary.
@@ -2307,7 +2296,7 @@ This indicate that boundary layer is a correct approximation.
 
 \begin{figure}
 	\includegraphics{topology/lateral_jet/plot_8__2_186.pdf}
-	\caption{Non splitted result with Runge-Kutta rk4 with $\nu=1.307e-6$, $\alpha=0.5$.
+	\caption{Non split result with Runge-Kutta rk4 with $\nu=\unit{1.307e-6}{\meter \squared \per \second}$, $\alpha=0.5$.
 	This is the $y$ speed.
 	The green line is the analytical solution boundary for the result without boundary condition.
 	The blue line is the calculate boundary.
@@ -2318,8 +2307,8 @@ This indicate that boundary layer is a correct approximation.
 \end{figure}
 
 \begin{figure}
-	\includegraphics{topology/lateral_jet/plot_9__1_182.pdf}
-		\caption{Splitted result with Runge-Kutta rk4 with $\nu=1.307e-6$, $\alpha=0.5$.
+	\includegraphics{topology/lateral_jet/plot_new__1.pdf}
+		\caption{Split result with Runge-Kutta rk4 with $\nu=\unit{1.307e-6}{\meter \squared \per \second}$, $\alpha=0.5$.
 	This is the $x$ speed.
 	The green line is the analytical solution boundary for the result without boundary condition.
 	The blue line is the calculate boundary.
@@ -2330,8 +2319,8 @@ This indicate that boundary layer is a correct approximation.
 \end{figure}
 
 \begin{figure}
-	\includegraphics{topology/lateral_jet/plot_9__2_182.pdf}
-		\caption{Splitted result with Runge-Kutta rk4 with $\nu=1.307e-6$, $\alpha=0.5$.
+	\includegraphics{topology/lateral_jet/plot_new__2.pdf}
+		\caption{Split result with Runge-Kutta rk4 with $\nu=\unit{1.307e-6}{\meter \squared \per \second}$, $\alpha=0.5$.
 	This is the $y$ speed.
 	The green line is the analytical solution boundary for the result without boundary condition.
 	The blue line is the calculate boundary.
@@ -2344,7 +2333,7 @@ This indicate that boundary layer is a correct approximation.
 
 \begin{figure}
 	\includegraphics{topology/lateral_jet/plot_10__1_293.pdf}
-			\caption{Splitted result with Euler with $\nu=1.307e-6$, $\alpha=0.5$.
+			\caption{Split result with Euler with $\nu=\unit{1.307e-6}{\meter \squared \per \second}$, $\alpha=0.5$.
 	This is the $x$ speed.
 	The green line is the analytical solution boundary for the result without boundary condition.
 	The blue line is the calculate boundary.
@@ -2356,7 +2345,7 @@ This indicate that boundary layer is a correct approximation.
 
 \begin{figure}
 	\includegraphics{topology/lateral_jet/plot_10__2_293.pdf}
-			\caption{Splitted result with Euler with $\nu=1.307e-6$, $\alpha=0.5$.
+			\caption{Split result with Euler with $\nu=\unit{1.307e-6}{\meter \squared \per \second}$, $\alpha=0.5$.
 	This is the $y$ speed.
 	The green line is the analytical solution boundary for the result without boundary condition.
 	The blue line is the calculate boundary.
@@ -2369,17 +2358,17 @@ This indicate that boundary layer is a correct approximation.
 
 \subsection{Jet}
 
-We now try to simulate the same problem than the lateral jet but in the same direction of gravity.
+We now try to simulate the same problem as the lateral jet but in the same direction of gravity.
 We have no analytical solution in this case because the trivial particle solution is no more divergence free.
 Pressure is needed to push the fluid up.
 
-We have done two final numerical run of this problem.
-All numerical run were done with 50 cells at basis. With a spacing of $\unit{0.0002}{\meter}$.
-The viscosity is $\nu=\unit{1.307\cdot 10^{-6}}{\pascal\second}$ which is the viscosity of water.
-We use $\alpha=0.5$. We use non splitted rk4 integration method.
+We have done two final numerical runs of this problem.
+All numerical run were done with 50 cells at the basis. With a spacing of $\unit{0.0002}{\meter}$.
+The viscosity is $\nu=\unit{1.307\cdot 10^{-6}}{\meter \squared \per\second}$ which is the viscosity of water.
+We use $\alpha=0.5$. We use the non split rk4 integration method.
 Particles which go below the 0 altitude are supressed.
 
-The two run took a day to complete. 3 dimmensional run was not possible for reason of time and
+The two runs took a day to complete. 3 dimensional runs were not possible for reasons of time and
 computing power.
 
 This is shown in figure \ref{top:jet:G}, \ref{top:jet:Gx}, \ref{top:jet:Gy}, \ref{top:jet:P}, \ref{top:jet:Px} and
@@ -2387,17 +2376,17 @@ This is shown in figure \ref{top:jet:G}, \ref{top:jet:Gx}, \ref{top:jet:Gy}, \re
 
 The most expensive operation is to calculate the projection operator for every iteration.
 
-We see three phase in the computed result:
+We see three phases in the computed result:
 \begin{enumerate}
  \item Vertical motion without deformation. Gravity had not the time to act a lot on the speed.
- \item The top particle want to push the below particles because of gravity.
- But because of incompressibility the below region become larger. This generate
+ \item The top particles want to push the below particles because of gravity.
+ But because of incompressibility the below region becomes larger. This generates
  a lateral speed.
  \item We touch the supression particles limit and have now a stationary state.
 \end{enumerate}
 
-We think that the reason why the jet lateral distance is so big, is because we are in a 2d problem where
-we have less spatial liberty. The pression exerced by the gravity can in 2d escape only in one dimension
+We think that the reason why the jet lateral distance is so big is because we are in a 2d problem where
+we have less spatial liberty. The pressure exerted by the gravity can in 2d escape only in one dimension
 and not two.
 
 \begin{figure}
